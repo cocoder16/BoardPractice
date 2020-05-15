@@ -28,7 +28,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.9.14",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
