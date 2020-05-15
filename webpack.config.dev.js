@@ -1,6 +1,5 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -8,18 +7,22 @@ module.exports = {
     entry: ['@babel/polyfill', './src/client/index.js', './src/client/index.scss'],
     output: {
         path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
         filename: 'js/bundle_[name].js'
     },
+    mode: "development",
     devServer: {
         hot: true,
         port: 3000,
         open: true,
         contentBase: path.resolve(__dirname, 'dist'),
-        historyApiFallback: true // 이거없으면 리액트 라우터 에러 발생
+        historyApiFallback: true, // 이거없으면 리액트 라우터 에러 발생
+        proxy: {
+            "**": "http://localhost:4000" // express 서버주소
+        }
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: 'css/style.css' }), //컴파일+번들링CSS파일이 저장될 경로와 이름 지정
-        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: './public/index.html', //빌드 전에 사용되는 파일
             filename: 'index.html' //빌드 후에 생성될 파일명
@@ -36,7 +39,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader', 
                     options: { //프리셋과 플러그인도 사용
-                        presets: ['@babel/preset-env'],
+                        presets: ['@babel/preset-env', "@babel/preset-react"],
                         plugins: ['@babel/plugin-proposal-class-properties']
                     }
                 }
@@ -56,5 +59,16 @@ module.exports = {
           '~c': path.resolve(__dirname, 'src/client'),
           '~s': path.resolve(__dirname, 'src/server')
         },
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: 'all',
+                    name: 'js/vendor/libs'
+                }
+            }
+        }
     }
 }

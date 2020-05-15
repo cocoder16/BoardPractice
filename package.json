@@ -1,10 +1,12 @@
 {
-  "name": "BoardPractice",
+  "name": "board-practice",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "webpack-dev-server --mode=development --hot",
+    "watch": "webpack-dev-server --config ./webpack.config.dev --hot",
+    "start": "nodemon src/server/server.js",
+    "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn start\"",
     "webpack-prod": "webpack --config ./webpack.config.prod",
     "webpack-dev": "webpack --config ./webpack.config.dev"
   },
@@ -20,6 +22,9 @@
   },
   "homepage": "https://github.com/cocoder16/BoardPractice#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.2.0",
+    "express": "^4.17.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
@@ -31,7 +36,6 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
-    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.5.3",
     "html-webpack-plugin": "^4.3.0",
     "mini-css-extract-plugin": "^0.9.0",
@@ -41,5 +45,6 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0"
-  }
+  },
+  "proxy": "http://localhost:4000"
 }
