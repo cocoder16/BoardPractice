@@ -27,7 +27,7 @@ console.log(__dirname);
 //dev server
 if (process.env.NODE_ENV.trim() == 'development') {
     server.listen(devPort, () => {
-        console.log(`webpack-dev-server is listening on port ${devPort}. ${new Date().toLocaleString()}`);
+        console.log(`#### webpack-dev-server is listening on port ${devPort}. ${new Date().toLocaleString()} ####`);
     });
 }
 
@@ -40,5 +40,5 @@ if (process.env.NODE_ENV.trim() == 'development') {
 // })
 
 // server.listen(port, () => {
-//     console.log(`####Express listening on port ${port}. ${new Date().toLocaleString()}`);
+//     console.log(`#### Express listening on port ${port}. ${new Date().toLocaleString()}`);
 // });
