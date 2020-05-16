@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --watchAll",
     "watch": "webpack-dev-server --config ./webpack.config.dev --hot",
     "start": "nodemon src/server/server.js",
     "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn start\"",
@@ -42,9 +43,12 @@
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
+    "@testing-library/jest-dom": "^5.7.0",
+    "@testing-library/react": "^10.0.4",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
     "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.0.1",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
@@ -53,5 +57,11 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0"
   },
-  "proxy": "http://localhost:4000"
+  "proxy": "http://localhost:4000",
+  "jest": {
+    "moduleNameMapper": {
+      "^~c(.*)$": "<rootDir>/src/client$1",
+      "^~s(.*)$": "<rootDir>/src/server$1"
+    }
+  }
 }
