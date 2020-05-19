@@ -56,8 +56,10 @@ module.exports = {
     },
     resolve: { //import경로 편하게하기
         alias: {
-          '~c': path.resolve(__dirname, 'src/client'),
-          '~s': path.resolve(__dirname, 'src/server')
+            '@': path.resolve(__dirname),
+            '~': path.resolve(__dirname, 'src'),
+            '~c': path.resolve(__dirname, 'src/client'),
+            '~s': path.resolve(__dirname, 'src/server')
         },
     },
     optimization: {
