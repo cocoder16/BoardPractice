@@ -35,7 +35,7 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, 'src') 
                 ],
-                exclude: /node_modules/, 
+                exclude: [ /node_modules/, /__test__/, /\.test.js$/ ],
                 use: {
                     loader: 'babel-loader', 
                     options: { //프리셋과 플러그인도 사용
@@ -49,7 +49,7 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, 'src')
                 ],
-                exclude: /node_modules/, 
+                exclude: [ /node_modules/, /__test__/, /\.test.js$/ ],
                 use: [ MiniCssExtractPlugin.loader, "css-loader", "sass-loader" ]
             }
         ]
@@ -57,9 +57,9 @@ module.exports = {
     resolve: { //import경로 편하게하기
         alias: {
             '@': path.resolve(__dirname),
-            '~': path.resolve(__dirname, 'src'),
             '~c': path.resolve(__dirname, 'src/client'),
-            '~s': path.resolve(__dirname, 'src/server')
+            '~s': path.resolve(__dirname, 'src/server'),
+            '~': path.resolve(__dirname, 'src')
         },
     },
     optimization: {

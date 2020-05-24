@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --watchAll",
     "watch": "webpack-dev-server --config ./webpack.config.dev --hot",
-    "start": "nodemon src/server/server.js",
+    "start": "nodemon --exec babel-node src/server/server.js",
     "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn start\"",
     "webpack-prod": "webpack --config ./webpack.config.prod",
     "webpack-dev": "webpack --config ./webpack.config.dev"
@@ -24,22 +24,25 @@
   "homepage": "https://github.com/cocoder16/BoardPractice#readme",
   "dependencies": {
     "axios": "^0.19.2",
-    "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.9.14",
+    "multer": "^1.4.2",
     "promise-polyfill": "^8.1.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
@@ -51,6 +54,7 @@
     "jest": "^26.0.1",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
+    "redux-mock-store": "^1.5.4",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
@@ -61,7 +65,11 @@
   "jest": {
     "moduleNameMapper": {
       "^~c(.*)$": "<rootDir>/src/client$1",
-      "^~s(.*)$": "<rootDir>/src/server$1"
-    }
+      "^~s(.*)$": "<rootDir>/src/server$1",
+      "^~(.*)$": "<rootDir>/src$1"
+    },
+    "moduleFileExtensions": [
+      "js"
+    ]
   }
 }

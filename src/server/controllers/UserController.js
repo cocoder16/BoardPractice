@@ -1,0 +1,49 @@
+import User from '../models/user';
+import InputChecker from '../../modules/InputChecker';
+import crypto from 'crypto';
+
+class UserController {
+    static async checkOverlap (target) { //하나만 찾고 멈추는 쿼리를..
+        const user = await User.find(target).limit(1).then(user => {
+            return user;
+        });
+        console.log(user);
+        console.log('user length: ' ,user.length);
+        if (user.length > 0) return {result: true};
+        else return {result: false};
+    }
+
+    static testFormAndCreateUser (formData) {
+        console.log('controller');
+        //form vaildation test
+        if(!InputChecker.id(formData.id) || !InputChecker.pw(formData.pw) || formData.pw !== formData.pwConfirm
+        || !InputChecker.nickname(formData.nickname) || !InputChecker.email(formData.email)) {
+            const isOverlap_id = this.checkOverlap({id: formData.id});
+            if (isOverlap_id.result === true) return {result: false};
+            const isOverlap_nickname = this.checkOverlap({nickname: formData.nickname});
+            if (isOverlap_nickname.result === true) return {result: false};
+            //if pass... password encryption
+            crypto.randomBytes(64, (err, buf) => {
+                crypto.pbkdf2(formData.pw, buf.toString('base64'), 1108943, 64, 'sha512', (err, key) => {
+                    console.log(key.toString('base64')); //암호화된 password
+                    //save
+                    const newUser = new User({
+                        id: formData.id,
+                        password: key.toString('base64'),
+                        nickname: formData.nickname,
+                        email: formData.email
+                    })
+                    console.log(newUser);
+                    newUser.save();
+                    console.log('end');
+                });
+            });
+            //result true
+            return {result: true};
+        } else {
+            return {result: false};
+        }
+    }
+}
+
+module.exports = UserController;
