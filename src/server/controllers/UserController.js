@@ -13,14 +13,15 @@ class UserController {
         else return {result: false};
     }
 
-    static testFormAndCreateUser (formData) {
+    static async testFormAndCreateUser (formData) {
         console.log('controller');
         //form vaildation test
         if(!InputChecker.id(formData.id) || !InputChecker.pw(formData.pw) || formData.pw !== formData.pwConfirm
         || !InputChecker.nickname(formData.nickname) || !InputChecker.email(formData.email)) {
-            const isOverlap_id = this.checkOverlap({id: formData.id});
+            const isOverlap_id = await this.checkOverlap({id: formData.id});
+            console.log(isOverlap_id);
             if (isOverlap_id.result === true) return {result: false};
-            const isOverlap_nickname = this.checkOverlap({nickname: formData.nickname});
+            const isOverlap_nickname = await this.checkOverlap({nickname: formData.nickname});
             if (isOverlap_nickname.result === true) return {result: false};
             //if pass... password encryption
             crypto.randomBytes(64, (err, buf) => {
@@ -39,7 +40,7 @@ class UserController {
                 });
             });
             //result true
-            return {result: true};
+            return {result: true, url: '/'};
         } else {
             return {result: false};
         }

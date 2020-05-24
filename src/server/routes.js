@@ -12,7 +12,6 @@ const index = path.resolve(__dirname, '../../dist/index.html');
 
 router.get('/check/overlapid/:id', async (req, res) => {
     const result = await UserController.checkOverlap({id: req.params.id});
-    console.log(result);
     res.send(result);
 })
 
@@ -21,9 +20,8 @@ router.get('/check/overlapnickname/:nickname', async (req, res) => {
     res.send(result);
 })
 
-router.post('/send/signupform', upload.none(), (req, res) => {
-    console.log('routes');
-    const result = UserController.testFormAndCreateUser(req.body);
+router.post('/send/signupform', upload.none(), async (req, res) => {
+    const result = await UserController.testFormAndCreateUser(req.body);
     res.send(result);
 })
 
