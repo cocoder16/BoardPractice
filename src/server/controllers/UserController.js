@@ -26,11 +26,11 @@ class UserController {
             //if pass... password encryption
             crypto.randomBytes(64, (err, buf) => {
                 crypto.pbkdf2(formData.pw, buf.toString('base64'), 1108943, 64, 'sha512', (err, key) => {
-                    console.log(key.toString('base64')); //암호화된 password
                     //save
                     const newUser = new User({
                         id: formData.id,
-                        password: key.toString('base64'),
+                        password: key.toString('base64'), //formData.pw을 salt와 함께 암호화한 것이 key파라미터로 전달. buffer형태이므로 string으로.
+                        salt: buf.toString('base64'),
                         nickname: formData.nickname,
                         email: formData.email
                     })
