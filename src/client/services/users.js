@@ -15,11 +15,9 @@ export const isOverlapNickname = (targetNickname) => {
 export const createUser = (formData) => {
     axios({
         method: 'post',
-        url: '/send/signupform',
+        url: '/signupform',
         data: formData,
-        headers: {
-            'content-type': 'multipart/form-data'
-        }
+        headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         if (res.data.result) {
             alert('환영합니다. 회원가입이 완료되었습니다.');
@@ -27,5 +25,16 @@ export const createUser = (formData) => {
         } else {
             alert('회원가입에 실패하였습니다. 다시 시도해주세요.');
         }
+    }).catch(err => console.log(err));
+}
+
+export const tryLogIn = (formData) => {
+    return axios({
+        method: 'post',
+        url: '/login',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' }
+    }).then(res => {
+        return res.data;
     }).catch(err => console.log(err));
 }

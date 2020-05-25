@@ -1,13 +1,12 @@
 import React, {Component, Fragment} from 'react';
-
-import SignUpForm from '~c/containers/SignUpForm';
+import SignUpContainer from '~c/containers/SignUpContainer';
 
 class SignUp extends Component {
   render() {
     return (
       <Fragment>
         <h1>Sign Up</h1>
-        <SignUpForm/>
+        <SignUpContainer/>
       </Fragment>
     );
   }

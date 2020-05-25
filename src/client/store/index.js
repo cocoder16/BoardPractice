@@ -1,9 +1,11 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux';
-import signUp from './signUp';
 import thunk from 'redux-thunk';
+import signUp from './signUp';
+import logIn from './logIn';
+import userInfo from './userInfo';
 
 const store = createStore(combineReducers({
-    signUp
+    signUp, logIn, userInfo
 }), applyMiddleware(thunk));
 
 store.subscribe(() => {

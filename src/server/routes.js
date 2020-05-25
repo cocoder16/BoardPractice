@@ -20,8 +20,14 @@ router.get('/check/overlapnickname/:nickname', async (req, res) => {
     res.send(result);
 })
 
-router.post('/send/signupform', upload.none(), async (req, res) => {
+router.post('/signupform', upload.none(), async (req, res) => {
     const result = await UserController.testFormAndCreateUser(req.body);
+    res.send(result);
+})
+
+router.post('/login', upload.none(), async (req, res) => {
+    const result = await UserController.logInDataCheck(req.body); 
+    console.log(result);
     res.send(result);
 })
 
