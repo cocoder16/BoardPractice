@@ -11,7 +11,7 @@ const upload = multer();
 const index = path.resolve(__dirname, '../../dist/index.html');
 
 router.get('/check/overlapid/:id', async (req, res) => {
-    const result = await UserController.checkOverlap({id: req.params.id});
+    const result = await UserController.checkOverlap({id: req.params.id, is_deleted: false});
     res.send(result);
 })
 
@@ -26,8 +26,18 @@ router.post('/signupform', upload.none(), async (req, res) => {
 })
 
 router.post('/login', upload.none(), async (req, res) => {
-    const result = await UserController.logInDataCheck(req.body); 
+    const result = await UserController.logInDataCheck(req, req.body);
     console.log(result);
+    res.send(result);
+})
+
+router.delete('/logout', async (req, res) => {
+    const result = await UserController.logOut(req);
+    res.send(result);
+})
+
+router.get('/getuserinfo', async (req, res) => {
+    const result = await UserController.getUserInfo(req);
     res.send(result);
 })
 

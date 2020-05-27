@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  id: { type: String, lowercase: true, index: true },
+  id: { type: String, required: true, lowercase: true, index: true },
   password: { type: String, required: true },
   salt: { type: String, required: true },
   nickname: { type: String, required: true, index: true },
-  email: { type: String },
+  email: { type: String, required: true },
   auth: { type: Number, default: 2 },
-  is_login: { type: Boolean, default: true },
-  last_logout: { type: Date },
+  is_login: { type: Boolean, default: false },
+  last_logout: { type: Date, default: Date.now() + 3600000 * 9 },
   is_deleted: { type: Boolean, default: false }
 }, {
   timestamps: { currentTime: () => Date.now() + 3600000 * 9 } //ISO date에 한국시각을 덮어써서 created_at, updated_at 자동저장

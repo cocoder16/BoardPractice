@@ -4,9 +4,9 @@ import LogInForm from '~c/components/LogInForm';
 import LoggedIn from '~c/components/LoggedIn';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
-import { tryLogIn } from '~c/services/users';
+import { tryLogIn, tryLogOut } from '~c/services/users';
 
-class LogInContainer extends Component {
+class UserContainer extends Component {
     handleInputChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -27,26 +27,39 @@ class LogInContainer extends Component {
         formData.append('id', id);
         formData.append('pw', pw);
         const data = await tryLogIn(formData);
-        console.log(data);
         if (data.result) {
-            this.props.logInSuccessful();
-            this.props.userInfoSet(data.userInfo);
+            this.props.setUserInfo(data.userInfo);
         } else {
             this.props.logInFailed();
         }
     }
 
-    render() {
-        const { span, isLoggedIn, userNickname } = this.props;
-        const { handleInputChange, handleFormSubmit } = this;
+    handleLogOut = async () => {
+        const result = await tryLogOut();
+        console.log(result);
+        if (result) {
+            this.props.deleteUserInfo();
+            console.log(this.props.isLoggedIn);
+            window.location.replace('/');
+        }
+    }
+
+    render () {        
+        const { span, onPending, isLoggedIn, userNickname } = this.props;
+        const { handleInputChange, handleFormSubmit, handleLogOut } = this;
         let target;
 
-        if (!isLoggedIn) {
-            target = <LogInForm
-                failSpan={span} onInputChange={handleInputChange} onFormSubmit={handleFormSubmit}
-            />;
-        } else {
-            target = <LoggedIn userName={userNickname}/>;
+        if (onPending) target = null;
+        else {
+            if (!isLoggedIn) {
+                target = <LogInForm
+                    failSpan={span} onInputChange={handleInputChange} onFormSubmit={handleFormSubmit}
+                />;
+            } else {
+                target = <LoggedIn 
+                    userName={userNickname} logOut={handleLogOut}
+                />;
+            }
         }
 
         return (
@@ -63,7 +76,8 @@ const mapStateToProps = (state) => ({
     pw: state.logIn.pw,
     span: state.logIn.span,
     pass: state.logIn.pass,
-    isLoggedIn: state.logIn.isLoggedIn,
+    onPending: state.userInfo.onPending,
+    isLoggedIn: state.userInfo.isLoggedIn,
     userId: state.userInfo.id,
     userNickname: state.userInfo.nickname,
     userEmail: state.userInfo.email
@@ -74,8 +88,9 @@ const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(logInActions.inputChange(payload)),
     formValidationInput: () => dispatch(logInActions.formValidationInput()),
     logInFailed: () => dispatch(logInActions.logInFailed()),
-    logInSuccessful: () => dispatch(logInActions.logInSuccessful()),
-    userInfoSet: (payload) => dispatch(userInfoActions.userInfoSet(payload))
+
+    setUserInfo: (payload) => dispatch(userInfoActions.setUserInfo(payload)),
+    deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogInContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

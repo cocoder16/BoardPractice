@@ -38,3 +38,16 @@ export const tryLogIn = (formData) => {
         return res.data;
     }).catch(err => console.log(err));
 }
+
+export const tryLogOut = () => {
+    return axios.delete('/logout').then(res => {
+        console.log(res.data);
+        return res.data.result;
+    }).catch(err => console.log(err));
+}
+
+export const getUserInfo = () => {
+    return axios.get('/getuserinfo').then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}

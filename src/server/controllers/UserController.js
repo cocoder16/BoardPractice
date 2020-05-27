@@ -3,6 +3,7 @@ import InputChecker from '../../modules/InputChecker';
 import crypto from 'crypto';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
+import { raw } from 'express';
 
 class UserController {
     static async checkOverlap (target) { //하나만 찾고 멈추는 쿼리를..
@@ -10,7 +11,7 @@ class UserController {
             return user;
         });
         console.log(user);
-        console.log('user length: ' ,user.length);
+        console.log('user length: ', user.length);
         if (user.length > 0) return {result: true};
         else return {result: false};
     }
@@ -44,10 +45,11 @@ class UserController {
         } else return {result: false};
     }
 
-    static async logInDataCheck (formData) {
+    static async logInDataCheck (req, formData) {
         let proc = {};
+        // 아이디가 있는지 찾고 있으면 입력받은 pw를 해시화하여 DB에 있는 값과 비교
         MeasureRunTime.start('find');
-        await User.find({id: formData.id, is_deleted: false}).then(user => {
+        return await User.find({id: formData.id, is_deleted: false}).then(user => {
             MeasureRunTime.end('find');
             if (user.length > 0) {
                 const salt = user[0].salt;
@@ -56,17 +58,53 @@ class UserController {
                 MeasureRunTime.end('pw hash');
                 if (key.toString('base64') === user[0].password) {
                     proc.result = 'success';
-                    proc.userInfo = { id: user[0].id, nickname: user[0].nickname, email: user[0].email };
-                }
+                    proc.userInfo = {id: user[0].id, nickname: user[0].nickname, email: user[0].email}
+                     //session 만들어주고,
+                    req.session.userid = formData.id;
+                    req.session.save();
+                    MeasureRunTime.start('findOneAndUpdate');
+                    User.updateOne({id: formData.id, is_deleted: false}, {$set: {is_login: true}}, (err, rawResponse) => {
+                        if (err) console.log(err);
+                        else {
+                            console.log(rawResponse);
+                        }
+                    })
+                    MeasureRunTime.end('findOneAndUpdate');
+                    return {...proc, result: true}
+                } else return {result: false}
             }
         });
-        if (proc.result === 'success') {
-            MeasureRunTime.start('findOneAndUpdate');
-            User.findOneAndUpdate({id: formData.id, is_deleted: false}, {is_login: true});
-            MeasureRunTime.end('findOneAndUpdate');
-            return { ...proc, result: true }
-        }
-        else return {result: false}
+    }
+
+    static logOut (req) {
+        return User.updateOne({id: req.session.userid, is_deleted: false},
+            {$set: {is_login: false, last_logout: Date.now() + 3600000 * 9}}, (err, rawResponse) => {
+                if (err) console.log(err);
+                else {
+                    console.log(rawResponse);
+                    req.session.destroy();
+                }
+            }
+        ).then(res => {
+            console.log(res);
+            if (res.n == 1) return {result: true}
+            else return {result: false}
+        })
+    }
+
+    static getUserInfo (req) {
+        console.log(req.session);
+        console.log(req.session.userid);
+        //유저데이터는 세션을 통해 검증받아야만 보냄.
+        if (!req.session.userid) return {result: false, userInfo: {id: '', nickname: '', email: ''}}
+        //세션이 있다면 그에 맞는 유저 데이터를 보냄.
+        return User.find({id: req.session.userid, is_deleted: false}).then(user => {
+            if (user.length == 0) {
+                return {result: false, userInfo: {id: '', nickname: '', email: ''}}
+            } else {
+                return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname, email: user[0].email}}
+            }
+        }).catch(err => console.log(err));
     }
 }
 
