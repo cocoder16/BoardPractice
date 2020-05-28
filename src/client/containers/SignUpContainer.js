@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import SignUpForm from '~c/components/SignUpForm';
 import * as signUpActions from '~c/store/signUp';
 import { createUser } from '~c/services/users';
@@ -45,7 +45,7 @@ class SignUpContainer extends Component {
         formData.append('pw', pw);
         formData.append('nickname', nickname);
         formData.append('email', email);
-        await createUser(formData);
+        createUser(formData);
     }
 
     render() {

@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import routes from './routes';
 import db from './db';
+import bodyParser from 'body-parser';
 import session from 'express-session';
 import { default as connectMongo } from 'connect-mongo';
 
@@ -28,6 +29,8 @@ console.log(__dirname);
 //dev server
 if (process.env.NODE_ENV.trim() == 'development') {
     db();
+    server.use(bodyParser.urlencoded({extended: false}));
+    server.use(bodyParser.json());
     server.use(session({
         HttpOnly: true,
         secure: true,

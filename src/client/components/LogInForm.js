@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 const LogInForm = ({
     failSpan, onInputChange, onFormSubmit
 }) => {
     return (
-        <div>
+        <Fragment>
             <form onSubmit={onFormSubmit}>
                 <table><tbody>
                     <tr>
@@ -29,7 +29,8 @@ const LogInForm = ({
                 <input type='submit' value='로그인'/>
             </form>
             <Link to="/signup">회원가입</Link>
-        </div>
+            <Link to="/help/pwreset">비밀번호 재설정</Link>
+        </Fragment>
     )
 };
 

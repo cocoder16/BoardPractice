@@ -1,9 +1,10 @@
 import User from '../models/user';
 import InputChecker from '../../modules/InputChecker';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
+import '../../modules/replaceAll';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
-import { raw } from 'express';
 
 class UserController {
     static async checkOverlap (target) { //하나만 찾고 멈추는 쿼리를..
@@ -105,6 +106,82 @@ class UserController {
                 return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname, email: user[0].email}}
             }
         }).catch(err => console.log(err));
+    }
+
+    static sendPwAuthEmail (id) {
+        console.log(id);
+        return User.find({id: id, is_deleted: false}).then(user => {
+            if (user.length == 0) return {result: false}
+
+            const userEmail = user[0].email;
+
+            //token발급과 함께 인증메일 발송
+            crypto.randomBytes(64, (err, buf) => {
+                crypto.pbkdf2(userEmail, buf.toString('base64'), process.env.ITERATIONS*1, 64, 'sha512', (err, key) => {
+                    let emailToken = key.toString('base64');
+                    emailToken = emailToken.replaceAll('+', '-'); //url safe base64
+                    emailToken = emailToken.replaceAll('/', '_');
+                    User.updateOne({id: id, is_deleted: false},
+                    {$set: {email_token: emailToken}}, (err, rawResponse) => {
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: process.env.MAIL,
+                                pass: process.env.MAIL_PASS
+                            }
+                        });
+                        const mailOptions = {
+                            from: process.env.MAIL,
+                            to: userEmail,
+                            subject: 'Board Practice 비밀번호 재설정 인증메일 입니다.',
+                            html: `<p>회원 인증을 위해서 
+                                <a href='${process.env.DOMAIN}/auth/?id=${user[0].id}&token=${emailToken}'>
+                                인증하기</a>를 클릭해주세요</p>`
+                        };
+                        transporter.sendMail(mailOptions, (err, info) => {
+                            if (err) console.log(err);
+                            else console.log('Email sent: ' + info.response);
+                        })
+                    });
+                });
+            });
+            
+            return {result: true}
+        })
+    }
+    
+    static async issueNewPw (id, token) {
+        let newPw = '';
+        for (let i = 0; i < 12; i++) {
+            if (i < 4) newPw += String.fromCharCode((Math.random() * 26) + 97); //a-z
+            else if (i < 8) newPw += String.fromCharCode((Math.random() * 10) + 48); //0-9
+            else newPw += String.fromCharCode((Math.random() * 15) + 33); //특수문자
+        } 
+        console.log(newPw);
+        const buffer = await new Promise((res, rej) => {
+            crypto.randomBytes(64, function(err, buf) {
+                if (err) rej("cant generate buffer.");
+                res(buf);
+            });
+        });
+        const buf = buffer.toString('base64');
+        console.log(buf);
+        const key = crypto.pbkdf2Sync(newPw, buf, process.env.ITERATIONS*1, 64, 'sha512');
+        const newPwHash = key.toString('base64');
+        console.log(id);
+        console.log(token);
+        User.find({id: id, email_token: token, is_deleted: false}).then(res => {
+            console.log(res);
+        })
+        const resData = await new Promise((res, rej) => {
+            User.updateOne({id: id, email_token: token, is_deleted: false},
+            {$set: {salt: buf, password: newPwHash, email_token: ''}}, (err, rawResponse) => {
+                console.log(rawResponse);
+                if (rawResponse.n == 0) res({result: false, pw: ''});
+                else res({result: true, pw: newPw});
+            })
+        });
+        return resData;
     }
 }
 

@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 export const isOverlapId = (targetId) => {
-    return axios.get(`/check/overlapid/${targetId}`).then(res => {
+    return axios.get(`/check/overlap/id/${targetId}`).then(res => {
         return res.data.result;
     }).catch(err => console.log(err));
 }
 
 export const isOverlapNickname = (targetNickname) => {
-    return axios.get(`/check/overlapnickname/${targetNickname}`).then(res => {
+    return axios.get(`/check/overlap/nickname/${targetNickname}`).then(res => {
         return res.data.result;
     }).catch(err => console.log(err));
 }
@@ -15,7 +15,7 @@ export const isOverlapNickname = (targetNickname) => {
 export const createUser = (formData) => {
     axios({
         method: 'post',
-        url: '/signupform',
+        url: '/user',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
@@ -47,7 +47,28 @@ export const tryLogOut = () => {
 }
 
 export const getUserInfo = () => {
-    return axios.get('/getuserinfo').then(res => {
+    return axios.get('/userinfo').then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}
+
+export const goAuthEmail = (formData) => {
+    return axios({
+        method: 'post',
+        url: '/help/pwreset/authemail',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' }
+    }).then(res => {
+        return res.data.result;
+    }).catch(err => console.log(err));
+}
+
+export const issueNewPw = (id, token) => {
+    return axios({
+        method: 'post',
+        url: '/help/pwreset/issue',
+        data: {id: id, token: token}
+    }).then(res => {
         return res.data;
     }).catch(err => console.log(err));
 }

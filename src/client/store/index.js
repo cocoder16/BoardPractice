@@ -3,9 +3,10 @@ import thunk from 'redux-thunk';
 import signUp from './signUp';
 import logIn from './logIn';
 import userInfo from './userInfo';
+import pwReset from './pwReset';
 
 const store = createStore(combineReducers({
-    signUp, logIn, userInfo
+    signUp, logIn, userInfo, pwReset
 }), applyMiddleware(thunk));
 
 store.subscribe(() => {

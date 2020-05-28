@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
   auth: { type: Number, default: 2 },
   is_login: { type: Boolean, default: false },
   last_logout: { type: Date, default: Date.now() + 3600000 * 9 },
-  is_deleted: { type: Boolean, default: false }
+  is_deleted: { type: Boolean, default: false },
+  email_token: { type: String, default: '' }
 }, {
   timestamps: { currentTime: () => Date.now() + 3600000 * 9 } //ISO date에 한국시각을 덮어써서 created_at, updated_at 자동저장
 });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import LogInForm from '~c/components/LogInForm';
 import LoggedIn from '~c/components/LoggedIn';
 import * as logInActions from '~c/store/logIn';
@@ -7,6 +7,11 @@ import * as userInfoActions from '~c/store/userInfo';
 import { tryLogIn, tryLogOut } from '~c/services/users';
 
 class UserContainer extends Component {
+    componentDidMount () {
+        sessionStorage.removeItem('received newPw');
+        sessionStorage.removeItem('sent email');
+    }
+
     handleInputChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -70,7 +75,6 @@ class UserContainer extends Component {
     }
 }
 
-//props값으로 넣어줄 상태 정의
 const mapStateToProps = (state) => ({
     id: state.logIn.id,
     pw: state.logIn.pw,
@@ -83,7 +87,6 @@ const mapStateToProps = (state) => ({
     userEmail: state.userInfo.email
 })
 
-//props값으로 넣어줄 액션 함수들 정의
 const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(logInActions.inputChange(payload)),
     formValidationInput: () => dispatch(logInActions.formValidationInput()),

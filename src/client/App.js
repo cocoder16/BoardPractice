@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Router from './routers/Router';
 import {connect} from 'react-redux';
-import UserContainer from '~c/containers/UserContainer';
 import * as userInfoActions from '~c/store/userInfo';
 
 class App extends Component {
@@ -15,7 +14,6 @@ class App extends Component {
         return (
             <div>
                 <BrowserRouter>
-                    <UserContainer/>
                     <Router/>
                 </BrowserRouter>
             </div>
