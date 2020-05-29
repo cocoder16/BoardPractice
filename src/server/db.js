@@ -3,18 +3,18 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default () => {
-  function connect() {
-    mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true, useUnifiedTopology: true
-      }, function(err) {
-      if (err) {
-        console.error('#### mongodb connection error : ', err);
-      }
-      console.log('#### mongodb connected ####');
-    });
-  }
-  connect();
-  mongoose.connection.on('disconnected', connect);
+    function connect() {
+        mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true, useUnifiedTopology: true
+        }, function(err) {
+        if (err) {
+            console.error('#### mongodb connection error : ', err);
+        }
+        console.log('#### mongodb connected ####');
+        });
+    }
+    connect();
+    mongoose.connection.on('disconnected', connect);
 }
 
 // // mongodb connection
