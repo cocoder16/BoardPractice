@@ -58,7 +58,6 @@ module.exports = {
         alias: {
             '@': path.resolve(__dirname),
             '~c': path.resolve(__dirname, 'src/client'),
-            '~s': path.resolve(__dirname, 'src/server'),
             '~': path.resolve(__dirname, 'src')
         },
     },

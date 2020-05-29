@@ -1,13 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LoggedIn = ({
-    userName, onInfo, onWrite, logOut
+    userName, onWrite, logOut
 }) => {
     return (
         <div>
             <p>{userName} 님 환영합니다 ^^</p>
             <ul>
-                <li onClick={onInfo}>내 정보</li>
+                <Link to='/info/privacy'><li>내 정보</li></Link>
                 <li onClick={onWrite}>글쓰기</li>
                 <li onClick={logOut}>로그아웃</li>
             </ul>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import LogInForm from '~c/components/LogInForm';
-import LoggedIn from '~c/components/LoggedIn';
+import { LogInForm, LoggedIn } from '~c/components/index';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
 import { tryLogIn, tryLogOut } from '~c/services/users';

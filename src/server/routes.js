@@ -25,6 +25,11 @@ router.post('/user', upload.none(), async (req, res) => {
     res.send(result);
 })
 
+router.put('/user', upload.none(), async (req, res) => {
+    const result = await UserController.testFormAndUpdateUser(req.body);
+    res.send(result);
+})
+
 router.post('/login', upload.none(), async (req, res) => {
     const result = await UserController.logInDataCheck(req, req.body);
     res.send(result);
@@ -46,12 +51,9 @@ router.post('/help/pwreset/authemail', upload.none(), async (req, res) => {
 })
 
 router.post('/help/pwreset/issue', async (req, res) => {
-    console.log(req.body);
     const id = req.body.id;
     const token = req.body.token;
     const result = await UserController.issueNewPw(id, token);
-    console.log('####result');
-    console.log(result);
     res.send(result);
 })
 

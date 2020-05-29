@@ -1,10 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SignUpForm from '~c/components/SignUpForm';
+import { SignUpForm } from '~c/components/index';
 import * as signUpActions from '~c/store/signUp';
-import { createUser } from '~c/services/users';
+import * as userInfoActions from '~c/store/userInfo';
+import { createUser, updateUser } from '~c/services/users';
 
 class SignUpContainer extends Component {
+    constructor (props) {
+        super(props);
+        if (location.toString().indexOf('/signUp') != -1) {
+            this.props.setIsModify(false);
+        }
+        if (location.toString().indexOf('/info/privacy') != -1) {
+            this.props.setIsModify(true);
+            if (!this.props.onPending) {
+                this.props.getUserInfo();
+            }
+        }
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        console.log(prevProps.onPending);
+        console.log(this.props.onPending);
+        if ((prevProps.onPending && !this.props.onPending)) {
+            document.getElementsByName('id')[0].value = this.props.userId;
+            document.getElementsByName('nickname')[0].value = this.props.userNickname;
+            document.getElementsByName('email')[0].value = this.props.userEmail;
+            this.props.setInputValue({id: this.props.userId, nickname: this.props.userNickname, 
+            email: this.props.userEmail});
+        }
+    }
+
     handleInputChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -24,6 +50,7 @@ class SignUpContainer extends Component {
 
     handleFormSubmit = async (e) => {
         e.preventDefault();
+        const { isModify } = this.props;
 
         await this.props.formValidationInput();
         if (!this.props.pass) {
@@ -45,12 +72,14 @@ class SignUpContainer extends Component {
         formData.append('pw', pw);
         formData.append('nickname', nickname);
         formData.append('email', email);
-        createUser(formData);
+
+        if (!isModify) createUser(formData);
+        else updateUser(formData);
     }
 
     render() {
         const { handleInputChange, overlapCheck, handleFormSubmit } = this;
-        const { span } = this.props;
+        const { span, isModify } = this.props;
 
         return (
             <SignUpForm
@@ -58,6 +87,7 @@ class SignUpContainer extends Component {
                 onInputChange={handleInputChange}
                 onOverlapCheck={overlapCheck}
                 onFormSubmit={handleFormSubmit} 
+                isModify={isModify}
             />
         )
     }
@@ -78,16 +108,25 @@ const mapStateToProps = (state) => ({
         email: state.signUp.span.email
     },
     goOverlapCheck: state.signUp.goOverlapCheck,
-    pass: state.signUp.pass
+    pass: state.signUp.pass,
+    isModify: state.signUp.isModify,
+    userId: state.userInfo.id,
+    userNickname: state.userInfo.nickname,
+    userEmail: state.userInfo.email,
+    onPending: state.userInfo.onPending,
 })
 
 //props값으로 넣어줄 액션 함수들 정의
 const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(signUpActions.inputChange(payload)),
     beforeOverlapCheck: (payload) => dispatch(signUpActions.beforeOverlapCheck(payload)),
-    overlapCheck: (name) => dispatch(signUpActions.overlapCheck(name)),
+    overlapCheck: (payload) => dispatch(signUpActions.overlapCheck(payload)),
     formValidationInput: () => dispatch(signUpActions.formValidationInput()),
-    formValidationOverlap: () => dispatch(signUpActions.formValidationOverlap())
+    formValidationOverlap: () => dispatch(signUpActions.formValidationOverlap()),
+    setIsModify: (payload) => dispatch(signUpActions.setIsModify(payload)),
+    setInputValue: (payload) => dispatch(signUpActions.setInputValue(payload)),
+
+    getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpContainer);

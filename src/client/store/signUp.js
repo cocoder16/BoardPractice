@@ -7,6 +7,8 @@ const BEFORE_OVERLAP_CHECK = 'signUp/BEFORE_OVERLAP_CHECK';
 const OVERLAP_CHECK = 'signUp/OVERLAP_CHECK';
 const FORM_VALIDATION_INPUT = 'signUp/FORM_VALIDATION_INPUT';
 const FORM_VALIDATION_OVERLAP = 'signUp/FORM_VALIDATION_OVERLAP';
+const SET_IS_MODIFY = 'signUp/SET_IS_MODIFY';
+const SET_INPUT_VALUE = 'signUp/SET_INPUT_VALUE';
 
 //function creating action
 export const inputChange = (payload) => ({
@@ -18,6 +20,7 @@ export const beforeOverlapCheck = (name) => ({
     payload: name
 })
 export const overlapCheck = (name) => async (dispatch, getState) => {
+    if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return false;
     let isOverlap;
     switch (name) {
         case 'idCheck' :
@@ -46,18 +49,34 @@ export const overlapCheck = (name) => async (dispatch, getState) => {
 }
 export const formValidationInput = () => ({type: FORM_VALIDATION_INPUT});
 export const formValidationOverlap = () => async (dispatch, getState) => {
-    const isOverlap_id = await serviceUsers.isOverlapId(getState().signUp.id);
-    console.log('isOverlap_id : ' + isOverlap_id);
-    const isOverlap_nickname = await serviceUsers.isOverlapNickname(getState().signUp.nickname);
-    console.log('isOverlap_nickname : ' + isOverlap_nickname);
+    let isOverlap = {};
+    if (!getState().signUp.isModify) {
+        isOverlap.id = await serviceUsers.isOverlapId(getState().signUp.id);
+        console.log('isOverlap_id : ' + isOverlap.id); 
+        isOverlap.nickname = await serviceUsers.isOverlapNickname(getState().signUp.nickname);
+        console.log('isOverlap_nickname : ' + isOverlap.nickname);
+    } else {
+        isOverlap.id = false;
+        isOverlap.nickname = false;
+        if (getState().signUp.nickname != getState().userInfo.nickname) {
+            isOverlap.nickname = await serviceUsers.isOverlapNickname(getState().signUp.nickname);
+            console.log('isOverlap_nickname : ' + isOverlap.nickname);
+        }
+    }
+   
     return {
         type: FORM_VALIDATION_OVERLAP,
-        payload: {
-            isOverlap_id: isOverlap_id,
-            isOverlap_nickname: isOverlap_nickname
-        }
+        payload: isOverlap
     };
-}
+};
+export const setIsModify = (isModify) => ({
+    type: SET_IS_MODIFY,
+    payload: isModify
+});
+export const setInputValue = (payload) => ({
+    type: SET_INPUT_VALUE,
+    payload: payload
+})
 
 //module's initial state
 const initialState = {
@@ -74,7 +93,8 @@ const initialState = {
         email: ''
     },
     goOverlapCheck: '',
-    pass: ''
+    pass: '',
+    isModify: false
 }
 
 //reducer
@@ -138,21 +158,31 @@ export default function reducer (state=initialState, action) {
                     }
             }
         case FORM_VALIDATION_INPUT :
-            _state = { ...state };
-            if (!InputChecker.id(_state.id) || !InputChecker.pw(_state.pw) || _state.pw !== _state.pwConfirm
-            || !InputChecker.nickname(_state.nickname) || !InputChecker.email(_state.email)) {
-                return { ..._state, pass: false };
+            if (!state.isModify || state.pw.length > 0 || state.pwConfirm.length > 0) {
+                if (!InputChecker.id(state.id) || !InputChecker.pw(state.pw) || state.pw !== state.pwConfirm
+                || !InputChecker.nickname(state.nickname) || !InputChecker.email(state.email)) {
+                    return { ...state, pass: false };
+                } else return { ...state, pass: true };
+            } else {
+                console.log('me');
+                if (!InputChecker.nickname(state.nickname) || !InputChecker.email(state.email)) {
+                    return { ...state, pass: false };
+                } else return { ...state, pass: true };
             }
-            return { ..._state, pass: true };
         case FORM_VALIDATION_OVERLAP :
             _state = { ...state };
-            if (action.payload.isOverlap_id) {
+            if (action.payload.id) {
                 _state = { ..._state, pass: false, span: { ..._state.span, id: '이미 사용중인 아이디입니다. 다른 아이디를 사용해주세요.'} };
             }
-            if (action.payload.isOverlap_nickname) {
+            if (action.payload.nickname) {
                 _state = { ..._state, pass: false, span: { ..._state.span, nickname: '이미 사용중인 닉네임입니다. 다른 닉네임을 사용해주세요.'} };
             }
             return _state;
+        case SET_IS_MODIFY :
+            if (action.payload) return { ...state, isModify: true }
+            else return { ...state, isModify: false }
+        case SET_INPUT_VALUE :
+            return { ...state, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
         default :
             return state;
     }

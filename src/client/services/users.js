@@ -28,6 +28,22 @@ export const createUser = (formData) => {
     }).catch(err => console.log(err));
 }
 
+export const updateUser = (formData) => {
+    axios({
+        method: 'put',
+        url: '/user',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' }
+    }).then(res => {
+        if (res.data.result) {
+            alert('개인정보변경이 완료되었습니다.');
+            window.location.replace(res.data.url);
+        } else {
+            alert('개인정보변경에 실패하였습니다. 다시 시도해주세요.');
+        }
+    }).catch(err => console.log(err));
+}
+
 export const tryLogIn = (formData) => {
     return axios({
         method: 'post',

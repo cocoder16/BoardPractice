@@ -11,16 +11,14 @@ class UserController {
         const user = await User.find(target).limit(1).then(user => {
             return user;
         });
-        console.log(user);
-        console.log('user length: ', user.length);
         if (user.length > 0) return {result: true};
         else return {result: false};
     }
 
     static async testFormAndCreateUser (formData) {
         //form vaildation test
-        if(!InputChecker.id(formData.id) || !InputChecker.pw(formData.pw) || formData.pw !== formData.pwConfirm
-        || !InputChecker.nickname(formData.nickname) || !InputChecker.email(formData.email)) {
+        if(InputChecker.id(formData.id) && InputChecker.pw(formData.pw) && InputChecker.nickname(formData.nickname) 
+        && InputChecker.email(formData.email)) {
             const isOverlap_id = await this.checkOverlap({id: formData.id});
             console.log(isOverlap_id);
             if (isOverlap_id.result === true) return {result: false};
@@ -44,6 +42,46 @@ class UserController {
             //result true
             return {result: true, url: '/'};
         } else return {result: false};
+    }
+
+    static testFormAndUpdateUser (formData) {
+        return User.find({id: formData.id, is_deleted: false}).then(user => {
+            //pw 검사 및 재설정
+            if (formData.pw != '') {
+                if (!InputChecker.pw(formData.pw)) return {result: false};
+                else {
+                    //pw포함 재설정
+                    crypto.randomBytes(64, (err, buf) => {
+                        crypto.pbkdf2(formData.pw, buf.toString('base64'), process.env.ITERATIONS*1, 64, 'sha512', (err, key) => {
+                            User.updateOne({id: formData.id, is_deleted: false}, {$set: {
+                                password: key.toString('base64'), 
+                                salt: buf.toString('base64'),
+                                nickname: formData.nickname,
+                                email: formData.email
+                            }}, (err, raw) => {
+                                console.log(raw);
+                            });
+                        });
+                    });
+                    return {result: true, url: '/'};
+                }
+            }
+            //nickname 검사 및 재설정
+            if (formData.nickname != user[0].nickname) {
+                console.log('## go to nickname check ##');
+                if (!InputChecker.nickname(formData.nickname)) return {result: false};
+            }
+            console.log('## pass nick check ##');
+            //pw빼고 재설정
+            if (!InputChecker.email(formData.email)) return {result: false};
+            User.updateOne({id: formData.id, is_deleted: false}, {$set: {
+                nickname: formData.nickname,
+                email: formData.email
+            }}, (err, raw) => {
+                console.log(raw);
+            });
+            return {result: true, url: '/'}
+        })
     }
 
     static async logInDataCheck (req, formData) {
@@ -94,8 +132,6 @@ class UserController {
     }
 
     static getUserInfo (req) {
-        console.log(req.session);
-        console.log(req.session.userid);
         //유저데이터는 세션을 통해 검증받아야만 보냄.
         if (!req.session.userid) return {result: false, userInfo: {id: '', nickname: '', email: ''}}
         //세션이 있다면 그에 맞는 유저 데이터를 보냄.
@@ -157,7 +193,7 @@ class UserController {
             else if (i < 8) newPw += String.fromCharCode((Math.random() * 10) + 48); //0-9
             else newPw += String.fromCharCode((Math.random() * 15) + 33); //특수문자
         } 
-        console.log(newPw);
+        console.log('#### new pw : ' + newPw);
         const buffer = await new Promise((res, rej) => {
             crypto.randomBytes(64, function(err, buf) {
                 if (err) rej("cant generate buffer.");
@@ -165,14 +201,8 @@ class UserController {
             });
         });
         const buf = buffer.toString('base64');
-        console.log(buf);
         const key = crypto.pbkdf2Sync(newPw, buf, process.env.ITERATIONS*1, 64, 'sha512');
         const newPwHash = key.toString('base64');
-        console.log(id);
-        console.log(token);
-        User.find({id: id, email_token: token, is_deleted: false}).then(res => {
-            console.log(res);
-        })
         const resData = await new Promise((res, rej) => {
             User.updateOne({id: id, email_token: token, is_deleted: false},
             {$set: {salt: buf, password: newPwHash, email_token: ''}}, (err, rawResponse) => {
