@@ -7,6 +7,9 @@ import PwResetEmailSent from './PwResetEmailSent';
 import InfoHead from './InfoHead';
 import InfoBodyPosts from './InfoBodyPosts';
 import InfoBodyReplys from './InfoBodyReplys';
+import BoardHead from './BoardHead';
+import BoardBody from './Boardbody';
+import WriteForm from './WriteForm';
 
 export {
     SignUpForm,
@@ -18,4 +21,7 @@ export {
     InfoHead,
     InfoBodyPosts,
     InfoBodyReplys,
+    BoardHead,
+    BoardBody,
+    WriteForm
 }

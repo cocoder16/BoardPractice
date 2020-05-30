@@ -179,8 +179,7 @@ export default function reducer (state=initialState, action) {
             }
             return _state;
         case SET_IS_MODIFY :
-            if (action.payload) return { ...state, isModify: true }
-            else return { ...state, isModify: false }
+            return { ...state, isModify: action.payload }
         case SET_INPUT_VALUE :
             return { ...state, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
         default :

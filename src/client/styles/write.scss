@@ -1,0 +1,9 @@
+@import './var';
+
+// write
+.write {
+    textarea {
+        width: $write_contents_width;
+        height: $write_contents_height;
+    }
+}

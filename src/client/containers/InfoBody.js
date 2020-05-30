@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch} from 'react-router-dom';
-import { InfoBodyPrivacy, InfoBodyPosts, InfoBodyReplys } from '~c/components/index';
+import { InfoBodyPosts, InfoBodyReplys } from '~c/components/index';
 import SignUpContainer from './SignUpContainer';
 import * as userInfoActions from '~c/store/userInfo';
 

@@ -5,9 +5,9 @@ const InfoHead = () => {
     return (
         <div>
             <ul>
-                <Link to='/info/privacy'><li>개인 정보 관리</li></Link>
-                <Link to='/info/posts'><li>내가 쓴 글</li></Link>
-                <Link to='/info/replys'><li>내가 쓴 댓글</li></Link>
+                <li><Link to='/info/privacy'>개인 정보 관리</Link></li>
+                <li><Link to='/info/posts'>내가 쓴 글</Link></li>
+                <li><Link to='/info/replys'>내가 쓴 댓글</Link></li>
             </ul>
         </div>
     )
