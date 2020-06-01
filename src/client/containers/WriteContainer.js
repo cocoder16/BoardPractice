@@ -4,11 +4,14 @@ import { Route, Switch } from 'react-router-dom';
 import { WriteForm } from '~c/components/index';
 import * as boardActions from '~c/store/board';
 import * as writeActions from '~c/store/write';
+import { stringify } from 'query-string';
+import { createPost } from '~c/services/posts';
 
 class WriteContainer extends Component {
     constructor (props) {
         super(props);
         if (location.toString().indexOf('/write') != -1) {
+            console.log('isModify : false');
             this.props.setIsModify(false);
         }
         // if (location.toString().indexOf('/info/privacy') != -1) {
@@ -25,10 +28,18 @@ class WriteContainer extends Component {
         console.log(this.props);
     }
 
-    handleInputChange = (e) => {
+    goBack () {
+        this.props.history.goBack();
+    }
+
+    handleTitleChange = (e) => {
         e.preventDefault();
-        const { name, value } = e.target;
-        this.props.inputChange({name: name, value: value});
+        const { value } = e.target;
+        this.props.inputChange({name: 'title', value: value});
+    }
+
+    handleContentsChange = (data) => {
+        this.props.inputChange({name: 'contents', value: data});
     }
 
     alertReject () {
@@ -49,24 +60,21 @@ class WriteContainer extends Component {
         formData.append('title', title);
         formData.append('contents', contents);
 
-        if (!isModify) createPosts(formData);
+        if (!isModify) createPost(formData);
         // else updateUser(formData);
-    }
-
-    goBack () {
-        this.props.history.goBack();
     }
 
     render () {
         const { category } = this.props;
-        const { goBack, handleInputChange, handleFormSubmit } = this;
+        const { goBack, handleTitleChange, handleContentsChange, handleFormSubmit } = this;
 
         return (
             <Fragment>
                 <WriteForm 
                     category={category}
                     goBack={goBack}
-                    onInputChange={handleInputChange}
+                    onTitleChange={handleTitleChange}
+                    onContentsChange={handleContentsChange}
                     onSubmit={handleFormSubmit}
                 />
             </Fragment>

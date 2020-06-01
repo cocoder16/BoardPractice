@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import autoIncrement from './autoIncrement';
 
 const postSchema = new mongoose.Schema({
-    _id: { type: Number },
+    id: { type: Number, unique: true, min: 1 },
     title: { type: String, required: true, index: true },
     contents: { type: String, required: true, index: true },
     author: { type: String, required: true, index: true },
@@ -20,13 +20,19 @@ const postSchema = new mongoose.Schema({
 
 //title, contents, author -> 검색,
 
-Post.pre('save', function (next) {
-    autoIncrement(Post, this, column, next);
+postSchema.pre('save', async function (next) {
+    console.log('#### pre ####');
+    if (!this.isNew) {
+        next();
+        return;
+    }
+    console.log('#### entering auto increment ####');
+    await autoIncrement(Post, this, 'id');
+    next();
     // Arguments:
     // model: The model const here below
     // this: The schema, the body of the document you wan to save
     // column: auto-increment that want to apply
-    // next: next fn to continue
 });
 
 const Post = mongoose.model('Post', postSchema);

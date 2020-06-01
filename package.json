@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/cocoder16/BoardPractice#readme",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^19.0.1",
+    "@ckeditor/ckeditor5-react": "^2.1.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",

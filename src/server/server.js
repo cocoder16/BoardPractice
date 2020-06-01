@@ -29,6 +29,7 @@ console.log(__dirname);
 //dev server
 if (process.env.NODE_ENV.trim() == 'development') {
     db();
+    server.use(express.static('public'));
     server.use(bodyParser.urlencoded({extended: false}));
     server.use(bodyParser.json());
     server.use(session({

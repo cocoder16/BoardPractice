@@ -3,3 +3,4 @@ dist/*
 *.log
 *history.xlsx
 .env
+public/uploads

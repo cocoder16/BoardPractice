@@ -3,9 +3,20 @@ import path from 'path';
 import multer from 'multer';
 
 import UserController from './controllers/UserController';
+import PostController from './controllers/PostController';
 
 const router = express.Router();
-const upload = multer();
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, path.resolve(__dirname, '../../public/uploads'));
+        },
+        filename: function (req, file, cb) {
+            cb(null, new Date().valueOf() + path.extname(file.originalname));
+        }
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 }
+  });
 
 //html file
 const index = path.resolve(__dirname, '../../dist/index.html');
@@ -57,8 +68,22 @@ router.post('/help/pwreset/issue', async (req, res) => {
     res.send(result);
 })
 
+router.post('/upload/test', upload.single('upload'), (req, res) => {  
+    console.log(path.resolve(__dirname, `../../public/uploads/${req.file.filename.toLowerCase()}`));
+    res.send({
+        "uploaded": true,
+        "url": `${process.env.DEV_DOMAIN}/uploads/${req.file.filename.toLowerCase()}`
+    })
+})
+
+router.post('/post', upload.none(), async (req, res) => {
+    console.log(req.body);
+    const result = await PostController.createPost(req.body, req.session);
+    res.send(result);
+})
+
 router.get('*', (req, res) => {
     res.sendFile(index);
 })
 
-module.exports = router;
+export default router;

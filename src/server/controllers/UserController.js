@@ -171,7 +171,7 @@ class UserController {
                             to: userEmail,
                             subject: 'Board Practice 비밀번호 재설정 인증메일 입니다.',
                             html: `<p>회원 인증을 위해서 
-                                <a href='${process.env.DOMAIN}/auth/?id=${user[0].id}&token=${emailToken}'>
+                                <a href='${process.env.DEV_DOMAIN}/auth/?id=${user[0].id}&token=${emailToken}'>
                                 인증하기</a>를 클릭해주세요</p>`
                         };
                         transporter.sendMail(mailOptions, (err, info) => {
@@ -215,4 +215,4 @@ class UserController {
     }
 }
 
-module.exports = UserController;
+export default UserController;
