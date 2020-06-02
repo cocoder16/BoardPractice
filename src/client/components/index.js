@@ -8,8 +8,10 @@ import InfoHead from './InfoHead';
 import InfoBodyPosts from './InfoBodyPosts';
 import InfoBodyReplys from './InfoBodyReplys';
 import BoardHead from './BoardHead';
-import BoardBody from './Boardbody';
+import BoardBody from './BoardBody';
 import WriteForm from './WriteForm';
+import Article from './Article';
+import ArticleList from './ArticleList';
 
 export {
     SignUpForm,
@@ -23,5 +25,7 @@ export {
     InfoBodyReplys,
     BoardHead,
     BoardBody,
-    WriteForm
+    WriteForm,
+    Article,
+    ArticleList
 }

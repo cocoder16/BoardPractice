@@ -47,18 +47,15 @@ class PwResetContainer extends Component {
     render () {
         const { handleInputChange, handleFormSubmit } = this;
         const { span, isSentEmail } = this.props;
-        let target;
 
-        if (isSentEmail) {
-            target = <PwResetEmailSent/>
-        } else {
-            target = <PwResetForm 
-                onInputChange={handleInputChange} onFormSubmit={handleFormSubmit} spanText={span}
-            />
-        }
         return (
             <div>
-                {target}
+                { isSentEmail
+                    ? target = <PwResetEmailSent/>
+                    : <PwResetForm 
+                        onInputChange={handleInputChange} onFormSubmit={handleFormSubmit} spanText={span}
+                    />
+                }
             </div>
         )
     }

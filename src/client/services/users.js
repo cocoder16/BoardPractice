@@ -1,13 +1,11 @@
 import axios from 'axios';
 
-export const isOverlapId = (targetId) => {
-    return axios.get(`/check/overlap/id/${targetId}`).then(res => {
-        return res.data.result;
-    }).catch(err => console.log(err));
-}
-
-export const isOverlapNickname = (targetNickname) => {
-    return axios.get(`/check/overlap/nickname/${targetNickname}`).then(res => {
+export const isOverlap = (target) => {
+    return axios({
+        method: 'get',
+        url: '/check/overlap',
+        params: target
+    }).then(res => {
         return res.data.result;
     }).catch(err => console.log(err));
 }

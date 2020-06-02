@@ -12,7 +12,7 @@ const upload = multer({
             cb(null, path.resolve(__dirname, '../../public/uploads'));
         },
         filename: function (req, file, cb) {
-            cb(null, new Date().valueOf() + path.extname(file.originalname));
+            cb(null, new Date().valueOf() + path.extname(file.originalname).toLowerCase());
         }
     }),
     limits: { fileSize: 5 * 1024 * 1024 }
@@ -21,13 +21,10 @@ const upload = multer({
 //html file
 const index = path.resolve(__dirname, '../../dist/index.html');
 
-router.get('/check/overlap/id/:id', async (req, res) => {
-    const result = await UserController.checkOverlap({id: req.params.id, is_deleted: false});
-    res.send(result);
-})
-
-router.get('/check/overlap/nickname/:nickname', async (req, res) => {
-    const result = await UserController.checkOverlap({nickname: req.params.nickname});
+router.get('/check/overlap', async (req, res) => {
+    let result;
+    if (req.query.id) result = await UserController.checkOverlap({id: req.query.id, is_deleted: false});
+    else if (req.query.nickname) result = await UserController.checkOverlap({nickname: req.query.nickname, is_deleted: false});
     res.send(result);
 })
 
@@ -76,8 +73,17 @@ router.post('/upload/test', upload.single('upload'), (req, res) => {
     })
 })
 
+router.get('/post/:num', async (req, res) => {
+    const article = await PostController.getArticle(req.params.num);
+    res.send(article);
+})
+
+router.get('/post', async (req, res) => {
+    const posts = await PostController.getPosts(req.query.category);
+    res.send(posts);
+})
+
 router.post('/post', upload.none(), async (req, res) => {
-    console.log(req.body);
     const result = await PostController.createPost(req.body, req.session);
     res.send(result);
 })

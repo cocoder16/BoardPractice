@@ -9,6 +9,7 @@ const FORM_VALIDATION_INPUT = 'signUp/FORM_VALIDATION_INPUT';
 const FORM_VALIDATION_OVERLAP = 'signUp/FORM_VALIDATION_OVERLAP';
 const SET_IS_MODIFY = 'signUp/SET_IS_MODIFY';
 const SET_INPUT_VALUE = 'signUp/SET_INPUT_VALUE';
+const CLEAR = 'signUpCLEAR';
 
 //function creating action
 export const inputChange = (payload) => ({
@@ -21,45 +22,30 @@ export const beforeOverlapCheck = (name) => ({
 })
 export const overlapCheck = (name) => async (dispatch, getState) => {
     if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return false;
-    let isOverlap;
-    switch (name) {
-        case 'idCheck' :
-            isOverlap = await serviceUsers.isOverlapId(getState().signUp.id);
-            console.log('isOverlap : ' + isOverlap);
-            dispatch({
-                type: OVERLAP_CHECK,
-                payload: {
-                    name: 'id',
-                    isOverlap: isOverlap
-                }
-            });
-            break;
-        case 'nicknameCheck' :
-            isOverlap = await serviceUsers.isOverlapNickname(getState().signUp.nickname);
-            console.log('isOverlap : ' + isOverlap);
-            dispatch({
-                type: OVERLAP_CHECK,
-                payload: {
-                    name: 'nickname',
-                    isOverlap: isOverlap
-                }
-            });
-            break;
-    }
+    const _name = name.split('Check')[0];
+    const isOverlap = await serviceUsers.isOverlap({[_name]: getState().signUp[_name]});
+    console.log('isOverlap : ' + isOverlap);
+    dispatch({
+        type: OVERLAP_CHECK,
+        payload: {
+            name: _name,
+            isOverlap: isOverlap
+        }
+    });
 }
 export const formValidationInput = () => ({type: FORM_VALIDATION_INPUT});
 export const formValidationOverlap = () => async (dispatch, getState) => {
     let isOverlap = {};
     if (!getState().signUp.isModify) {
-        isOverlap.id = await serviceUsers.isOverlapId(getState().signUp.id);
+        isOverlap.id = await serviceUsers.isOverlap(getState().signUp.id);
         console.log('isOverlap_id : ' + isOverlap.id); 
-        isOverlap.nickname = await serviceUsers.isOverlapNickname(getState().signUp.nickname);
+        isOverlap.nickname = await serviceUsers.isOverlap(getState().signUp.nickname);
         console.log('isOverlap_nickname : ' + isOverlap.nickname);
     } else {
         isOverlap.id = false;
         isOverlap.nickname = false;
         if (getState().signUp.nickname != getState().userInfo.nickname) {
-            isOverlap.nickname = await serviceUsers.isOverlapNickname(getState().signUp.nickname);
+            isOverlap.nickname = await serviceUsers.isOverlap(getState().signUp.nickname);
             console.log('isOverlap_nickname : ' + isOverlap.nickname);
         }
     }
@@ -77,6 +63,7 @@ export const setInputValue = (payload) => ({
     type: SET_INPUT_VALUE,
     payload: payload
 })
+export const clear = () => ({type: CLEAR});
 
 //module's initial state
 const initialState = {
@@ -182,6 +169,8 @@ export default function reducer (state=initialState, action) {
             return { ...state, isModify: action.payload }
         case SET_INPUT_VALUE :
             return { ...state, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
+        case CLEAR :
+            return { ...state, span: { ...state.span, id: '', pw: '', pwConfirm: '', nickname: '', email: '' } }
         default :
             return state;
     }

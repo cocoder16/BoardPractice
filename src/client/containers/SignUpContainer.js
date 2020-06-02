@@ -31,6 +31,10 @@ class SignUpContainer extends Component {
         }
     }
 
+    componentWillUnmount () {
+        this.props.clear();
+    }
+
     handleInputChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -125,6 +129,7 @@ const mapDispatchToProps = (dispatch) => ({
     formValidationOverlap: () => dispatch(signUpActions.formValidationOverlap()),
     setIsModify: (payload) => dispatch(signUpActions.setIsModify(payload)),
     setInputValue: (payload) => dispatch(signUpActions.setInputValue(payload)),
+    clear: () => dispatch(signUpActions.clear()),
 
     getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload))
 })

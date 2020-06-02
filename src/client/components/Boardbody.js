@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { ArticleList } from '~c/components/index';
 
-const BoardBody = () => {
+const BoardBody = ({
+    onReady, posts
+}) => {
     return (
-        <div>
-            BoardBody
-        </div>
-    )
+        <Fragment>
+            { onReady && <ArticleList posts={posts}/> }
+        </Fragment>
+    );
 };
 
 export default BoardBody;

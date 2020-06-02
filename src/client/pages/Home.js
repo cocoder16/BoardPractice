@@ -22,9 +22,9 @@ class Home extends Component {
 					{/* 페이지는 쿼리스트링으로 */}
 					<Route exact path='/qna' component={BoardContainer}/>
 					<Route exact path='/forum' component={BoardContainer}/>
-					<Route exact path='/write' component={WriteContainer}/>
 					{/* 모든 게시글은 article url로 통합 post 모델로 관리 */}
-					{/* <Route path='/article' component={}/> */}
+					<Route path='/article' component={BoardContainer}/>
+					<Route exact path='/write' component={WriteContainer}/>
 				</Switch>
         	</Fragment>
     	);

@@ -24,8 +24,9 @@ class WriteContainer extends Component {
         this.goBack = this.goBack.bind(this); 
     }
 
-    componentDidMount () {
-        console.log(this.props);
+    componentWillUnmount() {
+        console.log("on clear");
+        this.props.clear();
     }
 
     goBack () {
@@ -90,9 +91,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    setCategory: (payload) => dispatch(boardActions.setCategory(payload)),
     inputChange: (payload) => dispatch(writeActions.inputChange(payload)),
-    setIsModify: (payload) => dispatch(writeActions.setIsModify(payload))
+    setIsModify: (payload) => dispatch(writeActions.setIsModify(payload)),
+    clear: () => dispatch(writeActions.clear())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(WriteContainer);

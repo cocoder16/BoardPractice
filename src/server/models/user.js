@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: { currentTime: () => Date.now() + 3600000 * 9 } //ISO date에 한국시각을 덮어써서 created_at, updated_at 자동저장
 });
-// id, pw(암호화), nickname, email, auth(관리자0,스태프1,일반2), is_login(로그인상태), 
+// _id(주키), id, pw(암호화), nickname, email, auth(관리자0,스태프1,일반2), is_login(로그인상태), 
 // last_logout(마지막로그아웃시각), is_deleted(계정삭제여부), created_at(생성시각), updated_at(업데이트시각), 
 // deleted_at(삭제시각)은 없고 is_deleted와 updated_at으로 대신함.
 

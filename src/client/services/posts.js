@@ -14,3 +14,21 @@ export const createPost = (formData) => {
         }
     }).catch(err => console.log(err));
 }
+
+export const getPosts = (category) => {
+    return axios({
+        method: 'get',
+        url: '/post',
+        params: {
+            category: category
+        }
+    }).then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}
+
+export const getArticle = (num) => {
+    return axios.get(`/post/${num}`).then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}
