@@ -4,12 +4,12 @@ import routes from './routes';
 import db from './db';
 import bodyParser from 'body-parser';
 import session from 'express-session';
-import { default as connectMongo } from 'connect-mongo';
+// import { default as connectMongo } from 'connect-mongo';
 
 const server = express();
 const port = 4000;
 const devPort = 4000;
-const MongoStore = connectMongo(session);
+// const MongoStore = connectMongo(session);
 
 
 // /* use session */
@@ -39,10 +39,10 @@ if (process.env.NODE_ENV.trim() == 'development') {
         resave: false,
         saveUninitialized: true,
         // cookie: { maxAge: 24000 * 60 * 60 },
-        store: new MongoStore({
-            url: process.env.MONGO_URI,
-            collection: "sessions"
-        })
+        // store: new MongoStore({
+        //     url: process.env.MONGO_URI,
+        //     collection: "sessions"
+        // })
     }))
     server.use(routes); // routes는 sessions에 의존하므로 더 밑에 위치
 
