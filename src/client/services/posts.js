@@ -16,12 +16,14 @@ export const createPost = (formData) => {
     }).catch(err => console.log(err));
 }
 
-export const getPosts = (category) => {
+export const getPosts = (category, page, per) => {
     return axios({
         method: 'get',
         url: '/post',
         params: {
-            category: category
+            category: category,
+            page: page,
+            per: per
         }
     }).then(res => {
         return res.data;

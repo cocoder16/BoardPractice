@@ -21,8 +21,8 @@ const Article = ({
                 </div>
                 <div>
                     <span>{article.reply_count}</span>
-                    <Link to={`/modify/${id}`}><button className={btnClass}>수정</button></Link>
-                    <Link to={`/delete/${id}`}><button className={btnClass}>삭제</button></Link>
+                    <Link to={`/modify/${id}`} className='link'><button className={btnClass}>수정</button></Link>
+                    <Link to={`/delete/${id}`} className='link'><button className={btnClass}>삭제</button></Link>
                 </div>
                 <div>
                     replys

@@ -60,9 +60,9 @@ class PostController {
         })
     }
 
-    static async getPosts (category) {
+    static async getPosts (query) {
         let cate;
-        switch (category) {
+        switch (query.category) {
             case 'qna' :
                 cate = 0;
                 break;
@@ -70,9 +70,22 @@ class PostController {
                 cate = 1;
                 break;
         }
+        const per = query.per*1;
+        const skip = (query.page - 1) * per;
+        console.log("#### getPosts ####");
+        console.log(skip);
+        console.log(per);
+
+        const total = await Post.countDocuments({category: cate, is_deleted: false}).exec();
+        console.log(total);
+        const max = Math.ceil(total / per);
         return Post.find({category: cate, is_deleted: false})
-        .select('id title author read_count reply_count created_at').sort({id: -1}).then(posts => {
-            return posts;
+        .select('id title author read_count reply_count created_at')
+        .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
+            console.log(posts.length);
+            console.log(posts);
+            if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
+            return {result: true, max: max, posts};
         }).catch(err => console.log(err));
     }
 

@@ -28,8 +28,8 @@ const LogInForm = ({
                 </tbody></table>
                 <input type='submit' value='로그인'/>
             </form>
-            <Link to="/signup">회원가입</Link>
-            <Link to="/help/pwreset">비밀번호 재설정</Link>
+            <Link to="/signup" className='link'>회원가입</Link>
+            <Link to="/help/pwreset" className='link'>비밀번호 재설정</Link>
         </Fragment>
     )
 };

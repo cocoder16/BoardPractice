@@ -5,7 +5,7 @@ import { Home, SignUp, PwReset, PwResetCompleted, NotFound } from '~c/pages/inde
 const Router = () => (
     <div>
         <ul>
-            <li><Link to="/">Home</Link></li>
+            <li><Link to="/" className='link'>Home</Link></li>
         </ul>
         <Switch>
             <Route exact path="/signup" component={SignUp}/>

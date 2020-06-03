@@ -3,8 +3,24 @@
 // board
 .board {
     .item {
+        font-size: 0.9rem;
         h3 {
             display: inline;
+        }
+        .id {
+            display: inline-block; width: 50px; border: 1px solid black;
+        }
+        .title {
+            display: inline-block; width: 600px; max-width: 80%; border: 1px solid black;
+        }
+        .author {
+            display: inline-block; width: 200px; border: 1px solid black;
+        }
+        .read_count {
+            display: inline-block; width: 50px; border: 1px solid black;
+        }
+        .created_at {
+            display: inline-block; width: 50px; border: 1px solid black;
         }
     }
 }

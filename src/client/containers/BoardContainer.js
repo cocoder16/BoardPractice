@@ -26,9 +26,10 @@ class BoardContainer extends Component {
 
     getData = () => {
         if (location.pathname == '/qna') {
-            this.props.getPosts('qna');
+            console.log(location.search);
+            this.props.getPosts('qna', location.search);
         } else if (location.pathname == '/forum') {
-            this.props.getPosts('forum');
+            this.props.getPosts('forum', location.search);
         } else if (location.pathname.split('/')[1] == 'article') {
             this.props.getArticle(location.pathname.split('/article/')[1]);
         } else if (location.pathname.split('/')[1] == 'modify') {
@@ -88,7 +89,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getPosts: (payload) => dispatch(boardActions.getPosts(payload)),
+    getPosts: (category, queryString) => dispatch(boardActions.getPosts(category, queryString)),
     getArticle: (payload) => dispatch(boardActions.getArticle(payload)),
     getDeleteAlert: () => dispatch(boardActions.getDeleteAlert()),
     skimOnDelete: () => dispatch(boardActions.skimOnDelete()),

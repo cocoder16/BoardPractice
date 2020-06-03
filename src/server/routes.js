@@ -81,7 +81,8 @@ router.get('/post/:num', async (req, res) => {
 })
 
 router.get('/post', async (req, res) => {
-    const posts = await PostController.getPosts(req.query.category);
+    console.log(req.query);
+    const posts = await PostController.getPosts(req.query);
     res.send(posts);
 })
 

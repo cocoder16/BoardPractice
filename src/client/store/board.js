@@ -7,21 +7,27 @@ const GET_ARTICLE = 'board/GET_ARTICLE';
 const ARTICLE_PENDING = 'board/ARTICLE_PENDING';
 const GET_DELETE_ALERT = 'board/GET_DELETE_ALERT';
 const SKIM_ON_DELETE = 'board/SKIM_ON_DELETE';
-const DELETE_POST = 'board/DELETE_POST';
 
 //function creating action
-export const getPosts = (category) => async (dispatch, getState) => {
+export const getPosts = (category, queryString) => async (dispatch, getState) => {
+    console.log(queryString);
     dispatch({
         type: SET_CATEGORY,
         payload: category
-    })
-    const posts = await servicePosts.getPosts(category);
-    console.log('getPosts');
-    console.log(posts);
-    dispatch({
-        type: GET_POSTS,
-        payload: posts
     });
+    let page;
+    if (!queryString) page = '1';
+    else page = queryString.split('=')[1];
+    const result = await servicePosts.getPosts(category, page, getState().board.per);
+    console.log('getPosts');
+    if (result.result) {
+        dispatch({
+            type: GET_POSTS,
+            payload: { result, page }
+        });
+    } else {
+        window.location.replace(result.url);
+    }
 }
 export const getArticle = (num) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
@@ -59,7 +65,11 @@ const initialState = {
     listOnReady: false,
     article: {},
     articleOnReady: false,
-    onDelete: false
+    onDelete: false,
+    per: 2,
+    now: 1,
+    max: 1,
+    interval: 3
 }
 
 //reducer
@@ -68,7 +78,8 @@ export default function reducer (state=initialState, action) {
         case SET_CATEGORY :
             return { ...state, category: action.payload, listOnReady: false };
         case GET_POSTS :
-            return { ...state, posts: [ ...action.payload ], listOnReady: true };
+            return { ...state, posts: [ ...action.payload.result.posts ], now: action.payload.page,
+                max: action.payload.result.max, listOnReady: true };
         case GET_ARTICLE : 
             const _article = { ...action.payload.article };
             delete _article.category;
@@ -82,7 +93,7 @@ export default function reducer (state=initialState, action) {
         case GET_DELETE_ALERT :
             return { ...state, onDelete: true };
         case SKIM_ON_DELETE :
-            return { ...state, onDelete: false }
+            return { ...state, onDelete: false };
         default :
             return state;
     }

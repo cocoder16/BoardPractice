@@ -8,7 +8,7 @@ const LoggedIn = ({
         <div>
             <p>{userName} 님 환영합니다 ^^</p>
             <ul>
-                <Link to='/info/privacy'><li>내 정보</li></Link>
+                <Link to='/info/privacy' className='link'><li>내 정보</li></Link>
                 <li onClick={logOut}>로그아웃</li>
             </ul>
         </div>

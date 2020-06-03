@@ -12,6 +12,8 @@ import BoardBody from './BoardBody';
 import WriteForm from './WriteForm';
 import Article from './Article';
 import ArticleList from './ArticleList';
+import Pagination from './Pagination';
+import PageItem from './PageItem';
 
 export {
     SignUpForm,
@@ -27,5 +29,7 @@ export {
     BoardBody,
     WriteForm,
     Article,
-    ArticleList
+    ArticleList,
+    Pagination,
+    PageItem
 }
