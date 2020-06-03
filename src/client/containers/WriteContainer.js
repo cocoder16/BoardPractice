@@ -18,7 +18,7 @@ class WriteContainer extends Component {
             this.props.setIsModify(true);
         }
 
-        this.goBack = this.goBack.bind(this); 
+        this.goBack = this.goBack.bind(this); //왜
     }
 
     componentDidUpdate (prevProps, prevState) {
@@ -30,19 +30,14 @@ class WriteContainer extends Component {
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
         console.log("on clear");
         this.props.setIsModify(false);
-        this.clear();
+        this.props.clear();
     }
 
-    clear () {
-        // this.props.articleClear();
-        this.props.formClear();
-    }
-
-    goBack () {
-        this.clear();
+    goBack = () => {
+        this.props.clear();
         this.props.history.goBack();
     }
 
@@ -116,8 +111,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(writeActions.inputChange(payload)),
     setIsModify: (payload) => dispatch(writeActions.setIsModify(payload)),
-    formClear: () => dispatch(writeActions.clear()),
-    // articleClear: () => dispatch(boardActions.clear()),
+    clear: () => dispatch(writeActions.clear()),
     setInputValue: (payload) => dispatch(writeActions.setInputValue(payload))
 })
 

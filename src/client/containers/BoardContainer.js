@@ -9,6 +9,8 @@ class BoardContainer extends Component {
     constructor (props) {
         super(props);
         this.getData();
+
+        this.goBackOnDelete = this.goBackOnDelete.bind(this); //왜 붙였지?
     }
 
     componentDidMount() {
@@ -22,23 +24,32 @@ class BoardContainer extends Component {
         this.unlisten();
     }
 
-    getData () {
+    getData = () => {
         if (location.pathname == '/qna') {
             this.props.getPosts('qna');
-        }
-        else if (location.pathname == '/forum') {
+        } else if (location.pathname == '/forum') {
             this.props.getPosts('forum');
-        }
-        else if (location.pathname.split('/')[1] == 'article') {
+        } else if (location.pathname.split('/')[1] == 'article') {
             this.props.getArticle(location.pathname.split('/article/')[1]);
-        }
-        else if (location.pathname.split('/')[1] == 'modify') {
+        } else if (location.pathname.split('/')[1] == 'modify') {
             this.props.getArticle(location.pathname.split('/modify/')[1]);
+        } else if (location.pathname.split('/')[1] == 'delete') {
+            this.props.getDeleteAlert();
         }
     }
 
+    goBackOnDelete = () => {
+        this.props.skimOnDelete();
+        this.props.history.goBack();
+    }
+
+    handleDeletePost = () => {
+        this.props.deletePost(location.pathname.split('/delete/')[1]);
+    }
+
     render () {
-        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, auth, isModify } = this.props;
+        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, auth, isModify, onDelete } = this.props;
+        const { goBackOnDelete, handleDeletePost } = this;
 
         return (
             <Fragment>
@@ -50,9 +61,14 @@ class BoardContainer extends Component {
                     render={() => <BoardBody onReady={listOnReady} posts={posts}/>}/>
                     <Route path='/article'
                     render={() => <Article onReady={articleOnReady} article={article} auth={auth}
-                        id={article.id}/>}/>
+                        id={article.id}/>}
+                    />
                     <Route exact path='/write' component={WriteContainer}/>
                     <Route path='/modify' component={WriteContainer}/>
+                    <Route path='/delete'
+                    render={() => <Article auth={auth} onDelete={onDelete} goBack={goBackOnDelete}
+                        deletePost={handleDeletePost}/>}
+                    />
                 </Switch>
             </Fragment>
         );
@@ -68,11 +84,15 @@ const mapStateToProps = (state) => ({
     articleOnReady: state.board.articleOnReady,
     auth: state.board.auth,
     isModify: state.write.isModify,
+    onDelete: state.board.onDelete
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getPosts: (payload) => dispatch(boardActions.getPosts(payload)),
     getArticle: (payload) => dispatch(boardActions.getArticle(payload)),
+    getDeleteAlert: () => dispatch(boardActions.getDeleteAlert()),
+    skimOnDelete: () => dispatch(boardActions.skimOnDelete()),
+    deletePost: (payload) => dispatch(boardActions.deletePost(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);

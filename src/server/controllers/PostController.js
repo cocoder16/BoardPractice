@@ -37,10 +37,23 @@ class PostController {
         }).then(res => {
             if (res.n == 0) return {result: false, url: '/'};
             else return {result: true, url: `/article/${formData.id}`};
+        });
+    }
+
+    static async deletePost(id, category, session) {
+        console.log('### del ###');
+        console.log(id);
+        console.log(session.userid);
+        return Post.updateOne({id: id, authorId: session.userid},
+        {$set: {is_deleted: true, updated_at: new Date().format('yy-MM-dd a/p hh:mm:ss')}}, (err, rawResponse) => {
+            console.log(rawResponse);
+        }).then(res => {
+            if (res.n == 1) return {result: true, url: `/${category}`};
+            else return {result: false, url: '/'};            
         })
     }
 
-    static async authoModify (id, session) {
+    static async authModify (id, session) {
         return Post.find({id: id}).then(post => {
             if (post[0].authorId == session.userid) return true;
             else return false;

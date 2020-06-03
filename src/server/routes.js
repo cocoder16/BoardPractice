@@ -95,6 +95,12 @@ router.put('/post', upload.none(), async (req, res) => {
     res.send(result);
 })
 
+router.delete('/post', async (req, res) => {
+    const result = await PostController.deletePost(req.query.id, req.query.category, req.session);
+    console.log(result);
+    res.send(result);
+})
+
 router.get('/info*', (req, res) => {
     if (!req.session.userid) res.redirect('/');
     else res.sendFile(index);
@@ -114,6 +120,10 @@ router.get('/modify*', (req, res) => {
 })
 
 router.get('/write*', (req, res) => {
+    res.redirect('/');
+})
+
+router.get('/delete*', (req, res) => {
     res.redirect('/');
 })
 

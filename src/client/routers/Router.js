@@ -24,6 +24,7 @@ const Router = () => (
             <Route exact path='/write' component={Home}/>
             <Route path='/article' component={Home}/>
             <Route path='/modify' component={Home}/>
+            <Route path='/delete' component={Home}/>
             <Route component={NotFound}/>
         </Switch>
     </div>

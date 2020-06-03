@@ -5,7 +5,9 @@ const SET_CATEGORY = 'board/SET_CATEGORY';
 const GET_POSTS = 'board/GET_POSTS';
 const GET_ARTICLE = 'board/GET_ARTICLE';
 const ARTICLE_PENDING = 'board/ARTICLE_PENDING';
-const CLEAR = 'board/CLEAR';
+const GET_DELETE_ALERT = 'board/GET_DELETE_ALERT';
+const SKIM_ON_DELETE = 'board/SKIM_ON_DELETE';
+const DELETE_POST = 'board/DELETE_POST';
 
 //function creating action
 export const getPosts = (category) => async (dispatch, getState) => {
@@ -43,7 +45,12 @@ export const getArticle = (num) => async (dispatch, getState) => {
         window.location.replace(article.url);
     }
 }
-export const clear = () => ({type: CLEAR})
+export const getDeleteAlert = () => ({type: GET_DELETE_ALERT});
+export const skimOnDelete = () => ({type: SKIM_ON_DELETE});
+export const deletePost = (id) => async (dispatch, getState) => {
+    servicePosts.deletePost(id, getState().board.category);
+    dispatch({type: SKIM_ON_DELETE});
+}
 
 //module's initial state
 const initialState = {
@@ -52,6 +59,7 @@ const initialState = {
     listOnReady: false,
     article: {},
     articleOnReady: false,
+    onDelete: false
 }
 
 //reducer
@@ -71,8 +79,10 @@ export default function reducer (state=initialState, action) {
                 articleOnReady: true };
         case ARTICLE_PENDING :
             return { ...state, articleOnReady: false };
-        case CLEAR :
-            return { ...state, article: {} };
+        case GET_DELETE_ALERT :
+            return { ...state, onDelete: true };
+        case SKIM_ON_DELETE :
+            return { ...state, onDelete: false }
         default :
             return state;
     }

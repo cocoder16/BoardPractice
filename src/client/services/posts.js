@@ -44,6 +44,24 @@ export const updatePost = (formData) => {
     }).catch(err => console.log(err));
 }
 
+export const deletePost = (id, category) => {
+    axios({
+        method: 'delete',
+        url: '/post',
+        params: {
+            id: id,
+            category: category
+        }
+    }).then(res => {
+        if (res.data.result) {
+            window.location.replace(res.data.url);
+        } else {
+            window.location.replace(res.data.url);
+            console.log('!!!!!! failed deletePost !!!!!!!');
+        }
+    }).catch(err => console.log(err));
+}
+
 export const getArticle = (num) => {
     return axios.get(`/post/${num}`).then(res => {
         return res.data;

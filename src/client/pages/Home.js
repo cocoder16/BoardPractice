@@ -26,6 +26,7 @@ class Home extends Component {
 					<Route path='/article' component={BoardContainer}/>
 					<Route exact path='/write' component={BoardContainer}/>
 					<Route path='/modify' component={BoardContainer}/>
+					<Route path='/delete' component={BoardContainer}/>
 				</Switch>
         	</Fragment>
     	);
