@@ -5,6 +5,7 @@ const SET_CATEGORY = 'board/SET_CATEGORY';
 const GET_POSTS = 'board/GET_POSTS';
 const GET_ARTICLE = 'board/GET_ARTICLE';
 const ARTICLE_PENDING = 'board/ARTICLE_PENDING';
+const CLEAR = 'board/CLEAR';
 
 //function creating action
 export const getPosts = (category) => async (dispatch, getState) => {
@@ -23,17 +24,26 @@ export const getPosts = (category) => async (dispatch, getState) => {
 export const getArticle = (num) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
     const article = await servicePosts.getArticle(num);
-    console.log('getArticle');
-    console.log(article);
+    let auth = false;
+    const artId = article.article.id;
+    console.log(artId);
+    const userRight = getState().userInfo.articleIdArr.filter((cur, i, arr) => {
+        console.log(cur);
+        if (cur == artId) return true;
+        else return false;
+    });
+    console.log(userRight);
+    if (userRight.length == 1) auth = true;
     if (article.result) {
         dispatch({
             type: GET_ARTICLE,
-            payload: article.article
+            payload: { article: article.article, auth: auth }
         });
     } else {
         window.location.replace(article.url);
     }
 }
+export const clear = () => ({type: CLEAR})
 
 //module's initial state
 const initialState = {
@@ -52,14 +62,17 @@ export default function reducer (state=initialState, action) {
         case GET_POSTS :
             return { ...state, posts: [ ...action.payload ], listOnReady: true };
         case GET_ARTICLE : 
-            const _article = { ...action.payload };
+            const _article = { ...action.payload.article };
             delete _article.category;
             let cate;
-            if (action.payload.category == 0) cate = 'qna';
-            else if (action.payload.category == 1) cate = 'forum';
-            return { ...state, category: cate, article: _article, articleOnReady: true };
+            if (action.payload.article.category == 0) cate = 'qna';
+            else if (action.payload.article.category == 1) cate = 'forum';
+            return { ...state, category: cate, article: _article, auth: action.payload.auth,
+                articleOnReady: true };
         case ARTICLE_PENDING :
             return { ...state, articleOnReady: false };
+        case CLEAR :
+            return { ...state, article: {} };
         default :
             return state;
     }

@@ -51,7 +51,7 @@ class PwResetContainer extends Component {
         return (
             <div>
                 { isSentEmail
-                    ? target = <PwResetEmailSent/>
+                    ? <PwResetEmailSent/>
                     : <PwResetForm 
                         onInputChange={handleInputChange} onFormSubmit={handleFormSubmit} spanText={span}
                     />

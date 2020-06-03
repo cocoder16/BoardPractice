@@ -16,18 +16,6 @@ export const getUserInfo = () => async (dispatch, getState) => {
         });
     } else dispatch({type: DELETE_USER_INFO});
 };
-export const setUserInfo = (payload) => async (dispatch, getState) => {
-    let _payload;
-    if (!payload) {
-        _payload = await serviceUsers.getUserInfo();
-    } else {
-        _payload = payload;
-    }
-    dispatch({
-        type: SET_USER_INFO,
-        payload: _payload
-    });
-};
 export const deleteUserInfo = () => ({type: DELETE_USER_INFO});
 
 //module's initial state
@@ -36,7 +24,8 @@ const initialState = {
     isLoggedIn: false,
     id: '',
     nickname: '',
-    email: ''
+    email: '',
+    articleIdArr: []
 }
 
 //reducer
@@ -45,7 +34,10 @@ export default function reducer (state=initialState, action) {
         case GETTING_START :
             return { ...state, onPending: true }
         case SET_USER_INFO :
-            return { ...state, onPending: false, isLoggedIn: true, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
+            console.log(action.payload);
+            return { ...state, onPending: false, isLoggedIn: true, id: action.payload.id, 
+                nickname: action.payload.nickname, email: action.payload.email, 
+                articleIdArr: action.payload.articleIdArr }
         case DELETE_USER_INFO :
             return { ...state, onPending: false, isLoggedIn: false, id: '', nickname: '', email: '' }
         default :

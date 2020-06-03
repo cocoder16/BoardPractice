@@ -32,7 +32,7 @@ class UserContainer extends Component {
         formData.append('pw', pw);
         const data = await tryLogIn(formData);
         if (data.result) {
-            this.props.setUserInfo(data.userInfo);
+            this.props.getUserInfo();
         } else {
             this.props.logInFailed();
         }
@@ -91,7 +91,7 @@ const mapDispatchToProps = (dispatch) => ({
     formValidationInput: () => dispatch(logInActions.formValidationInput()),
     logInFailed: () => dispatch(logInActions.logInFailed()),
 
-    setUserInfo: (payload) => dispatch(userInfoActions.setUserInfo(payload)),
+    getUserInfo: () => dispatch(userInfoActions.getUserInfo()),
     deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo())
 })
 

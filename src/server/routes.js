@@ -4,6 +4,7 @@ import multer from 'multer';
 
 import UserController from './controllers/UserController';
 import PostController from './controllers/PostController';
+import { runInNewContext } from 'vm';
 
 const router = express.Router();
 const upload = multer({
@@ -62,6 +63,7 @@ router.post('/help/pwreset/issue', async (req, res) => {
     const id = req.body.id;
     const token = req.body.token;
     const result = await UserController.issueNewPw(id, token);
+    console.log(result);
     res.send(result);
 })
 
@@ -86,6 +88,33 @@ router.get('/post', async (req, res) => {
 router.post('/post', upload.none(), async (req, res) => {
     const result = await PostController.createPost(req.body, req.session);
     res.send(result);
+})
+
+router.put('/post', upload.none(), async (req, res) => {
+    const result = await PostController.updatePost(req.body, req.session);
+    res.send(result);
+})
+
+router.get('/info*', (req, res) => {
+    if (!req.session.userid) res.redirect('/');
+    else res.sendFile(index);
+})
+
+router.get('/modify/:num', async (req, res) => {
+    if(!req.params || !req.session.userid) {
+        res.redirect('/');
+        return null;
+    }
+    const result = await PostController.authModify(req.params.num, req.session);
+    if (!result) res.redirect('/');
+})
+
+router.get('/modify*', (req, res) => {
+    res.redirect('/');
+})
+
+router.get('/write*', (req, res) => {
+    res.redirect('/');
 })
 
 router.get('*', (req, res) => {

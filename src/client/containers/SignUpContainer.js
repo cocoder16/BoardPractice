@@ -8,10 +8,10 @@ import { createUser, updateUser } from '~c/services/users';
 class SignUpContainer extends Component {
     constructor (props) {
         super(props);
-        if (location.toString().indexOf('/signUp') != -1) {
+        if (location.pathname == '/signup') {
             this.props.setIsModify(false);
         }
-        if (location.toString().indexOf('/info/privacy') != -1) {
+        if (location.pathname == '/info/privacy') {
             this.props.setIsModify(true);
             if (!this.props.onPending) {
                 this.props.getUserInfo();

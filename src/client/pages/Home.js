@@ -24,7 +24,8 @@ class Home extends Component {
 					<Route exact path='/forum' component={BoardContainer}/>
 					{/* 모든 게시글은 article url로 통합 post 모델로 관리 */}
 					<Route path='/article' component={BoardContainer}/>
-					<Route exact path='/write' component={WriteContainer}/>
+					<Route exact path='/write' component={BoardContainer}/>
+					<Route path='/modify' component={BoardContainer}/>
 				</Switch>
         	</Fragment>
     	);

@@ -7,6 +7,7 @@ const postSchema = new mongoose.Schema({
     title: { type: String, required: true, index: true },
     contents: { type: String, required: true, index: true },
     author: { type: String, required: true, index: true },
+    authorId: { type: String, required: true, index: true },
     category: { type: Number, required: true },
     is_deleted: { type: Boolean, default: false },
     read_count: { type: Number, default: 0 },
@@ -19,7 +20,7 @@ const postSchema = new mongoose.Schema({
 //  is_deleted(글삭제여부), read_count(조회수), reply_count(댓글수), 
 // createdAt(생성시각), updatedAt(업데이트시각),
 
-//title, contents, author -> 검색, id -> get url
+//title, contents, author -> 검색, id -> get url, authorId -> 쿼리
 
 postSchema.pre('save', async function (next) {
     console.log('#### pre ####');

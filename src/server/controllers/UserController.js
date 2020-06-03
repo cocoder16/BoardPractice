@@ -3,6 +3,7 @@ import InputChecker from '../../modules/InputChecker';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import '../../modules/replaceAll';
+import Post from '../models/post';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
@@ -44,7 +45,7 @@ class UserController {
         } else return {result: false};
     }
 
-    static testFormAndUpdateUser (formData) {
+    static async testFormAndUpdateUser (formData) {
         return User.find({id: formData.id, is_deleted: false}).then(user => {
             //pw 검사 및 재설정
             if (formData.pw != '') {
@@ -85,7 +86,6 @@ class UserController {
     }
 
     static async logInDataCheck (req, formData) {
-        let proc = {};
         // 아이디가 있는지 찾고 있으면 입력받은 pw를 해시화하여 DB에 있는 값과 비교
         MeasureRunTime.start('find');
         return await User.find({id: formData.id, is_deleted: false}).then(user => {
@@ -96,10 +96,9 @@ class UserController {
                 const key = crypto.pbkdf2Sync(formData.pw, salt, process.env.ITERATIONS*1, 64, 'sha512');
                 MeasureRunTime.end('pw hash');
                 if (key.toString('base64') === user[0].password) {
-                    proc.result = 'success';
-                    proc.userInfo = {id: user[0].id, nickname: user[0].nickname, email: user[0].email}
                      //session 만들어주고,
                     req.session.userid = formData.id;
+                    req.session.usernickname = user[0].nickname;
                     req.session.save();
                     MeasureRunTime.start('findOneAndUpdate');
                     User.updateOne({id: formData.id, is_deleted: false}, {$set: {is_login: true}}, (err, rawResponse) => {
@@ -109,13 +108,13 @@ class UserController {
                         }
                     })
                     MeasureRunTime.end('findOneAndUpdate');
-                    return {...proc, result: true}
+                    return {result: true}
                 } else return {result: false}
             }
         });
     }
 
-    static logOut (req) {
+    static async logOut (req) {
         return User.updateOne({id: req.session.userid, is_deleted: false},
             {$set: {is_login: false, last_logout: Date.now() + 3600000 * 9}}, (err, rawResponse) => {
                 if (err) console.log(err);
@@ -131,7 +130,8 @@ class UserController {
         })
     }
 
-    static getUserInfo (req) {
+    static async getUserInfo (req) {
+        console.log('#### getUserInfo ####');
         //유저데이터는 세션을 통해 검증받아야만 보냄.
         if (!req.session.userid) return {result: false, userInfo: {id: '', nickname: '', email: ''}}
         //세션이 있다면 그에 맞는 유저 데이터를 보냄.
@@ -139,12 +139,20 @@ class UserController {
             if (user.length == 0) {
                 return {result: false, userInfo: {id: '', nickname: '', email: ''}}
             } else {
-                return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname, email: user[0].email}}
+                return Post.find({authorId: user[0].id, is_deleted: false})
+                .select('id').then(post => {
+                    const articleIdArr = [];
+                    for (let i = 0; i < post.length; i++) {
+                        articleIdArr.push(post[i].id);
+                    }
+                    return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname,
+                        email: user[0].email, articleIdArr: articleIdArr}}
+                })
             }
         }).catch(err => console.log(err));
     }
 
-    static sendPwAuthEmail (id) {
+    static async sendPwAuthEmail (id) {
         console.log(id);
         return User.find({id: id, is_deleted: false}).then(user => {
             if (user.length == 0) return {result: false}
@@ -203,6 +211,7 @@ class UserController {
         const buf = buffer.toString('base64');
         const key = crypto.pbkdf2Sync(newPw, buf, process.env.ITERATIONS*1, 64, 'sha512');
         const newPwHash = key.toString('base64');
+        //
         const resData = await new Promise((res, rej) => {
             User.updateOne({id: id, email_token: token, is_deleted: false},
             {$set: {salt: buf, password: newPwHash, email_token: ''}}, (err, rawResponse) => {
@@ -212,6 +221,15 @@ class UserController {
             })
         });
         return resData;
+        // why not same rawResponse and res
+        // return User.updateOne({id: id, email_token: token, is_deleted: false},
+        // {$set: {salt: buf, password: newPwHash, email_token: ''}}, (err, rawResponse) => {
+        //     console.log(rawResponse);
+        // }).then(res => {
+        //     console.log(res);
+        //     if (res.n == 0) return {result: false};
+        //     else return {result: true, pw: newPw};
+        // });
     }
 }
 

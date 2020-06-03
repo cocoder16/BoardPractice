@@ -2,6 +2,7 @@
 const INPUT_CHANGE = 'write/INPUT_CHANGE';
 const SET_IS_MODIFY = 'write/SET_IS_MODIFY';
 const CLEAR = 'write/CLEAR';
+const SET_INPUT_VALUE = 'write/SET_INPUT_VALUE'
 
 //function creating action
 export const inputChange = (payload) => ({
@@ -15,7 +16,11 @@ export const setIsModify = (isModify) => ({
 export const clear = () => {
     console.log('clear');
     return {type: CLEAR};
-}
+};
+export const setInputValue = (payload) => ({
+    type: SET_INPUT_VALUE,
+    payload: payload
+});
 
 //module's initial state
 const initialState = {
@@ -33,6 +38,8 @@ export default function reducer (state=initialState, action) {
             return { ...state, isModify: action.payload };
         case CLEAR :
             return { ...state, title: '', contents: '' };
+        case SET_INPUT_VALUE :
+            return { ...state, title: action.payload.title, contents: action.payload.contents }
         default :
             return state;
     }

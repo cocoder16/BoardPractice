@@ -5,31 +5,44 @@ import { WriteForm } from '~c/components/index';
 import * as boardActions from '~c/store/board';
 import * as writeActions from '~c/store/write';
 import { stringify } from 'query-string';
-import { createPost } from '~c/services/posts';
+import { createPost, updatePost } from '~c/services/posts';
 
 class WriteContainer extends Component {
     constructor (props) {
         super(props);
-        if (location.toString().indexOf('/write') != -1) {
+        if (location.pathname == '/write') {
             console.log('isModify : false');
             this.props.setIsModify(false);
         }
-        // if (location.toString().indexOf('/info/privacy') != -1) {
-        //     this.props.setIsModify(true);
-        //     if (!this.props.onPending) {
-        //         this.props.getUserInfo();
-        //     }
-        // }
+        if (location.pathname.split('/')[1] == 'modify') {
+            this.props.setIsModify(true);
+        }
 
         this.goBack = this.goBack.bind(this); 
     }
 
+    componentDidUpdate (prevProps, prevState) {
+        console.log(prevProps.articleOnReady);
+        console.log(this.props.articleOnReady);
+        if ((!prevProps.articleOnReady && this.props.articleOnReady && this.props.isModify)) {
+            document.getElementsByName('title')[0].value = this.props.article.title;
+            this.props.setInputValue({title: this.props.article.title, contents: this.props.article.contents});
+        }
+    }
+
     componentWillUnmount() {
         console.log("on clear");
-        this.props.clear();
+        this.props.setIsModify(false);
+        this.clear();
+    }
+
+    clear () {
+        // this.props.articleClear();
+        this.props.formClear();
     }
 
     goBack () {
+        this.clear();
         this.props.history.goBack();
     }
 
@@ -57,43 +70,55 @@ class WriteContainer extends Component {
         }
 
         const formData = new FormData();
-        formData.append('category', category);
         formData.append('title', title);
         formData.append('contents', contents);
 
-        if (!isModify) createPost(formData);
-        // else updateUser(formData);
+        if (!isModify) {
+            formData.append('category', category);
+            createPost(formData);
+        }
+        else {
+            formData.append('id', location.pathname.split('/modify/')[1]);
+            updatePost(formData);
+        }
     }
 
     render () {
-        const { category } = this.props;
         const { goBack, handleTitleChange, handleContentsChange, handleFormSubmit } = this;
+        const { isModify, contents } = this.props;
 
+        console.log('render');
+        console.log(isModify);
         return (
-            <Fragment>
-                <WriteForm 
-                    category={category}
-                    goBack={goBack}
-                    onTitleChange={handleTitleChange}
-                    onContentsChange={handleContentsChange}
-                    onSubmit={handleFormSubmit}
-                />
-            </Fragment>
+            <WriteForm 
+                goBack={goBack}
+                onTitleChange={handleTitleChange}
+                onContentsChange={handleContentsChange}
+                onSubmit={handleFormSubmit}
+                contents={contents}
+            />
         );
     };
 };
 
 const mapStateToProps = (state) => ({
+    article: state.board.article,
+    articleOnReady: state.board.articleOnReady,
+
     category: state.board.category,
     isModify: state.write.isModify,
     title: state.write.title,
-    contents: state.write.contents
+    contents: state.write.contents,
+
+    article: state.board.article,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(writeActions.inputChange(payload)),
     setIsModify: (payload) => dispatch(writeActions.setIsModify(payload)),
-    clear: () => dispatch(writeActions.clear())
+    formClear: () => dispatch(writeActions.clear()),
+    // articleClear: () => dispatch(boardActions.clear()),
+    setInputValue: (payload) => dispatch(writeActions.setInputValue(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(WriteContainer);
