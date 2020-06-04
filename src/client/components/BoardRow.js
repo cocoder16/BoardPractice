@@ -5,9 +5,6 @@ const BoardRow = ({//id title author read_count reply_count created_at
     post
 }) => {
 
-    if (post.reply_count == 0) {
-
-    }
     return (
         <li className='item'>
             <div className='id'>
@@ -15,7 +12,7 @@ const BoardRow = ({//id title author read_count reply_count created_at
             </div>
             <div className='title'>
                 <Link to={`article/${post.id}`} className='link'>{post.title}</Link>
-                { post.read_count != 0 && <span className='reply_count'> [{post.reply_count}]</span> }
+                { post.reply_count != 0 && <span className='reply_count'> [{post.reply_count}]</span> }
             </div>
             <div className='author'>{post.author}</div>
             <div className='read_count'>{post.read_count}</div>

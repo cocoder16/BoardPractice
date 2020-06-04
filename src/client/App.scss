@@ -1,3 +1,10 @@
 @import './styles/index';
 body { background-color: #ddd; }
 .link { text-decoration: none; }
+
+.personal-btn {
+    display: none;
+    &.show {
+        display: initial;
+    }
+}

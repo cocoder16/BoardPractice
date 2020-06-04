@@ -121,6 +121,11 @@ router.post('/reply', upload.none(), async (req, res) => {
     res.send(result);
 })
 
+router.get('/reply', async (req, res) => {
+    const replies = await ReplyController.getReplies(req.query.post_id);
+    res.send(replies);
+})
+
 router.get('/modify*', (req, res) => {
     res.redirect('/');
 })

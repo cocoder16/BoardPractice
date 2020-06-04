@@ -16,6 +16,7 @@ import Pagination from './Pagination';
 import PageItem from './PageItem';
 import ReplyForm from './ReplyForm';
 import ReplyList from './ReplyList';
+import Reply from './Reply';
 
 export {
     SignUpForm,
@@ -35,5 +36,6 @@ export {
     Pagination,
     PageItem,
     ReplyForm,
-    ReplyList
+    ReplyList,
+    Reply
 }

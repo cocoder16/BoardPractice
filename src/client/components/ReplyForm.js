@@ -5,12 +5,12 @@ const ReplyForm = ({
 }) => {
 
     return (
-        <Fragment>
+        <div className='reply-form'>
             <form onSubmit={onSubmit}>
-                <textarea name='contents' maxLength='4000' onChange={onChange}></textarea>
+                <textarea name='contents' className='contents' maxLength='4000' onChange={onChange}></textarea>
                 <input type='submit' value='등록'/>
             </form>
-        </Fragment>
+        </div>
     )
 }
 

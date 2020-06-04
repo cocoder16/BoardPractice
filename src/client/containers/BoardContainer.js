@@ -20,6 +20,12 @@ class BoardContainer extends Component {
         });
     }
 
+    componentDidUpdate (prevProps) {
+        if (prevProps.isLoggedIn != this.props.isLoggedIn) {
+            this.getData();
+        }
+    }
+
     componentWillUnmount() {
         this.unlisten();
     }

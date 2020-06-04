@@ -1,0 +1,15 @@
+@import './var';
+
+// board
+.reply {
+    font-size: 0.9rem;
+    .author {
+        border: 1px solid black;
+    }
+    .contents {
+        display: inline-block; max-width: 80%; border: 1px solid black;
+    }
+    .foot {
+        display: inline-block; width: 300px; border: 1px solid black;
+    }
+}

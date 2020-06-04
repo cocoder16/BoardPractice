@@ -6,8 +6,8 @@ const Article = ({
     onReady, article, auth, id, onDelete, goBack, deletePost
 }) => {   
     let btnClass;
-    if (auth) btnClass = 'modify-btn show';
-    else btnClass = 'modify-btn'
+    if (auth) btnClass = 'personal-btn show';
+    else btnClass = 'personal-btn'
 
     return (
         <Fragment>

@@ -25,13 +25,3 @@
         }
     }
 }
-
-// article
-.article {
-    .modify-btn {
-        display: none;
-        &.show {
-            display: initial;
-        }
-    }
-}
