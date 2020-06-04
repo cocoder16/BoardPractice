@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PwResetForm, PwResetEmailSent } from '~c/components/index';
+import { PwResetForm, PwResetEmailSent } from '~c/components';
 import * as pwResetActions from '~c/store/pwReset';
 import { goAuthEmail } from '~c/services/users';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PwResetCompleted } from '~c/components/index';
+import { PwResetCompleted } from '~c/components';
 import qs from 'query-string';
 import * as pwResetActions from '~c/store/pwReset';
 

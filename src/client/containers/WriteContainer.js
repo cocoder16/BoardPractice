@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import { WriteForm } from '~c/components/index';
+import { WriteForm } from '~c/components';
 import * as boardActions from '~c/store/board';
 import * as writeActions from '~c/store/write';
 import { stringify } from 'query-string';

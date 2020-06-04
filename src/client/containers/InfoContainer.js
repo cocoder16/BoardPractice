@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { InfoHead } from '~c/components/index';
+import { InfoHead } from '~c/components';
 import InfoBody from '~c/containers/InfoBody';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';

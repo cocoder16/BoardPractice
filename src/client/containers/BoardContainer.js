@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch} from 'react-router-dom';
-import { BoardHead, BoardBody, Article } from '~c/components/index';
+import { BoardHead, BoardBody, Article } from '~c/components';
 import * as boardActions from '~c/store/board';
 import WriteContainer from './WriteContainer';
 

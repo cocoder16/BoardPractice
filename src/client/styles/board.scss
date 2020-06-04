@@ -4,14 +4,15 @@
 .board {
     .item {
         font-size: 0.9rem;
-        h3 {
-            display: inline;
-        }
         .id {
             display: inline-block; width: 50px; border: 1px solid black;
         }
         .title {
             display: inline-block; width: 600px; max-width: 80%; border: 1px solid black;
+        }
+        .link {
+            display: inline-block; max-width: 85%; border: 1px solid black;
+            text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
         }
         .author {
             display: inline-block; width: 200px; border: 1px solid black;

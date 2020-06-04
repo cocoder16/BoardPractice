@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { ArticleList } from '~c/components/index';
+import { ArticleList } from './index';
 import PaginationContainer from '~c/containers/PaginationContainer';
 
 const BoardBody = ({

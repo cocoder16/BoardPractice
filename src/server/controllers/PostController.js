@@ -32,7 +32,7 @@ class PostController {
     static async updatePost (formData, session) {
         return Post.updateOne({id: formData.id, authorId: session.userid, is_deleted: false},
         {$set: {title: formData.title, contents: formData.contents, 
-        updated_at: new Date().format('yy-MM-dd a/p hh:mm:ss')}}, (err, rawResponse) => {
+        updated_at: new Date().format('yy-MM-dd HH:mm:ss')}}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
             if (res.n == 0) return {result: false, url: '/'};
@@ -45,7 +45,7 @@ class PostController {
         console.log(id);
         console.log(session.userid);
         return Post.updateOne({id: id, authorId: session.userid},
-        {$set: {is_deleted: true, updated_at: new Date().format('yy-MM-dd a/p hh:mm:ss')}}, (err, rawResponse) => {
+        {$set: {is_deleted: true, updated_at: new Date().format('yy-MM-dd HH:mm:ss')}}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
             if (res.n == 1) return {result: true, url: `/${category}`};
@@ -82,8 +82,12 @@ class PostController {
         return Post.find({category: cate, is_deleted: false})
         .select('id title author read_count reply_count created_at')
         .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
-            console.log(posts.length);
-            console.log(posts);
+            const today = new Date().format('yy-MM-dd');
+            console.log(today);
+            posts.map(cur => {
+                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[2].substr(0, 5);
+                else cur.created_at = cur.created_at.split(' ')[0]
+            });
             if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
             return {result: true, max: max, posts};
         }).catch(err => console.log(err));

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { SignUpForm } from '~c/components/index';
+import { SignUpForm } from '~c/components';
 import * as signUpActions from '~c/store/signUp';
 import * as userInfoActions from '~c/store/userInfo';
 import { createUser, updateUser } from '~c/services/users';
