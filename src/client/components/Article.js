@@ -1,5 +1,6 @@
 import React, {  Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import ReplyContainer from '~c/containers/ReplyContainer';
 
 const Article = ({
     onReady, article, auth, id, onDelete, goBack, deletePost
@@ -25,7 +26,7 @@ const Article = ({
                     <Link to={`/delete/${id}`} className='link'><button className={btnClass}>삭제</button></Link>
                 </div>
                 <div>
-                    replys
+                    <ReplyContainer/>
                 </div>
             </div> }
             { onDelete &&

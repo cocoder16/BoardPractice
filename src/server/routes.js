@@ -4,7 +4,7 @@ import multer from 'multer';
 
 import UserController from './controllers/UserController';
 import PostController from './controllers/PostController';
-import { runInNewContext } from 'vm';
+import ReplyController from './controllers/ReplyController';
 
 const router = express.Router();
 const upload = multer({
@@ -114,6 +114,11 @@ router.get('/modify/:num', async (req, res) => {
     }
     const result = await PostController.authModify(req.params.num, req.session);
     if (!result) res.redirect('/');
+})
+
+router.post('/reply', upload.none(), async (req, res) => {
+    const result = await ReplyController.createReply(req.body, req.session);
+    res.send(result);
 })
 
 router.get('/modify*', (req, res) => {

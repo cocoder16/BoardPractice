@@ -20,7 +20,7 @@ class PostController {
             title: formData.title,
             contents: formData.contents,
             author: session.usernickname,
-            authorId: session.userid
+            author_id: session.userid
         });
         console.log(newPost);
         newPost.save().then(res => {
@@ -30,7 +30,7 @@ class PostController {
     }
 
     static async updatePost (formData, session) {
-        return Post.updateOne({id: formData.id, authorId: session.userid, is_deleted: false},
+        return Post.updateOne({id: formData.id, author_id: session.userid, is_deleted: false},
         {$set: {title: formData.title, contents: formData.contents, 
         updated_at: new Date().format('yy-MM-dd HH:mm:ss')}}, (err, rawResponse) => {
             console.log(rawResponse);
@@ -44,7 +44,7 @@ class PostController {
         console.log('### del ###');
         console.log(id);
         console.log(session.userid);
-        return Post.updateOne({id: id, authorId: session.userid},
+        return Post.updateOne({id: id, author_id: session.userid},
         {$set: {is_deleted: true, updated_at: new Date().format('yy-MM-dd HH:mm:ss')}}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
@@ -55,7 +55,7 @@ class PostController {
 
     static async authModify (id, session) {
         return Post.find({id: id}).then(post => {
-            if (post[0].authorId == session.userid) return true;
+            if (post[0].author_id == session.userid) return true;
             else return false;
         })
     }
@@ -85,7 +85,7 @@ class PostController {
             const today = new Date().format('yy-MM-dd');
             console.log(today);
             posts.map(cur => {
-                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[2].substr(0, 5);
+                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
                 else cur.created_at = cur.created_at.split(' ')[0]
             });
             if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
@@ -95,7 +95,7 @@ class PostController {
 
     static async getArticle (num) {
         return Post.find({id: num, is_deleted: false})
-        .select('id category title contents author authorId read_count reply_count created_at').then(post => {
+        .select('id category title contents author author_id read_count reply_count created_at').then(post => {
             if (post.length == 0) return {result: false, url: '/'};
             else return {result: true, article: post[0]};
         })

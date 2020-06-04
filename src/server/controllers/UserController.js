@@ -139,7 +139,7 @@ class UserController {
             if (user.length == 0) {
                 return {result: false, userInfo: {id: '', nickname: '', email: ''}}
             } else {
-                return Post.find({authorId: user[0].id, is_deleted: false})
+                return Post.find({author_id: user[0].id, is_deleted: false})
                 .select('id').then(post => {
                     const articleIdArr = [];
                     for (let i = 0; i < post.length; i++) {

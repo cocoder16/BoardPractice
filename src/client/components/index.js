@@ -14,6 +14,8 @@ import Article from './Article';
 import ArticleList from './ArticleList';
 import Pagination from './Pagination';
 import PageItem from './PageItem';
+import ReplyForm from './ReplyForm';
+import ReplyList from './ReplyList';
 
 export {
     SignUpForm,
@@ -31,5 +33,7 @@ export {
     Article,
     ArticleList,
     Pagination,
-    PageItem
+    PageItem,
+    ReplyForm,
+    ReplyList
 }

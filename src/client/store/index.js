@@ -6,9 +6,10 @@ import userInfo from './userInfo';
 import pwReset from './pwReset';
 import board from './board';
 import write from './write';
+import reply from './reply';
 
 const store = createStore(combineReducers({
-    signUp, logIn, userInfo, pwReset, board, write
+    signUp, logIn, userInfo, pwReset, board, write, reply
 }), applyMiddleware(thunk));
 
 store.subscribe(() => {
