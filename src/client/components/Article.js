@@ -22,8 +22,8 @@ const Article = ({
                 </div>
                 <div>
                     <span>{article.reply_count}</span>
-                    <Link to={`/modify/${id}`} className='link'><button className={btnClass}>수정</button></Link>
-                    <Link to={`/delete/${id}`} className='link'><button className={btnClass}>삭제</button></Link>
+                    <Link to={`/modify/${id}`} className='link'><button type='button' className={btnClass}>수정</button></Link>
+                    <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>삭제</button></Link>
                 </div>
                 <div>
                     <ReplyContainer/>
@@ -34,7 +34,7 @@ const Article = ({
                     <div>
                         <span>정말로 게시글을 삭제하시겠습니까?</span>
                     </div>
-                    <button onClick={deletePost}>삭제</button><button onClick={goBack}>아니요</button>
+                    <button type='button' onClick={deletePost}>삭제</button><button type='button' onClick={goBack}>아니요</button>
                 </div>
             }
         </Fragment>

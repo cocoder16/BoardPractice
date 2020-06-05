@@ -8,6 +8,7 @@ const replySchema = new mongoose.Schema({
     contents: { type: String, required: true, index: true },
     author: { type: String, required: true, index: true },
     author_id: { type: String, required: true, index: true },
+    depth: { type: Number, default: 0 },
     parent_id: { type: Number, default: null },
     is_deleted: { type: Boolean, default: false },
     created_at: { type: String, default: new Date().format('yy-MM-dd HH:mm:ss') },

@@ -23,10 +23,10 @@ class PostController {
             author_id: session.userid
         });
         console.log(newPost);
-        newPost.save().then(res => {
+        return newPost.save().then(res => {
             console.log(res);
+            return {result: true, url: `/article/${res.id}`};
         });
-        return {result: true, url: '/' + formData.category};
     }
 
     static async updatePost (formData, session) {

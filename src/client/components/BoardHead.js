@@ -11,7 +11,7 @@ const BoardHead = ({
         <div>
             <h1>{category}</h1>
             {/* 글쓰기버튼, 검색 => 한줄에 오른쪽에 몰아서 */}
-            { (isLoggedIn && !isWrite && !isModify ) && <Link to='/write'><button>글쓰기</button></Link> }
+            { (isLoggedIn && !isWrite && !isModify ) && <Link to='/write'><button type='button'>글쓰기</button></Link> }
             <form>
                 <input type='text' name='keyword'/>
                 <input type='submit' value='검색'/>
