@@ -76,7 +76,7 @@ router.post('/upload/test', upload.single('upload'), (req, res) => {
 })
 
 router.get('/post/:num', async (req, res) => {
-    const article = await PostController.getArticle(req.params.num);
+    const article = await PostController.getArticle(req.params.num, req.session);
     res.send(article);
 })
 
@@ -122,8 +122,13 @@ router.post('/reply', upload.none(), async (req, res) => {
 })
 
 router.get('/reply', async (req, res) => {
-    const replies = await ReplyController.getReplies(req.query.post_id);
+    const replies = await ReplyController.getReplies(req.query.post_id, req.session);
     res.send(replies);
+})
+
+router.put('/reply', upload.none(), async (req, res) => {
+    const result = await ReplyController.updateReply(req.body, req.session);
+    res.send(result);
 })
 
 router.get('/modify*', (req, res) => {

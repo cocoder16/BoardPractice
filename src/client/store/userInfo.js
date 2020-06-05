@@ -25,7 +25,8 @@ const initialState = {
     id: '',
     nickname: '',
     email: '',
-    articleIdArr: []
+    articleIdArr: [],
+    replyIdArr: []
 }
 
 //reducer
@@ -37,7 +38,7 @@ export default function reducer (state=initialState, action) {
             console.log(action.payload);
             return { ...state, onPending: false, isLoggedIn: true, id: action.payload.id, 
                 nickname: action.payload.nickname, email: action.payload.email, 
-                articleIdArr: action.payload.articleIdArr }
+                articleIdArr: action.payload.articleIdArr, replyIdArr: action.payload.replyIdArr }
         case DELETE_USER_INFO :
             return { ...state, onPending: false, isLoggedIn: false, id: '', nickname: '', email: '' }
         default :

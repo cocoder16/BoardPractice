@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import XSS from '~/modules/XSS';
 
 const Reply = ({//id contents author depth parent_id is_deleted created_at
-    reply, loadReplyForm
+    reply, loadReplyForm, onModifyMode
 }) => {
     let btnClass, marginLeft;
-    // if (auth) btnClass = 'personal-btn show';
-    // else btnClass = 'personal-btn'
+    
+    if (reply.auth) btnClass = 'personal-btn show';
+    else btnClass = 'personal-btn'
 
     if (reply.depth >= 5) {
         marginLeft = 100;
@@ -30,7 +31,7 @@ const Reply = ({//id contents author depth parent_id is_deleted created_at
             </div>
             <div className='foot'>
                 <span>{reply.created_at}</span>
-                <button type='button' className={btnClass}>수정</button>
+                <button type='button' className={btnClass} onClick={onModifyMode}>수정</button>
                 <button type='button' className={btnClass}>삭제</button>
             </div>
         </li>

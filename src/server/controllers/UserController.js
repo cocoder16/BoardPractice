@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import '../../modules/replaceAll';
 import Post from '../models/post';
+import Reply from '../models/reply';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
@@ -135,19 +136,28 @@ class UserController {
         //유저데이터는 세션을 통해 검증받아야만 보냄.
         if (!req.session.userid) return {result: false, userInfo: {id: '', nickname: '', email: ''}}
         //세션이 있다면 그에 맞는 유저 데이터를 보냄.
-        return User.find({id: req.session.userid, is_deleted: false}).then(user => {
+        return User.find({id: req.session.userid, is_deleted: false}).then(async user => {
             if (user.length == 0) {
                 return {result: false, userInfo: {id: '', nickname: '', email: ''}}
             } else {
-                return Post.find({author_id: user[0].id, is_deleted: false})
+                const articleIdArr = await Post.find({author_id: user[0].id, is_deleted: false})
                 .select('id').then(post => {
-                    const articleIdArr = [];
+                    const arr = [];
                     for (let i = 0; i < post.length; i++) {
-                        articleIdArr.push(post[i].id);
+                        arr.push(post[i].id);
                     }
-                    return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname,
-                        email: user[0].email, articleIdArr: articleIdArr}}
-                })
+                    return arr;
+                });
+                const replyIdArr = await Reply.find({author_id: user[0].id, is_deleted: false})
+                .select('id').then(reply => {
+                    const arr = [];
+                    for (let i = 0; i < reply.length; i++) {
+                        arr.push(reply[i].id);
+                    }
+                    return arr;
+                });
+                return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname,
+                    email: user[0].email, articleIdArr, replyIdArr}};
             }
         }).catch(err => console.log(err));
     }

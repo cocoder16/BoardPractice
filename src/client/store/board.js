@@ -32,20 +32,10 @@ export const getPosts = (category, queryString) => async (dispatch, getState) =>
 export const getArticle = (num) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
     const article = await servicePosts.getArticle(num);
-    let auth = false;
-    const artId = article.article.id;
-    console.log(artId);
-    const userRight = getState().userInfo.articleIdArr.filter((cur, i, arr) => {
-        console.log(cur);
-        if (cur == artId) return true;
-        else return false;
-    });
-    console.log(userRight);
-    if (userRight.length == 1) auth = true;
     if (article.result) {
         dispatch({
             type: GET_ARTICLE,
-            payload: { article: article.article, auth: auth }
+            payload: { article: article.article }
         });
     } else {
         window.location.replace(article.url);
@@ -86,8 +76,7 @@ export default function reducer (state=initialState, action) {
             let cate;
             if (action.payload.article.category == 0) cate = 'qna';
             else if (action.payload.article.category == 1) cate = 'forum';
-            return { ...state, category: cate, article: _article, auth: action.payload.auth,
-                articleOnReady: true };
+            return { ...state, category: cate, article: _article, articleOnReady: true };
         case ARTICLE_PENDING :
             return { ...state, articleOnReady: false };
         case GET_DELETE_ALERT :

@@ -55,7 +55,7 @@ class BoardContainer extends Component {
     }
 
     render () {
-        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, auth, isModify, onDelete } = this.props;
+        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, isModify, onDelete } = this.props;
         const { goBackOnDelete, handleDeletePost } = this;
 
         return (
@@ -67,13 +67,13 @@ class BoardContainer extends Component {
                     <Route exact path='/forum'
                     render={() => <BoardBody onReady={listOnReady} posts={posts}/>}/>
                     <Route path='/article'
-                    render={() => <Article onReady={articleOnReady} article={article} auth={auth}
+                    render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
                         id={article.id}/>}
                     />
                     <Route exact path='/write' component={WriteContainer}/>
                     <Route path='/modify' component={WriteContainer}/>
                     <Route path='/delete'
-                    render={() => <Article auth={auth} onDelete={onDelete} goBack={goBackOnDelete}
+                    render={() => <Article auth={article.auth} onDelete={onDelete} goBack={goBackOnDelete}
                         deletePost={handleDeletePost}/>}
                     />
                 </Switch>
@@ -89,7 +89,6 @@ const mapStateToProps = (state) => ({
     listOnReady: state.board.listOnReady,
     article: state.board.article,
     articleOnReady: state.board.articleOnReady,
-    auth: state.board.auth,
     isModify: state.write.isModify,
     onDelete: state.board.onDelete
 })

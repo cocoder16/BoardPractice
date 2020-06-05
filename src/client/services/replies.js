@@ -23,3 +23,14 @@ export const getReplies = (post_id) => {
         return res.data;
     }).catch(err => console.log(err));
 }
+
+export const updateReply = (formData) => {
+    return axios({
+        method: 'put',
+        url: '/reply',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' }
+    }).then(res => {
+        return res.data.result;
+    }).catch(err => console.log(err));
+}

@@ -93,9 +93,15 @@ class PostController {
         }).catch(err => console.log(err));
     }
 
-    static async getArticle (num) {
+    static async getArticle (num, session) {
         return Post.find({id: num, is_deleted: false})
         .select('id category title contents author author_id read_count reply_count created_at').then(post => {
+            let auth = false;
+            if (session.userid) {
+                if (post[0].author_id == session.userid) auth = true;
+            }
+            post[0]._doc.auth = auth;
+            console.log(post[0]);
             if (post.length == 0) return {result: false, url: '/'};
             else return {result: true, article: post[0]};
         })

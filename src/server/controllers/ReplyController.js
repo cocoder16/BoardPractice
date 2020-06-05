@@ -6,7 +6,7 @@ import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
 class ReplyController {
     static async createReply (formData, session) { 
-        if (!session.userid) return {result: false, url: '/'};
+        if (!session.userid) return {result: false};
         const contents = XSS.Filter(formData.contents);
         const newReply = new Reply({
             post_id: formData.post_id,
@@ -23,7 +23,23 @@ class ReplyController {
         });
     }
 
-    static async getReplies (post_id) {
+    static async updateReply (formData, session) {
+        if (!session.userid) return {result: false};
+        console.log('#### update Reply ####');
+        console.log(formData);
+        console.log(session);
+        return Reply.updateOne({id: formData.id, author_id: session.userid}, {$set: {
+            contents: formData.contents, 
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss')}
+        }, (err, rawResponse) => {
+            console.log(rawResponse);
+        }).then(res => {
+            if (res.n == 0) return {result: false};
+            else return {result: true};
+        });
+    }
+
+    static async getReplies (post_id, session) {
         //lowArr, highArr 를 만드는 함수
         const sameDepthArrGenerator = (arr, _depth) => {
             const newArr = [];
@@ -46,21 +62,21 @@ class ReplyController {
                     }
                 }
             }
-            console.log('#### searchParent ####');
-            console.log(newArr);
+            // console.log('#### searchParent ####');
+            // console.log(newArr);
             return newArr;
         };
         //댓글 depth고려해 재정렬 하기 위한 함수
         const resort = (lowArr, highArr) => { //depth값이 lowArr + 1 = highArr
             const newArr = [];
             for (let i = 0; i < lowArr.length; i++) {
-                console.log('#### resort ####');
+                // console.log('#### resort ####');
                 const newEle = searchParent( highArr, lowArr[i].id);
-                console.log(`#### new Ele - ${i}####`);
-                console.log(newEle);
+                // console.log(`#### new Ele - ${i}####`);
+                // console.log(newEle);
                 newEle.unshift( lowArr[i]);
-                console.log('#### unshift ####');
-                console.log(newEle);
+                // console.log('#### unshift ####');
+                // console.log(newEle);
                 newArr.push(newEle);
             }
             return newArr;
@@ -70,11 +86,11 @@ class ReplyController {
             if (replies.length == 0) return -1;
             return replies[0].depth;
         });
-        console.log('#### max Depth ####');
-        console.log(maxDepth);
+        // console.log('#### max Depth ####');
+        // console.log(maxDepth);
 
         return Reply.find({post_id: post_id})
-        .select('id contents author depth parent_id is_deleted created_at')
+        .select('id contents author author_id depth parent_id is_deleted created_at')
         .sort({id: 1}).then(replies => {
             const today = new Date().format('yy-MM-dd');
             //id낮은 순으로 정렬되어있는상태.
@@ -89,33 +105,43 @@ class ReplyController {
                 const highArr = sameDepthArrGenerator(replies, maxDepth);
 
                 const finalResort = (function resortMerger (depth, highArr) {
-                    console.log('#### highArr ####');
-                    console.log(highArr);
+                    // console.log('#### highArr ####');
+                    // console.log(highArr);
                     const lowArr = sameDepthArrGenerator(replies, depth - 1);
-                    console.log('#### lowArr ####');
-                    console.log(lowArr);
+                    // console.log('#### lowArr ####');
+                    // console.log(lowArr);
 
                     if (depth == 1) return resort(lowArr, highArr);
                     return resortMerger (depth-1, resort(lowArr, highArr));
                 })(maxDepth, highArr);
-                console.log('#### finalResort ####');
-                console.log(finalResort);
+                // console.log('#### finalResort ####');
+                // console.log(finalResort);
 
-                console.log('#### finalResort resolve ####');
+                // console.log('#### finalResort resolve ####');
                 replies = finalResort.reduce((acc, cur) => {
                     return [ ...acc, ...cur ];
-                });                
+                });
 
                 replies = replies.map(cur => {
+                    let auth = false;
+                    if (session.userid) {
+                        if (cur.author_id == session.userid) auth = true;
+                    }
+                    cur._doc.auth = auth;
+                    console.log(cur);
                     if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
                     else cur.created_at = cur.created_at.split(' ')[0];
                     return cur;
                 });
-                console.log('#### replies ####');
-                console.log(replies);
+                // console.log('#### replies ####');
+                // console.log(replies);
                 return replies;
             } else if (replies.length > 0 && maxDepth == 0) {
                 replies.map(cur => {
+                    if (session.userid) {
+                        if (cur.author_id == session.userid) auth = true;
+                    }
+                    cur._doc.auth = auth;
                     if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
                     else cur.created_at = cur.created_at.split(' ')[0]
                 });
