@@ -7,7 +7,8 @@ const ReplyForm = ({
     return (
         <div className='reply-form'>
             <form onSubmit={onSubmit}>
-                <textarea name='contents' className='contents' maxLength='4000' onChange={onChange}></textarea>
+                <textarea name='contents' className='contents' maxLength='4000'
+                    onChange={onChange}></textarea>
                 <input type='submit' value='등록'/>
                 { possibleCancel && <input type='button' value='취소' onClick={clear}/> }
             </form>

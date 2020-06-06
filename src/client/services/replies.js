@@ -34,3 +34,13 @@ export const updateReply = (formData) => {
         return res.data.result;
     }).catch(err => console.log(err));
 }
+
+export const deleteReply = (id) => {
+    return axios({
+        method: 'delete',
+        url: '/reply',
+        params: { id }
+    }).then(res => {
+        return res.data.result;
+    }).catch(err => console.log(err));
+}

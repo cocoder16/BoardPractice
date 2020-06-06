@@ -2,14 +2,17 @@
 
 // board
 .reply {
-    font-size: 0.9rem;
+    font-size: 0.9rem; position: relative;
     .author {
         border: 1px solid black;
     }
     .contents {
         display: inline-block; max-width: 80%; border: 1px solid black;
     }
+    .delete-box {
+        display: inline-block; position: absolute; right: 200px; border: 1px solid black;
+    }
     .foot {
-        display: inline-block; width: 300px; border: 1px solid black;
+        display: inline-block; position: absolute; right: 0px; width: 200px; border: 1px solid black;
     }
 }

@@ -131,6 +131,11 @@ router.put('/reply', upload.none(), async (req, res) => {
     res.send(result);
 })
 
+router.delete('/reply', async (req, res) => {
+    const result = await ReplyController.deleteReply(req.query.id, req.session);
+    res.send(result);
+})
+
 router.get('/modify*', (req, res) => {
     res.redirect('/');
 })

@@ -30,8 +30,21 @@ class ReplyController {
         console.log(session);
         return Reply.updateOne({id: formData.id, author_id: session.userid}, {$set: {
             contents: formData.contents, 
-            updated_at: new Date().format('yy-MM-dd HH:mm:ss')}
-        }, (err, rawResponse) => {
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss')
+        }}, (err, rawResponse) => {
+            console.log(rawResponse);
+        }).then(res => {
+            if (res.n == 0) return {result: false};
+            else return {result: true};
+        });
+    }
+
+    static async deleteReply (id, session) {
+        if (!session.userid) return {result: false};
+        return Reply.updateOne({id, author_id: session.userid}, {$set: {
+            is_deleted: true,
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss')
+        }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
             if (res.n == 0) return {result: false};

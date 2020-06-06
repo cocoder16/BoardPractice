@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import { Reply, ReplyForm } from './index';
 
 const ReplyList = ({
-    replies, loadReplyForm, replyForm, handleTextChange, handleFormSubmit, clear, onModifyMode, unshown
+    replies, loadReplyForm, replyForm, handleTextChange, handleFormSubmit, clear, onModifyMode, unshown,
+    onDeleteMode, deleteMode, offDeleteMode, onDelete
 }) => {
     console.log(replies);
 
@@ -15,6 +16,7 @@ const ReplyList = ({
                         onSubmit={handleFormSubmit}
                         possibleCancel={true}
                         clear={clear}
+                        value={cur.contents}
                         key={i}
                     />
                 )
@@ -24,6 +26,10 @@ const ReplyList = ({
                             reply={cur} 
                             loadReplyForm={loadReplyForm}
                             onModifyMode={onModifyMode}
+                            onDeleteMode={onDeleteMode}
+                            isDeleteMode={cur.id == deleteMode}
+                            offDeleteMode={offDeleteMode}
+                            onDelete={onDelete}
                             key={i}
                         />
                     );
@@ -34,6 +40,10 @@ const ReplyList = ({
                                 reply={cur} 
                                 loadReplyForm={loadReplyForm}
                                 onModifyMode={onModifyMode}
+                                onDeleteMode={onDeleteMode}
+                                isDeleteMode={cur.id == deleteMode}
+                                offDeleteMode={offDeleteMode}
+                                onDelete={onDelete}
                             />
                             <ReplyForm 
                                 onChange={handleTextChange} 
