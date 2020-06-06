@@ -7,6 +7,7 @@ const GET_ARTICLE = 'board/GET_ARTICLE';
 const ARTICLE_PENDING = 'board/ARTICLE_PENDING';
 const GET_DELETE_ALERT = 'board/GET_DELETE_ALERT';
 const SKIM_ON_DELETE = 'board/SKIM_ON_DELETE';
+const REPLY_COUNT_UP = 'board/REPLY_COUNT_UP';
 
 //function creating action
 export const getPosts = (category, queryString) => async (dispatch, getState) => {
@@ -28,7 +29,7 @@ export const getPosts = (category, queryString) => async (dispatch, getState) =>
     } else {
         window.location.replace(result.url);
     }
-}
+};
 export const getArticle = (num) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
     const article = await servicePosts.getArticle(num);
@@ -40,13 +41,14 @@ export const getArticle = (num) => async (dispatch, getState) => {
     } else {
         window.location.replace(article.url);
     }
-}
+};
 export const getDeleteAlert = () => ({type: GET_DELETE_ALERT});
 export const skimOnDelete = () => ({type: SKIM_ON_DELETE});
 export const deletePost = (id) => async (dispatch, getState) => {
     servicePosts.deletePost(id, getState().board.category);
     dispatch({type: SKIM_ON_DELETE});
-}
+};
+export const replyCountUp = () => ({type: REPLY_COUNT_UP});
 
 //module's initial state
 const initialState = {
@@ -83,6 +85,8 @@ export default function reducer (state=initialState, action) {
             return { ...state, onDelete: true };
         case SKIM_ON_DELETE :
             return { ...state, onDelete: false };
+        case REPLY_COUNT_UP :
+            return { ...state, article: { ...state.article, reply_count: ++state.article.reply_count } };
         default :
             return state;
     }

@@ -1,4 +1,5 @@
 import Reply from '../models/reply';
+import Post from '../models/post';
 import '../../modules/DateFormat';
 import XSS from '../../modules/XSS';
 
@@ -7,7 +8,14 @@ import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 class ReplyController {
     static async createReply (formData, session) { 
         if (!session.userid) return {result: false};
+        // -- 검사
         const contents = XSS.Filter(formData.contents);
+        // -- 통과
+        await Post.updateOne({id: formData.post_id}, {$inc: {
+            reply_count: 1
+        }}).then(res => {
+            console.log(res);
+        });
         const newReply = new Reply({
             post_id: formData.post_id,
             contents: contents,

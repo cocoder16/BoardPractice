@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { ReplyForm, ReplyList } from '~c/components';
+import * as boardActions from '~c/store/board';
 import * as replyActions from '~c/store/reply';
 import { createReply, updateReply, deleteReply } from '~c/services/replies';
 
@@ -49,6 +50,7 @@ class ReplyContainer extends Component {
             document.querySelector('.reply-form .contents').value = '';
             this.props.clear();
             this.props.getReplies(location.pathname.split('/article/')[1]);
+            this.props.replyCountUp();
         } else {
             alert('댓글 등록에 실패했습니다.');
         }
@@ -162,7 +164,8 @@ const mapDispatchToProps = (dispatch) => ({
     displayOff: (id) => dispatch(replyActions.displayOff(id)),
     loadContents: (contents) => dispatch(replyActions.loadContents(contents)),
     deleteModeOn: (id) => dispatch(replyActions.deleteModeOn(id)),
-    clearReplies: () => dispatch(replyActions.clearReplies())
+    clearReplies: () => dispatch(replyActions.clearReplies()),
+    replyCountUp: () => dispatch(boardActions.replyCountUp())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReplyContainer);
