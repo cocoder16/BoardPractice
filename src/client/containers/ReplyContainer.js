@@ -17,6 +17,10 @@ class ReplyContainer extends Component {
         }
     }
 
+    componentWillUnmount () {
+        this.props.clearReplies();
+    }
+
     handleTextChange = (e) => {
         e.preventDefault();
         const { value } = e.target;
@@ -157,7 +161,8 @@ const mapDispatchToProps = (dispatch) => ({
     loadReplyForm: (space, id, depth) => dispatch(replyActions.loadReplyForm(space, id, depth)),
     displayOff: (id) => dispatch(replyActions.displayOff(id)),
     loadContents: (contents) => dispatch(replyActions.loadContents(contents)),
-    deleteModeOn: (id) => dispatch(replyActions.deleteModeOn(id))
+    deleteModeOn: (id) => dispatch(replyActions.deleteModeOn(id)),
+    clearReplies: () => dispatch(replyActions.clearReplies())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReplyContainer);

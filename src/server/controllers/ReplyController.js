@@ -53,6 +53,7 @@ class ReplyController {
     }
 
     static async getReplies (post_id, session) {
+        console.log('#### getReplies ####');
         //lowArr, highArr 를 만드는 함수
         const sameDepthArrGenerator = (arr, _depth) => {
             const newArr = [];
@@ -102,9 +103,13 @@ class ReplyController {
         // console.log('#### max Depth ####');
         // console.log(maxDepth);
 
+        console.log('#### post_id ####');
+        console.log(post_id);
         return Reply.find({post_id: post_id})
         .select('id contents author author_id depth parent_id is_deleted created_at')
         .sort({id: 1}).then(replies => {
+            console.log('#### replies ####');
+            console.log(replies);
             const today = new Date().format('yy-MM-dd');
             //id낮은 순으로 정렬되어있는상태.
             //depth의 max값을 구하고, 그 값에 해당하는 document들만 새 배열에 정렬함.
@@ -151,6 +156,7 @@ class ReplyController {
                 return replies;
             } else if (replies.length > 0 && maxDepth == 0) {
                 replies.map(cur => {
+                    let auth = false;
                     if (session.userid) {
                         if (cur.author_id == session.userid) auth = true;
                     }
