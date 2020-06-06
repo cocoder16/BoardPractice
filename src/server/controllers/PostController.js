@@ -94,17 +94,23 @@ class PostController {
     }
 
     static async getArticle (num, session) {
+        console.log('#### getArticle ####');
+        await Post.updateOne({id: num}, {$inc: {
+            read_count: 1
+        }}).then(res => {
+            console.log(res);
+        })
         return Post.find({id: num, is_deleted: false})
-        .select('id category title contents author author_id read_count reply_count created_at').then(post => {
+        .select('id category title contents author author_id read_count reply_count created_at').then(posts => {
+            if (posts.length == 0) return {result: false, url: '/'};
             let auth = false;
             if (session.userid) {
-                if (post[0].author_id == session.userid) auth = true;
+                if (posts[0].author_id == session.userid) auth = true;
             }
-            post[0]._doc.auth = auth;
-            console.log(post[0]);
-            if (post.length == 0) return {result: false, url: '/'};
-            else return {result: true, article: post[0]};
-        })
+            posts[0]._doc.auth = auth;
+            console.log(posts[0]);
+            return {result: true, article: posts[0]};
+        });
     }
 }
 

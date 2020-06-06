@@ -141,7 +141,7 @@ class ReplyController {
                         if (cur.author_id == session.userid) auth = true;
                     }
                     cur._doc.auth = auth;
-                    console.log(cur);
+                    // console.log(cur);
                     if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
                     else cur.created_at = cur.created_at.split(' ')[0];
                     return cur;
