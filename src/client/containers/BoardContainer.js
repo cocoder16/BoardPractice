@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch} from 'react-router-dom';
+import qs from 'query-string';
 import { BoardHead, BoardBody, Article } from '~c/components';
 import * as boardActions from '~c/store/board';
 import WriteContainer from './WriteContainer';
@@ -32,10 +33,20 @@ class BoardContainer extends Component {
 
     getData = () => {
         if (location.pathname == '/qna') {
-            console.log(location.search);
-            this.props.getPosts('qna', location.search);
+            const query = qs.parse(location.search);
+            if (query.type && query.keyword) {
+                console.log(query);                
+                this.props.search('qna', query);
+            } else {
+                this.props.getPosts('qna', location.search);
+            }
         } else if (location.pathname == '/forum') {
-            this.props.getPosts('forum', location.search);
+            const query = qs.parse(location.search);
+            if (query.type && query.keyword) {
+                this.props.search('forum', query);
+            } else {
+                this.props.getPosts('forum', location.search);
+            }
         } else if (location.pathname.split('/')[1] == 'article') {
             this.props.getArticle(location.pathname.split('/article/')[1]);
         } else if (location.pathname.split('/')[1] == 'modify') {
@@ -54,13 +65,28 @@ class BoardContainer extends Component {
         this.props.deletePost(location.pathname.split('/delete/')[1]);
     }
 
+    handleChangeSearchType = (e) => {
+        e.preventDefault();
+        this.props.setSearchType(e.target.value);
+    }
+
+    handleChangeSearchKeyword = (e) => {
+        e.preventDefault();
+        this.props.setSearchKeyword(e.target.value);
+    }
+
     render () {
-        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, isModify, onDelete } = this.props;
-        const { goBackOnDelete, handleDeletePost } = this;
+        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, isModify, onDelete, 
+            searchType, searchKeyword } = this.props;
+        const { goBackOnDelete, handleDeletePost, handleChangeSearchType, handleChangeSearchKeyword } = this;
 
         return (
             <Fragment>
-                <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify}/>
+                <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify} 
+                    searchType={searchType} searchKeyword={searchKeyword}
+                    onChangeSearchType={handleChangeSearchType}
+                    onChangeSearchKeyword={handleChangeSearchKeyword}
+                />
                 <Switch>
                     <Route exact path='/qna'
                     render={() => <BoardBody onReady={listOnReady} posts={posts}/>}/>
@@ -90,7 +116,9 @@ const mapStateToProps = (state) => ({
     article: state.board.article,
     articleOnReady: state.board.articleOnReady,
     isModify: state.write.isModify,
-    onDelete: state.board.onDelete
+    onDelete: state.board.onDelete,
+    searchType: state.board.searchType,
+    searchKeyword: state.board.searchKeyword,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -98,7 +126,11 @@ const mapDispatchToProps = (dispatch) => ({
     getArticle: (payload) => dispatch(boardActions.getArticle(payload)),
     getDeleteAlert: () => dispatch(boardActions.getDeleteAlert()),
     skimOnDelete: () => dispatch(boardActions.skimOnDelete()),
-    deletePost: (payload) => dispatch(boardActions.deletePost(payload))
+    deletePost: (payload) => dispatch(boardActions.deletePost(payload)),
+    setSearchType: (val) => dispatch(boardActions.setSearchType(val)),
+    setSearchKeyword: (val) => dispatch(boardActions.setSearchKeyword(val)),
+    showPosts: (posts, page, max) => dispatch(boardActions.showPosts(posts, page, max)),
+    search: (cate, query) => dispatch(boardActions.search(cate, query))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);

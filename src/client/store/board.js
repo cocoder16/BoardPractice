@@ -8,6 +8,9 @@ const ARTICLE_PENDING = 'board/ARTICLE_PENDING';
 const GET_DELETE_ALERT = 'board/GET_DELETE_ALERT';
 const SKIM_ON_DELETE = 'board/SKIM_ON_DELETE';
 const REPLY_COUNT_UP = 'board/REPLY_COUNT_UP';
+const SET_SEARCH_TYPE = 'board/SET_SEARCH_TYPE';
+const SET_SEARCH_KEYWORD = 'board/SET_SEARCH_KEYWORD';
+const GET_SEARCH = 'board/GET_SEARCH';
 
 //function creating action
 export const getPosts = (category, queryString) => async (dispatch, getState) => {
@@ -21,11 +24,45 @@ export const getPosts = (category, queryString) => async (dispatch, getState) =>
     else page = queryString.split('=')[1];
     const result = await servicePosts.getPosts(category, page, getState().board.per);
     console.log('getPosts');
+    console.log(result);
     if (result.result) {
         dispatch({
             type: GET_POSTS,
-            payload: { result, page }
+            payload: { posts: result.posts, page, max: result.max }
         });
+        dispatch({
+            type: GET_SEARCH,
+            payload: { type: 0, keyword: ''}
+        });
+        document.querySelector('.input-search-type').value = 0;
+        document.querySelector('.input-search-keyword').value = '';
+    } else {
+        window.location.replace(result.url);
+    }
+};
+export const search = (category, query) => async (dispatch, getState) => {
+    console.log('search');
+    console.log(category);
+    console.log(query);
+    dispatch({
+        type: SET_CATEGORY,
+        payload: category
+    });
+    let page;
+    if (!query.page) page = '1';
+    else page = query.page;
+    const result = await servicePosts.search(category, query.type, query.keyword, page, getState().board.per);
+    if (result.result) {
+        dispatch({
+            type: GET_POSTS,
+            payload: { posts: result.posts, page, max: result.max }
+        });
+        dispatch({
+            type: GET_SEARCH,
+            payload: { type: query.type, keyword: query.keyword }
+        });
+        document.querySelector('.input-search-type').value = query.type;
+        document.querySelector('.input-search-keyword').value = query.keyword;
     } else {
         window.location.replace(result.url);
     }
@@ -49,6 +86,14 @@ export const deletePost = (id) => async (dispatch, getState) => {
     dispatch({type: SKIM_ON_DELETE});
 };
 export const replyCountUp = () => ({type: REPLY_COUNT_UP});
+export const setSearchType = (val) => ({
+    type: SET_SEARCH_TYPE,
+    payload: val
+});
+export const setSearchKeyword = (val) => ({
+    type: SET_SEARCH_KEYWORD,
+    payload: val
+});
 
 //module's initial state
 const initialState = {
@@ -61,7 +106,9 @@ const initialState = {
     per: 2,
     now: 1,
     max: 1,
-    interval: 3
+    interval: 3,
+    searchType: 0,
+    searchKeyword: ''
 }
 
 //reducer
@@ -70,8 +117,8 @@ export default function reducer (state=initialState, action) {
         case SET_CATEGORY :
             return { ...state, category: action.payload, listOnReady: false };
         case GET_POSTS :
-            return { ...state, posts: [ ...action.payload.result.posts ], now: action.payload.page,
-                max: action.payload.result.max, listOnReady: true };
+            return { ...state, posts: [ ...action.payload.posts ], now: action.payload.page,
+                max: action.payload.max, listOnReady: true };
         case GET_ARTICLE : 
             const _article = { ...action.payload.article };
             delete _article.category;
@@ -87,6 +134,12 @@ export default function reducer (state=initialState, action) {
             return { ...state, onDelete: false };
         case REPLY_COUNT_UP :
             return { ...state, article: { ...state.article, reply_count: ++state.article.reply_count } };
+        case SET_SEARCH_TYPE : 
+            return { ...state, searchType: action.payload };
+        case SET_SEARCH_KEYWORD :
+            return { ...state, searchKeyword: action.payload };
+        case GET_SEARCH :
+            return { ...state, searchType: action.payload.type, searchKeyword: action.payload.keyword };
         default :
             return state;
     }

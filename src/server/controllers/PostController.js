@@ -112,6 +112,50 @@ class PostController {
             return {result: true, article: posts[0]};
         });
     }
+
+    static async search (query) {
+        let cate;
+        switch (query.category) {
+            case 'qna' :
+                cate = 0;
+                break;
+            case 'forum' :
+                cate = 1;
+                break;
+        }
+        let filter;
+        switch (query.type) {
+            case '0' :
+                filter = { title: new RegExp(query.keyword) }; 
+                break;
+            case '1' :
+                filter = { $or: [ {title: new RegExp(query.keyword)}, {contents: new RegExp(query.keyword)} ] };
+                break;
+            case '2' :
+                filter = { author: new RegExp(query.keyword) };
+                break;
+        }
+
+        const per = query.per*1;
+        const skip = (query.page - 1) * per;
+
+        const total = await Post.countDocuments({category: cate, ...filter, is_deleted: false}).exec();
+        console.log(total);
+        const max = Math.ceil(total / per);
+
+        return Post.find({category: cate, ...filter,  is_deleted: false})
+        .select('id title author read_count reply_count created_at')
+        .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
+            const today = new Date().format('yy-MM-dd');
+            console.log(today);
+            posts.map(cur => {
+                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                else cur.created_at = cur.created_at.split(' ')[0]
+            });
+            if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
+            return {result: true, max: max, posts};
+        }).catch(err => console.log(err));
+    }
 }
 
 export default PostController;

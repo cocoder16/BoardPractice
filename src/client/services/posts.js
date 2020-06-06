@@ -69,3 +69,15 @@ export const getArticle = (num) => {
         return res.data;
     }).catch(err => console.log(err));
 }
+
+export const search = (category, type, keyword, page, per) => {
+    return axios({
+        method: 'get',
+        url: '/search',
+        params: {
+            category, type, keyword, page, per
+        }
+    }).then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}

@@ -136,6 +136,11 @@ router.delete('/reply', async (req, res) => {
     res.send(result);
 })
 
+router.get('/search', async (req, res) => {
+    const result = await PostController.search(req.query);
+    res.send(result);
+})
+
 router.get('/modify*', (req, res) => {
     res.redirect('/');
 })
