@@ -76,7 +76,7 @@ router.post('/upload/test', upload.single('upload'), (req, res) => {
 })
 
 router.get('/post/:num', async (req, res) => {
-    const article = await PostController.getArticle(req.params.num, req.session);
+    const article = await PostController.getArticle(req.params.num, req.session, req.query.newGet);
     res.send(article);
 })
 

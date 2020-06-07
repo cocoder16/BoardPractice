@@ -93,13 +93,16 @@ class PostController {
         }).catch(err => console.log(err));
     }
 
-    static async getArticle (num, session) {
+    static async getArticle (num, session, newGet) {
         console.log('#### getArticle ####');
-        await Post.updateOne({id: num}, {$inc: {
-            read_count: 1
-        }}).then(res => {
-            console.log(res);
-        })
+        console.log(newGet);
+        if (newGet == 1) {
+            await Post.updateOne({id: num}, {$inc: {
+                read_count: 1
+            }}).then(res => {
+                console.log(res);
+            });
+        }
         return Post.find({id: num, is_deleted: false})
         .select('id category title contents author author_id read_count reply_count created_at').then(posts => {
             if (posts.length == 0) return {result: false, url: '/'};

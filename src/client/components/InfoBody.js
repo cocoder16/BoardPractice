@@ -1,11 +1,11 @@
 import React from 'react';
 
-const InfoBodyReplys = () => {
+const InfoBody = () => {
     return (
         <div>
-            replys
+            Posts
         </div>
     )
 };
 
-export default InfoBodyReplys;
+export default InfoBody;

@@ -40,6 +40,7 @@ class BoardContainer extends Component {
             } else {
                 this.props.getPosts('qna', location.search);
             }
+            sessionStorage.clear('article-id');
         } else if (location.pathname == '/forum') {
             const query = qs.parse(location.search);
             if (query.type && query.keyword) {
@@ -47,7 +48,9 @@ class BoardContainer extends Component {
             } else {
                 this.props.getPosts('forum', location.search);
             }
+            sessionStorage.clear('article-id');
         } else if (location.pathname.split('/')[1] == 'article') {
+            console.log('getData');
             this.props.getArticle(location.pathname.split('/article/')[1]);
         } else if (location.pathname.split('/')[1] == 'modify') {
             this.props.getArticle(location.pathname.split('/modify/')[1]);

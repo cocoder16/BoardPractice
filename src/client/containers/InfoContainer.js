@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { InfoHead } from '~c/components';
-import InfoBody from '~c/containers/InfoBody';
+import InfoBodyContainer from '~c/containers/InfoBodyContainer';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
 import { tryLogIn, tryLogOut } from '~c/services/users';
@@ -12,7 +12,7 @@ class InfoContainer extends Component {
         return (
             <Fragment>
                 <InfoHead/>
-                <InfoBody/>
+                <InfoBodyContainer/>
             </Fragment>
         );
     }

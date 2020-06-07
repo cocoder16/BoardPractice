@@ -1,4 +1,5 @@
 import * as servicePosts from '~c/services/posts';
+import session from 'express-session';
 
 //action type
 const SET_CATEGORY = 'board/SET_CATEGORY';
@@ -32,7 +33,7 @@ export const getPosts = (category, queryString) => async (dispatch, getState) =>
         });
         dispatch({
             type: GET_SEARCH,
-            payload: { type: 0, keyword: ''}
+            payload: { type: 0, keyword: '' }
         });
         document.querySelector('.input-search-type').value = 0;
         document.querySelector('.input-search-keyword').value = '';
@@ -69,12 +70,17 @@ export const search = (category, query) => async (dispatch, getState) => {
 };
 export const getArticle = (num) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
-    const article = await servicePosts.getArticle(num);
+    let newGet = 0;
+    console.log(num);
+    console.log(sessionStorage.getItem('article-id'));
+    if (sessionStorage.getItem('article-id') != num) newGet = 1;
+    const article = await servicePosts.getArticle(num, newGet);
     if (article.result) {
         dispatch({
             type: GET_ARTICLE,
             payload: { article: article.article }
         });
+        sessionStorage.setItem('article-id', article.article.id);
     } else {
         window.location.replace(article.url);
     }

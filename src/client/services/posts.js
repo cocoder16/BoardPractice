@@ -64,8 +64,16 @@ export const deletePost = (id, category) => {
     }).catch(err => console.log(err));
 }
 
-export const getArticle = (num) => {
-    return axios.get(`/post/${num}`).then(res => {
+export const getArticle = (num, newGet) => {
+    console.log('newGet');
+    console.log(newGet);
+    return axios({
+        method: 'get',
+        url: `/post/${num}`,
+        params: {
+            newGet
+        }
+    }).then(res => {
         return res.data;
     }).catch(err => console.log(err));
 }
