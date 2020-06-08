@@ -10,7 +10,7 @@ import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
 class UserController {
     static async checkOverlap (target) { //하나만 찾고 멈추는 쿼리를..
-        const user = await User.find(target).limit(1).then(user => {
+        const user = await User.find({...target, is_deleted: false}).limit(1).then(user => {
             return user;
         });
         if (user.length > 0) return {result: true};
@@ -84,6 +84,26 @@ class UserController {
             });
             return {result: true, url: '/'}
         })
+    }
+
+    static async deleteUser (formData, session) {
+        return await User.find({id: session.userid, is_deleted: false}).then(user => {
+            if (user.length > 0) {
+                const salt = user[0].salt;
+                const key = crypto.pbkdf2Sync(formData.pw, salt, process.env.ITERATIONS*1, 64, 'sha512');
+                if (key.toString('base64') === user[0].password) {
+                    User.updateOne({id: session.userid, is_deleted: false}, 
+                        {$set: {is_login: false, is_deleted: true}}, (err, raw) => {
+                            if (err) console.log(err);
+                            else {
+                                session.destroy();
+                                console.log(raw);
+                            }
+                        })
+                    return {result: true}
+                } else return {result: false}
+            }
+        });
     }
 
     static async logInDataCheck (req, formData) {

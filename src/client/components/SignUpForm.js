@@ -1,13 +1,15 @@
 import React from 'react';
 
 const SignUpForm = ({
-    spanMessage, onInputChange, onOverlapCheck, onFormSubmit, isModify
+    spanMessage, onInputChange, onOverlapCheck, onFormSubmit, isModify, 
+    onDeleteMode, isDeleteMode, onDelete, deleteFailedMessage
 }) => {
-    let idDisabled, idOverlap, submitValue;
+    let idDisabled, idOverlap, submitValue, deleteUser;
     if (isModify) {
         idDisabled = true;
         idOverlap = <td></td>;
         submitValue = '수정'
+        deleteUser = true;
     } else {
         idDisabled = false;
         idOverlap = <td><input type='button' value='중복체크' name='idCheck' onClick={onOverlapCheck}/>
@@ -67,7 +69,17 @@ const SignUpForm = ({
     return (
         <div>
             {template}
-        </div>        
+            { deleteUser && <input type='button' value='회원탈퇴' onClick={onDeleteMode}/> }
+            { (deleteUser && isDeleteMode) && 
+                <form onSubmit={onDelete}>
+                    <span>정말로 회원탈퇴를 하시겠습니까?</span>
+                    <input type='password' className='pw' maxLength='14'
+                        placeholder='비밀번호 재확인이 필요합니다.'/>
+                    <span>{deleteFailedMessage}</span><br/>
+                    <input type='submit' value='삭제'/>
+                </form>
+            }
+        </div>
     )
 };
 

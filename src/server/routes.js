@@ -24,6 +24,9 @@ const index = path.resolve(__dirname, '../../dist/index.html');
 
 router.get('/check/overlap', async (req, res) => {
     let result;
+    console.log('### overlap');
+    console.log(req.query);
+    console.log(req.query.id);
     if (req.query.id) result = await UserController.checkOverlap({id: req.query.id, is_deleted: false});
     else if (req.query.nickname) result = await UserController.checkOverlap({nickname: req.query.nickname, is_deleted: false});
     res.send(result);
@@ -36,6 +39,11 @@ router.post('/user', upload.none(), async (req, res) => {
 
 router.put('/user', upload.none(), async (req, res) => {
     const result = await UserController.testFormAndUpdateUser(req.body);
+    res.send(result);
+})
+
+router.delete('/user', upload.none(), async (req, res) => {
+    const result = await UserController.deleteUser(req.body, req.session);
     res.send(result);
 })
 

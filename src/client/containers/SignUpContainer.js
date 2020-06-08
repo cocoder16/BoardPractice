@@ -3,19 +3,19 @@ import { connect } from 'react-redux';
 import { SignUpForm } from '~c/components';
 import * as signUpActions from '~c/store/signUp';
 import * as userInfoActions from '~c/store/userInfo';
-import { createUser, updateUser } from '~c/services/users';
+import { createUser, updateUser, deleteUser } from '~c/services/users';
+import { applyMiddleware } from 'redux';
 
 class SignUpContainer extends Component {
     constructor (props) {
         super(props);
-        if (location.pathname == '/signup') {
-            this.props.setIsModify(false);
-        }
         if (location.pathname == '/info/privacy') {
             this.props.setIsModify(true);
             if (!this.props.onPending) {
                 this.props.getUserInfo();
             }
+        } else {
+            this.props.setIsModify(false);
         }
     }
 
@@ -33,6 +33,7 @@ class SignUpContainer extends Component {
 
     componentWillUnmount () {
         this.props.clear();
+        this.props.deleteModeOff();
     }
 
     handleInputChange = (e) => {
@@ -81,9 +82,35 @@ class SignUpContainer extends Component {
         else updateUser(formData);
     }
 
+    onDeleteMode = (e) => {
+        e.preventDefault();
+        this.props.deleteModeOn();
+    }
+
+    onDelete = async (e) => {
+        e.preventDefault();
+        console.log(e.target);
+        console.log(e.target.querySelector('.pw'));
+        const pw = e.target.querySelector('.pw').value;
+
+        await this.props.pwValidation(pw);
+        
+        if (this.props.deleteFailedMessage == '') {
+            const formData = new FormData();
+            formData.append('pw', pw);
+            const result = await deleteUser(formData);
+            if (result.result == true) {
+                alert('회원탈퇴가 완료되었습니다.');
+                window.location.replace('/');
+            } else {
+                this.props.deleteFailed();
+            }
+        }
+    }
+
     render() {
-        const { handleInputChange, overlapCheck, handleFormSubmit } = this;
-        const { span, isModify } = this.props;
+        const { handleInputChange, overlapCheck, handleFormSubmit, onDeleteMode, onDelete } = this;
+        const { span, isModify, isDeleteMode, deleteFailedMessage } = this.props;
 
         return (
             <SignUpForm
@@ -92,6 +119,10 @@ class SignUpContainer extends Component {
                 onOverlapCheck={overlapCheck}
                 onFormSubmit={handleFormSubmit} 
                 isModify={isModify}
+                onDeleteMode={onDeleteMode}
+                isDeleteMode={isDeleteMode}
+                onDelete={onDelete}
+                deleteFailedMessage={deleteFailedMessage}
             />
         )
     }
@@ -118,6 +149,8 @@ const mapStateToProps = (state) => ({
     userNickname: state.userInfo.nickname,
     userEmail: state.userInfo.email,
     onPending: state.userInfo.onPending,
+    isDeleteMode: state.signUp.isDeleteMode,
+    deleteFailedMessage: state.signUp.deleteFailedMessage
 })
 
 //props값으로 넣어줄 액션 함수들 정의
@@ -130,8 +163,11 @@ const mapDispatchToProps = (dispatch) => ({
     setIsModify: (payload) => dispatch(signUpActions.setIsModify(payload)),
     setInputValue: (payload) => dispatch(signUpActions.setInputValue(payload)),
     clear: () => dispatch(signUpActions.clear()),
-
-    getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload))
+    getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload)),
+    deleteModeOn: () => dispatch(signUpActions.deleteModeOn()),
+    deleteModeOff: () => dispatch(signUpActions.deleteModeOff()),
+    deleteFailed: () => dispatch(signUpActions.deleteFailed()),
+    pwValidation: (pw) => dispatch(signUpActions.pwValidation(pw))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpContainer);

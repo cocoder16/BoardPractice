@@ -10,6 +10,10 @@ const FORM_VALIDATION_OVERLAP = 'signUp/FORM_VALIDATION_OVERLAP';
 const SET_IS_MODIFY = 'signUp/SET_IS_MODIFY';
 const SET_INPUT_VALUE = 'signUp/SET_INPUT_VALUE';
 const CLEAR = 'signUpCLEAR';
+const DELETE_MODE_ON = 'signUp/DELETE_MODE_ON';
+const DELETE_MODE_OFF = 'signUp/DELETE_MODE_OFF';
+const DELETE_FAILED = 'signUp/DELETE_FAILED';
+const PW_VALIDATION = 'signUp/PW_VALIDATION';
 
 //function creating action
 export const inputChange = (payload) => ({
@@ -21,7 +25,7 @@ export const beforeOverlapCheck = (name) => ({
     payload: name
 })
 export const overlapCheck = (name) => async (dispatch, getState) => {
-    if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return false;
+    if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return null;
     const _name = name.split('Check')[0];
     const isOverlap = await serviceUsers.isOverlap({[_name]: getState().signUp[_name]});
     console.log('isOverlap : ' + isOverlap);
@@ -37,9 +41,9 @@ export const formValidationInput = () => ({type: FORM_VALIDATION_INPUT});
 export const formValidationOverlap = () => async (dispatch, getState) => {
     let isOverlap = {};
     if (!getState().signUp.isModify) {
-        isOverlap.id = await serviceUsers.isOverlap(getState().signUp.id);
+        isOverlap.id = await serviceUsers.isOverlap({id: getState().signUp.id});
         console.log('isOverlap_id : ' + isOverlap.id); 
-        isOverlap.nickname = await serviceUsers.isOverlap(getState().signUp.nickname);
+        isOverlap.nickname = await serviceUsers.isOverlap({nickname: getState().signUp.nickname});
         console.log('isOverlap_nickname : ' + isOverlap.nickname);
     } else {
         isOverlap.id = false;
@@ -64,6 +68,13 @@ export const setInputValue = (payload) => ({
     payload: payload
 })
 export const clear = () => ({type: CLEAR});
+export const deleteModeOn = () => ({type: DELETE_MODE_ON});
+export const deleteModeOff = () => ({type: DELETE_MODE_OFF});
+export const deleteFailed = () => ({type: DELETE_FAILED});
+export const pwValidation = (pw) => ({
+    type: PW_VALIDATION,
+    payload: pw
+})
 
 //module's initial state
 const initialState = {
@@ -81,7 +92,9 @@ const initialState = {
     },
     goOverlapCheck: '',
     pass: '',
-    isModify: false
+    isModify: false,
+    isDeleteMode: false,
+    deleteFailedMessage: ''
 }
 
 //reducer
@@ -171,6 +184,15 @@ export default function reducer (state=initialState, action) {
             return { ...state, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
         case CLEAR :
             return { ...state, span: { ...state.span, id: '', pw: '', pwConfirm: '', nickname: '', email: '' } }
+        case DELETE_MODE_ON :
+            return { ...state, isDeleteMode: true }
+        case DELETE_MODE_OFF :
+            return { ...state, isDeleteMode: false, deleteFailedMessage: '' }
+        case DELETE_FAILED :
+            return { ...state, deleteFailedMessage: '비밀번호가 틀렸습니다.' }
+        case PW_VALIDATION :
+            if (!InputChecker.pw(action.payload)) return { ...state, deleteFailedMessage: '비밀번호가 틀렸습니다.' }
+            else return { ...state, deleteFailedMessage: '' }
         default :
             return state;
     }

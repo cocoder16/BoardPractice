@@ -42,6 +42,17 @@ export const updateUser = (formData) => {
     }).catch(err => console.log(err));
 }
 
+export const deleteUser = (formData) => {
+    return axios({
+        method: 'delete',
+        url: '/user',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' }
+    }).then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}
+
 export const tryLogIn = (formData) => {
     return axios({
         method: 'post',
