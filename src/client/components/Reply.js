@@ -21,7 +21,7 @@ const Reply = ({//id contents author author_id depth parent_id is_deleted create
     }
 
     return (
-        <li className='reply' data-depth={reply.depth} data-id={reply.id} style={liStyle}>
+        <li className='reply' data-depth={reply.depth} data-id={reply.id} id={`comment_${reply.id}`} style={liStyle}>
             <div className='author'>
                 {reply.author}
             </div>

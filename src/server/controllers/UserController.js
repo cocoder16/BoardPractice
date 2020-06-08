@@ -138,28 +138,48 @@ class UserController {
         //세션이 있다면 그에 맞는 유저 데이터를 보냄.
         return User.find({id: req.session.userid, is_deleted: false}).then(async user => {
             if (user.length == 0) {
-                return {result: false, userInfo: {id: '', nickname: '', email: ''}}
+                return {result: false, userInfo: {id: '', nickname: '', email: ''}};
             } else {
-                const articleIdArr = await Post.find({author_id: user[0].id, is_deleted: false})
-                .select('id').then(post => {
-                    const arr = [];
-                    for (let i = 0; i < post.length; i++) {
-                        arr.push(post[i].id);
-                    }
-                    return arr;
-                });
-                const replyIdArr = await Reply.find({author_id: user[0].id, is_deleted: false})
-                .select('id').then(reply => {
-                    const arr = [];
-                    for (let i = 0; i < reply.length; i++) {
-                        arr.push(reply[i].id);
-                    }
-                    return arr;
-                });
                 return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname,
-                    email: user[0].email, articleIdArr, replyIdArr}};
+                    email: user[0].email}};
             }
         }).catch(err => console.log(err));
+    }
+
+    static async getUserWrote (req) {
+        if (!req.session.userid) return {result: false, url: '/'};
+        const query = req.query;
+        const per = query.per*1;
+        const skip = (query.page - 1) * per;
+        const today = new Date().format('yy-MM-dd');
+
+        if (query.type == 'posts') {
+            const total = await Post.countDocuments({author_id: req.session.userid, is_deleted: false}).exec();
+            const max = Math.ceil(total / per);
+            const postArr = await Post.find({author_id: req.session.userid, is_deleted: false})
+                .select('id title category read_count reply_count created_at')
+                .sort({id: -1}).skip(skip).limit(per*1).then(postArr => {
+                    postArr.map(cur => {
+                        if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                        else cur.created_at = cur.created_at.split(' ')[0];
+                    });
+                    return postArr;
+                });
+            return {result: true, max, postArr, replyArr: []}
+        } else if (query.type == 'replies') {
+            const total = await Reply.countDocuments({author_id: req.session.userid, is_deleted: false}).exec();
+            const max = Math.ceil(total / per);
+            const replyArr = await Reply.find({author_id: req.session.userid, is_deleted: false})
+                .select('id post_id contents created_at')
+                .sort({id: -1}).skip(skip).limit(per*1).then(replyArr => {
+                    replyArr.map(cur => {
+                        if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                        else cur.created_at = cur.created_at.split(' ')[0];
+                    });
+                    return replyArr;
+                });
+            return {result: true, max, postArr: [], replyArr};
+        }
     }
 
     static async sendPwAuthEmail (id) {

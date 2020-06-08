@@ -1,4 +1,5 @@
 import * as servicePosts from '~c/services/posts';
+import * as serviceUsers from '~c/services/users';
 import session from 'express-session';
 
 //action type
@@ -12,17 +13,18 @@ const REPLY_COUNT_UP = 'board/REPLY_COUNT_UP';
 const SET_SEARCH_TYPE = 'board/SET_SEARCH_TYPE';
 const SET_SEARCH_KEYWORD = 'board/SET_SEARCH_KEYWORD';
 const GET_SEARCH = 'board/GET_SEARCH';
+const GET_USER_WROTE = 'board/GET_USER_WROTE';
+const DELETE_USER_WROTE = 'board/DELTE_USER_WROTE';
 
 //function creating action
-export const getPosts = (category, queryString) => async (dispatch, getState) => {
-    console.log(queryString);
+export const getPosts = (category, query) => async (dispatch, getState) => {
     dispatch({
         type: SET_CATEGORY,
         payload: category
     });
     let page;
-    if (!queryString) page = '1';
-    else page = queryString.split('=')[1];
+    if (!query.page) page = '1';
+    else page = query.page;
     const result = await servicePosts.getPosts(category, page, getState().board.per);
     console.log('getPosts');
     console.log(result);
@@ -100,6 +102,23 @@ export const setSearchKeyword = (val) => ({
     type: SET_SEARCH_KEYWORD,
     payload: val
 });
+export const getUserWrote = (type, query) => async (dispatch, getState) => {
+    let page;
+    if (!query.page) page = '1';
+    else page = query.page;
+    const data = await serviceUsers.getUserWrote(type, page, getState().board.per);
+    console.log('getUserWrote');
+    console.log(data);
+    if (data.result) {
+        dispatch({
+            type: GET_USER_WROTE,
+            payload: { data, page }
+        });
+    } else {
+        window.location.replace(data.url);
+    }
+};
+export const deleteUserWrote = () => ({type: DELETE_USER_WROTE});
 
 //module's initial state
 const initialState = {
@@ -114,7 +133,9 @@ const initialState = {
     max: 1,
     interval: 3,
     searchType: 0,
-    searchKeyword: ''
+    searchKeyword: '',
+    userPosts: [],
+    userReplies: []
 }
 
 //reducer
@@ -146,6 +167,13 @@ export default function reducer (state=initialState, action) {
             return { ...state, searchKeyword: action.payload };
         case GET_SEARCH :
             return { ...state, searchType: action.payload.type, searchKeyword: action.payload.keyword };
+        case GET_USER_WROTE :
+            console.log('SET_USER_WROTE');
+            console.log(action.payload);
+            return { ...state, userPosts: action.payload.data.postArr, userReplies: action.payload.data.replyArr,
+                now: action.payload.page, max: action.payload.data.max }
+        case DELETE_USER_WROTE :
+            return { ...state, userPosts: [], userReplies: [] }
         default :
             return state;
     }

@@ -89,7 +89,7 @@ class PostController {
                 else cur.created_at = cur.created_at.split(' ')[0]
             });
             if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
-            return {result: true, max: max, posts};
+            return {result: true, max, posts};
         }).catch(err => console.log(err));
     }
 

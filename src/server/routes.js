@@ -54,6 +54,11 @@ router.get('/userinfo', async (req, res) => {
     res.send(result);
 })
 
+router.get('/userwrote', async (req, res) => {
+    const result = await UserController.getUserWrote(req);
+    res.send(result);
+})
+
 router.post('/help/pwreset/authemail', upload.none(), async (req, res) => {
     const result = await UserController.sendPwAuthEmail(req.body.id);
     res.send(result);

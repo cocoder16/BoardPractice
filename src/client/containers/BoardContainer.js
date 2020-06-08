@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import qs from 'query-string';
 import { BoardHead, BoardBody, Article } from '~c/components';
 import * as boardActions from '~c/store/board';
@@ -9,16 +9,23 @@ import WriteContainer from './WriteContainer';
 class BoardContainer extends Component {
     constructor (props) {
         super(props);
+        console.log('con');
         this.getData();
+
+        console.log(this.props);
 
         this.goBackOnDelete = this.goBackOnDelete.bind(this); //왜 붙였지?
     }
 
     componentDidMount() {
-        this.unlisten = this.props.history.listen((location, action) => {
+        this.unlisten = this.props.history.listen((location, action) => { //링크 이동시 호출하려고, componentDidUpdate에서 호출하면 무한루프
             console.log("on route change");
             this.getData();
         });
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
     }
 
     componentDidUpdate (prevProps) {
@@ -27,18 +34,15 @@ class BoardContainer extends Component {
         }
     }
 
-    componentWillUnmount() {
-        this.unlisten();
-    }
-
     getData = () => {
+        console.log('b');
         if (location.pathname == '/qna') {
             const query = qs.parse(location.search);
             if (query.type && query.keyword) {
                 console.log(query);                
                 this.props.search('qna', query);
             } else {
-                this.props.getPosts('qna', location.search);
+                this.props.getPosts('qna', query);
             }
             sessionStorage.clear('article-id');
         } else if (location.pathname == '/forum') {
@@ -46,7 +50,7 @@ class BoardContainer extends Component {
             if (query.type && query.keyword) {
                 this.props.search('forum', query);
             } else {
-                this.props.getPosts('forum', location.search);
+                this.props.getPosts('forum', query);
             }
             sessionStorage.clear('article-id');
         } else if (location.pathname.split('/')[1] == 'article') {
@@ -92,17 +96,19 @@ class BoardContainer extends Component {
                 />
                 <Switch>
                     <Route exact path='/qna'
-                    render={() => <BoardBody onReady={listOnReady} posts={posts}/>}/>
+                        render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
+                    />
                     <Route exact path='/forum'
-                    render={() => <BoardBody onReady={listOnReady} posts={posts}/>}/>
+                        render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
+                    />
                     <Route path='/article'
-                    render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
+                        render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
                         id={article.id}/>}
                     />
                     <Route exact path='/write' component={WriteContainer}/>
                     <Route path='/modify' component={WriteContainer}/>
                     <Route path='/delete'
-                    render={() => <Article auth={article.auth} onDelete={onDelete} goBack={goBackOnDelete}
+                        render={() => <Article auth={article.auth} onDelete={onDelete} goBack={goBackOnDelete}
                         deletePost={handleDeletePost}/>}
                     />
                 </Switch>
@@ -125,14 +131,13 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getPosts: (category, queryString) => dispatch(boardActions.getPosts(category, queryString)),
+    getPosts: (category, query) => dispatch(boardActions.getPosts(category, query)),
     getArticle: (payload) => dispatch(boardActions.getArticle(payload)),
     getDeleteAlert: () => dispatch(boardActions.getDeleteAlert()),
     skimOnDelete: () => dispatch(boardActions.skimOnDelete()),
     deletePost: (payload) => dispatch(boardActions.deletePost(payload)),
     setSearchType: (val) => dispatch(boardActions.setSearchType(val)),
     setSearchKeyword: (val) => dispatch(boardActions.setSearchKeyword(val)),
-    showPosts: (posts, page, max) => dispatch(boardActions.showPosts(posts, page, max)),
     search: (cate, query) => dispatch(boardActions.search(cate, query))
 })
 

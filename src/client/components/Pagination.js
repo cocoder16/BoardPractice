@@ -5,7 +5,6 @@ import qs from 'query-string';
 const Pagination = ({
     category, //string으로
     now, max, interval, //여기로 넘겨지는 값들은 1부터 세는 값들
-    type, keyword
 }) => {
     let pageData;
     now = now*1;
@@ -15,9 +14,12 @@ const Pagination = ({
     const query = qs.parse(location.search);
     console.log('Pagination');
     console.log(query);
-    let onSearch = false;
-    if (query.type && query.keyword) onSearch = true;
-    console.log(onSearch);
+    const pathname = location.pathname;
+    let type = 0; //type 0 : board, 1 : search, 2 : info/posts, 3: info/replies
+    if (query.type && query.keyword) type = 1;
+    console.log(pathname);
+    if (pathname == '/info/posts') type = 2;
+    else if (pathname == '/info/replies') type = 3;
 
     const reviseStartVal = () => {
         if (now % interval == 0) return now - interval + 1;
@@ -29,11 +31,11 @@ const Pagination = ({
         return max % interval;
     }
 
-    const liGenerator = (first, last, len=interval, start=reviseStartVal(), search=onSearch) => {
+    const liGenerator = (first, last, len=interval, start=reviseStartVal(), _type=type) => {
         const data = [];
         console.log(category);
-        console.log(search);
-        if (search) {
+        console.log(_type);
+        if (_type == 1) {
             console.log('onSearch');
             const type = query.type;
             const keyword = query.keyword;
@@ -49,7 +51,7 @@ const Pagination = ({
                 data.push({ url: `/${category}?type=${type}&keyword=${keyword}&page=${max}`, val: '>>'});
             }
             console.log(data);
-        } else {
+        } else if (_type == 0) {
             if (!first) {
                 data.push({ url: `/${category}`, val: '<<'});
                 data.push({ url: `/${category}?page=${start-1}`, val: '<'});
@@ -60,6 +62,30 @@ const Pagination = ({
             if (!last) {
                 data.push({ url: `/${category}?page=${start+interval}`, val: '>'});
                 data.push({ url: `/${category}?page=${max}`, val: '>>'});
+            }
+        } else if (_type == 2) {
+            if (!first) {
+                data.push({ url: `/info/posts`, val: '<<'});
+                data.push({ url: `/info/posts?page=${start-1}`, val: '<'});
+            }
+            for (let i = 0; i < len; i++) {
+                data.push({ url: `/info/posts?page=${start+i}`, val: `${start+i}`});
+            }
+            if (!last) {
+                data.push({ url: `/info/posts?page=${start+interval}`, val: '>'});
+                data.push({ url: `/info/posts?page=${max}`, val: '>>'});
+            }
+        } else if (_type == 3) {
+            if (!first) {
+                data.push({ url: `/info/replies`, val: '<<'});
+                data.push({ url: `/info/replies?page=${start-1}`, val: '<'});
+            }
+            for (let i = 0; i < len; i++) {
+                data.push({ url: `/info/replies?page=${start+i}`, val: `${start+i}`});
+            }
+            if (!last) {
+                data.push({ url: `/info/replies?page=${start+interval}`, val: '>'});
+                data.push({ url: `/info/replies?page=${max}`, val: '>>'});
             }
         }
         return data;

@@ -15,7 +15,7 @@ const Router = () => (
             <Route exact path="/" component={Home}/>
             <Route exact path='/info/privacy' component={Home}/>
             <Route exact path='/info/posts' component={Home}/>
-            <Route exact path='/info/replys' component={Home}/>
+            <Route exact path='/info/replies' component={Home}/>
             {/* qna, forum url 주소창에 직접 입력하면 서버에 요청이 가니까, 거기서 해당 게시글이 있는지
             쿼리하고 만약 없다면 not found로 리다이렉트 */}
             {/* 만약 exact가 쿼리스트링을 받아들이지 못한다면?? */}

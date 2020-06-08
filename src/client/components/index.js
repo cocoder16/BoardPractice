@@ -6,6 +6,8 @@ import PwResetCompleted from './PwResetCompleted';
 import PwResetEmailSent from './PwResetEmailSent';
 import InfoHead from './InfoHead';
 import InfoBody from './InfoBody';
+import InfoList from './InfoList';
+import InfoRow from './InfoRow';
 import BoardHead from './BoardHead';
 import BoardBody from './BoardBody';
 import WriteForm from './WriteForm';
@@ -26,6 +28,8 @@ export {
     PwResetEmailSent,
     InfoHead,
     InfoBody,
+    InfoList,
+    InfoRow,
     BoardHead,
     BoardBody,
     WriteForm,

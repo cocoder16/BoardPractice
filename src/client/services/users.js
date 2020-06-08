@@ -66,6 +66,18 @@ export const getUserInfo = () => {
     }).catch(err => console.log(err));
 }
 
+export const getUserWrote = (type, page, per) => {
+    return axios({
+        method: 'get',
+        url: '/userwrote',
+        params: {
+            type, page, per
+        }
+    }).then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}
+
 export const goAuthEmail = (formData) => {
     return axios({
         method: 'post',

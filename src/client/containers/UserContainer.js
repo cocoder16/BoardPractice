@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { LogInForm, LoggedIn } from '~c/components';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
+import * as boardActions from '~c/store/board';
 import { tryLogIn, tryLogOut } from '~c/services/users';
 
 class UserContainer extends Component {
@@ -43,6 +44,7 @@ class UserContainer extends Component {
         console.log(result);
         if (result) {
             this.props.deleteUserInfo();
+            this.props.deleteUserWrote();
             console.log(this.props.isLoggedIn);
             window.location.replace('/');
         }
@@ -90,9 +92,9 @@ const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(logInActions.inputChange(payload)),
     formValidationInput: () => dispatch(logInActions.formValidationInput()),
     logInFailed: () => dispatch(logInActions.logInFailed()),
-
     getUserInfo: () => dispatch(userInfoActions.getUserInfo()),
-    deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo())
+    deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo()),
+    deleteUserWrote: () => dispatch(boardActions.deleteUserWrote())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);
