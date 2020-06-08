@@ -26,8 +26,9 @@ export const beforeOverlapCheck = (name) => ({
 })
 export const overlapCheck = (name) => async (dispatch, getState) => {
     if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return null;
-    const _name = name.split('Check')[0];
+    let _name = name.split('Check')[0];
     const isOverlap = await serviceUsers.isOverlap({[_name]: getState().signUp[_name]});
+    
     console.log('isOverlap : ' + isOverlap);
     dispatch({
         type: OVERLAP_CHECK,
@@ -41,7 +42,7 @@ export const formValidationInput = () => ({type: FORM_VALIDATION_INPUT});
 export const formValidationOverlap = () => async (dispatch, getState) => {
     let isOverlap = {};
     if (!getState().signUp.isModify) {
-        isOverlap.id = await serviceUsers.isOverlap({id: getState().signUp.id});
+        isOverlap.id = await serviceUsers.isOverlap({user_id: getState().signUp.id});
         console.log('isOverlap_id : ' + isOverlap.id); 
         isOverlap.nickname = await serviceUsers.isOverlap({nickname: getState().signUp.nickname});
         console.log('isOverlap_nickname : ' + isOverlap.nickname);
@@ -49,7 +50,7 @@ export const formValidationOverlap = () => async (dispatch, getState) => {
         isOverlap.id = false;
         isOverlap.nickname = false;
         if (getState().signUp.nickname != getState().userInfo.nickname) {
-            isOverlap.nickname = await serviceUsers.isOverlap(getState().signUp.nickname);
+            isOverlap.nickname = await serviceUsers.isOverlap({nickname: getState().signUp.nickname});
             console.log('isOverlap_nickname : ' + isOverlap.nickname);
         }
     }

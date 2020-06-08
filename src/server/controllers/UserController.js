@@ -10,6 +10,10 @@ import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
 class UserController {
     static async checkOverlap (target) { //하나만 찾고 멈추는 쿼리를..
+        if (target.id) {
+            target = { ...target, user_id: target.id };
+            delete target.id;
+        }
         const user = await User.find({...target, is_deleted: false}).limit(1).then(user => {
             return user;
         });
@@ -21,7 +25,7 @@ class UserController {
         //form vaildation test
         if(InputChecker.id(formData.id) && InputChecker.pw(formData.pw) && InputChecker.nickname(formData.nickname) 
         && InputChecker.email(formData.email)) {
-            const isOverlap_id = await this.checkOverlap({id: formData.id});
+            const isOverlap_id = await this.checkOverlap({user_id: formData.id});
             console.log(isOverlap_id);
             if (isOverlap_id.result === true) return {result: false};
             const isOverlap_nickname = await this.checkOverlap({nickname: formData.nickname});
@@ -31,7 +35,7 @@ class UserController {
                 crypto.pbkdf2(formData.pw, buf.toString('base64'), process.env.ITERATIONS*1, 64, 'sha512', (err, key) => {
                     //save
                     const newUser = new User({
-                        id: formData.id,
+                        user_id: formData.id,
                         password: key.toString('base64'), //formData.pw을 salt와 함께 암호화한 것이 key파라미터로 전달. buffer형태이므로 string으로.
                         salt: buf.toString('base64'),
                         nickname: formData.nickname,
@@ -46,8 +50,8 @@ class UserController {
         } else return {result: false};
     }
 
-    static async testFormAndUpdateUser (formData) {
-        return User.find({id: formData.id, is_deleted: false}).then(user => {
+    static async testFormAndUpdateUser (formData, session) {
+        return User.find({id: session.userid, is_deleted: false}).then(user => {
             //pw 검사 및 재설정
             if (formData.pw != '') {
                 if (!InputChecker.pw(formData.pw)) return {result: false};
@@ -55,7 +59,7 @@ class UserController {
                     //pw포함 재설정
                     crypto.randomBytes(64, (err, buf) => {
                         crypto.pbkdf2(formData.pw, buf.toString('base64'), process.env.ITERATIONS*1, 64, 'sha512', (err, key) => {
-                            User.updateOne({id: formData.id, is_deleted: false}, {$set: {
+                            User.updateOne({id: session.userid, is_deleted: false}, {$set: {
                                 password: key.toString('base64'), 
                                 salt: buf.toString('base64'),
                                 nickname: formData.nickname,
@@ -76,7 +80,7 @@ class UserController {
             console.log('## pass nick check ##');
             //pw빼고 재설정
             if (!InputChecker.email(formData.email)) return {result: false};
-            User.updateOne({id: formData.id, is_deleted: false}, {$set: {
+            User.updateOne({id: session.userid, is_deleted: false}, {$set: {
                 nickname: formData.nickname,
                 email: formData.email
             }}, (err, raw) => {
@@ -109,7 +113,7 @@ class UserController {
     static async logInDataCheck (req, formData) {
         // 아이디가 있는지 찾고 있으면 입력받은 pw를 해시화하여 DB에 있는 값과 비교
         MeasureRunTime.start('find');
-        return await User.find({id: formData.id, is_deleted: false}).then(user => {
+        return await User.find({user_id: formData.id, is_deleted: false}).then(user => {
             MeasureRunTime.end('find');
             if (user.length > 0) {
                 const salt = user[0].salt;
@@ -118,11 +122,11 @@ class UserController {
                 MeasureRunTime.end('pw hash');
                 if (key.toString('base64') === user[0].password) {
                      //session 만들어주고,
-                    req.session.userid = formData.id;
+                    req.session.userid = user[0].id;
                     req.session.usernickname = user[0].nickname;
                     req.session.save();
                     MeasureRunTime.start('findOneAndUpdate');
-                    User.updateOne({id: formData.id, is_deleted: false}, {$set: {is_login: true}}, (err, rawResponse) => {
+                    User.updateOne({user_id: formData.id, is_deleted: false}, {$set: {is_login: true}}, (err, rawResponse) => {
                         if (err) console.log(err);
                         else {
                             console.log(rawResponse);
@@ -160,7 +164,7 @@ class UserController {
             if (user.length == 0) {
                 return {result: false, userInfo: {id: '', nickname: '', email: ''}};
             } else {
-                return {result: true, userInfo: {id: user[0].id, nickname: user[0].nickname,
+                return {result: true, userInfo: {id: user[0].user_id, nickname: user[0].nickname,
                     email: user[0].email}};
             }
         }).catch(err => console.log(err));
@@ -204,7 +208,7 @@ class UserController {
 
     static async sendPwAuthEmail (id) {
         console.log(id);
-        return User.find({id: id, is_deleted: false}).then(user => {
+        return User.find({user_id: id, is_deleted: false}).then(user => {
             if (user.length == 0) return {result: false}
 
             const userEmail = user[0].email;
@@ -215,7 +219,7 @@ class UserController {
                     let emailToken = key.toString('base64');
                     emailToken = emailToken.replaceAll('+', '-'); //url safe base64
                     emailToken = emailToken.replaceAll('/', '_');
-                    User.updateOne({id: id, is_deleted: false},
+                    User.updateOne({user_id: id, is_deleted: false},
                     {$set: {email_token: emailToken}}, (err, rawResponse) => {
                         const transporter = nodemailer.createTransport({
                             service: 'gmail',
@@ -263,7 +267,7 @@ class UserController {
         const newPwHash = key.toString('base64');
         //
         const resData = await new Promise((res, rej) => {
-            User.updateOne({id: id, email_token: token, is_deleted: false},
+            User.updateOne({id: id, email_token: token},
             {$set: {salt: buf, password: newPwHash, email_token: ''}}, (err, rawResponse) => {
                 console.log(rawResponse);
                 if (rawResponse.n == 0) res({result: false, pw: ''});

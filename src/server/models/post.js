@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
     author_id: { type: String, required: true, index: true },
     category: { type: Number, required: true },
     is_deleted: { type: Boolean, default: false },
-    read_count: { type: Number, default: 0 },
+    read_count: { type: Number, default: -1 },
     reply_count: { type: Number, default: 0 },
     created_at: { type: String, default: new Date().format('yy-MM-dd HH:mm:ss') },
     updated_at: { type: String, default: new Date().format('yy-MM-dd HH:mm:ss') }

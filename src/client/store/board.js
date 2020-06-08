@@ -76,13 +76,13 @@ export const getArticle = (num) => async (dispatch, getState) => {
     console.log(num);
     console.log(sessionStorage.getItem('article-id'));
     if (sessionStorage.getItem('article-id') != num) newGet = 1;
+    sessionStorage.setItem('article-id', num);
     const article = await servicePosts.getArticle(num, newGet);
     if (article.result) {
         dispatch({
             type: GET_ARTICLE,
             payload: { article: article.article }
         });
-        sessionStorage.setItem('article-id', article.article.id);
     } else {
         window.location.replace(article.url);
     }

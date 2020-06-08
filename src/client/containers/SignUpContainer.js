@@ -73,12 +73,14 @@ class SignUpContainer extends Component {
 
         const { id, pw, nickname, email } = this.props;
         const formData = new FormData();
-        formData.append('id', id);
         formData.append('pw', pw);
         formData.append('nickname', nickname);
         formData.append('email', email);
 
-        if (!isModify) createUser(formData);
+        if (!isModify) {
+            formData.append('id', id);
+            createUser(formData);
+        }
         else updateUser(formData);
     }
 

@@ -38,7 +38,7 @@ router.post('/user', upload.none(), async (req, res) => {
 })
 
 router.put('/user', upload.none(), async (req, res) => {
-    const result = await UserController.testFormAndUpdateUser(req.body);
+    const result = await UserController.testFormAndUpdateUser(req.body, req.session);
     res.send(result);
 })
 
