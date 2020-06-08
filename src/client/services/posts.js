@@ -89,3 +89,12 @@ export const search = (category, type, keyword, page, per) => {
         return res.data;
     }).catch(err => console.log(err));
 }
+
+export const recentPosts = () => {
+    return axios({
+        method: 'get',
+        url: '/recentposts',
+    }).then(res => {
+        return res.data;
+    }).catch(err => console.log(err));
+}

@@ -159,6 +159,30 @@ class PostController {
             return {result: true, max: max, posts};
         }).catch(err => console.log(err));
     }
+
+    static async recentPosts () {
+        let qnaArr, forumArr;
+        const today = new Date().format('yy-MM-dd');
+        qnaArr = await Post.find({category: 0, is_deleted: false})
+        .select('id title author read_count reply_count created_at')
+        .sort({id: -1}).limit(5).then(posts => {
+            posts.map(cur => {
+                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                else cur.created_at = cur.created_at.split(' ')[0]
+            });
+            return posts
+        });
+        forumArr = await Post.find({category: 1, is_deleted: false})
+        .select('id title author read_count reply_count created_at')
+        .sort({id: -1}).limit(5).then(posts => {
+            posts.map(cur => {
+                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                else cur.created_at = cur.created_at.split(' ')[0]
+            });
+            return posts
+        });
+        return { qnaArr, forumArr }
+    }
 }
 
 export default PostController;

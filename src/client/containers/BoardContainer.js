@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import qs from 'query-string';
-import { BoardHead, BoardBody, Article } from '~c/components';
+import { BoardHead, BoardBody, Article, RecentPosts } from '~c/components';
 import * as boardActions from '~c/store/board';
 import WriteContainer from './WriteContainer';
 
@@ -11,8 +11,6 @@ class BoardContainer extends Component {
         super(props);
         console.log('con');
         this.getData();
-
-        console.log(this.props);
 
         this.goBackOnDelete = this.goBackOnDelete.bind(this); //왜 붙였지?
     }
@@ -35,8 +33,9 @@ class BoardContainer extends Component {
     }
 
     getData = () => {
-        console.log('b');
-        if (location.pathname == '/qna') {
+        if (location.pathname == '/') {
+            this.props.getRecentPosts();
+        } else if (location.pathname == '/qna') {
             const query = qs.parse(location.search);
             if (query.type && query.keyword) {
                 console.log(query);                
@@ -84,34 +83,43 @@ class BoardContainer extends Component {
 
     render () {
         const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, isModify, onDelete, 
-            searchType, searchKeyword } = this.props;
+            searchType, searchKeyword, recentPosts } = this.props;
         const { goBackOnDelete, handleDeletePost, handleChangeSearchType, handleChangeSearchKeyword } = this;
+
+        let isHome = true;
+        if (location.pathname != '/') isHome = false;
 
         return (
             <Fragment>
-                <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify} 
-                    searchType={searchType} searchKeyword={searchKeyword}
-                    onChangeSearchType={handleChangeSearchType}
-                    onChangeSearchKeyword={handleChangeSearchKeyword}
-                />
-                <Switch>
-                    <Route exact path='/qna'
-                        render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
-                    />
-                    <Route exact path='/forum'
-                        render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
-                    />
-                    <Route path='/article'
-                        render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
-                        id={article.id}/>}
-                    />
-                    <Route exact path='/write' component={WriteContainer}/>
-                    <Route path='/modify' component={WriteContainer}/>
-                    <Route path='/delete'
-                        render={() => <Article auth={article.auth} onDelete={onDelete} goBack={goBackOnDelete}
-                        deletePost={handleDeletePost}/>}
-                    />
-                </Switch>
+                { isHome 
+                    ? <RecentPosts posts={recentPosts} onReady={listOnReady}/>
+                    :
+                    <div>
+                        <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify} 
+                            searchType={searchType} searchKeyword={searchKeyword}
+                            onChangeSearchType={handleChangeSearchType}
+                            onChangeSearchKeyword={handleChangeSearchKeyword}
+                        />
+                        <Switch>
+                            <Route exact path='/qna'
+                                render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
+                            />
+                            <Route exact path='/forum'
+                                render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
+                            />
+                            <Route path='/article'
+                                render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
+                                id={article.id}/>}
+                            />
+                            <Route exact path='/write' component={WriteContainer}/>
+                            <Route path='/modify' component={WriteContainer}/>
+                            <Route path='/delete'
+                                render={() => <Article auth={article.auth} onDelete={onDelete} goBack={goBackOnDelete}
+                                deletePost={handleDeletePost}/>}
+                            />
+                        </Switch>
+                    </div>
+                }
             </Fragment>
         );
     };
@@ -128,6 +136,7 @@ const mapStateToProps = (state) => ({
     onDelete: state.board.onDelete,
     searchType: state.board.searchType,
     searchKeyword: state.board.searchKeyword,
+    recentPosts: state.board.recentPosts
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -138,7 +147,8 @@ const mapDispatchToProps = (dispatch) => ({
     deletePost: (payload) => dispatch(boardActions.deletePost(payload)),
     setSearchType: (val) => dispatch(boardActions.setSearchType(val)),
     setSearchKeyword: (val) => dispatch(boardActions.setSearchKeyword(val)),
-    search: (cate, query) => dispatch(boardActions.search(cate, query))
+    search: (cate, query) => dispatch(boardActions.search(cate, query)),
+    getRecentPosts: () => dispatch(boardActions.getRecentPosts())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);

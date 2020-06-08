@@ -6,5 +6,5 @@ import store from '~c/store/index';
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <App/>
     </Provider>, document.getElementById('root'));

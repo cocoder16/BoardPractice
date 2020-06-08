@@ -17,7 +17,7 @@ class Home extends Component {
 				</ul>
 				{/* {board main body} */}
 				<Switch>
-					{/* <Route path="/" component={Summary}/> */}
+					<Route path="/" component={BoardContainer}/>
 					<Route path='/info' component={InfoContainer}/>
 					{/* 페이지는 쿼리스트링으로 */}
 					<Route exact path='/qna' component={BoardContainer}/>

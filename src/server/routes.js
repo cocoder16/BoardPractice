@@ -154,6 +154,11 @@ router.get('/search', async (req, res) => {
     res.send(result);
 })
 
+router.get('/recentposts', async (req, res) => {
+    const posts = await PostController.recentPosts();
+    res.send(posts);
+})
+
 router.get('/modify*', (req, res) => {
     res.redirect('/');
 })

@@ -15,6 +15,8 @@ const SET_SEARCH_KEYWORD = 'board/SET_SEARCH_KEYWORD';
 const GET_SEARCH = 'board/GET_SEARCH';
 const GET_USER_WROTE = 'board/GET_USER_WROTE';
 const DELETE_USER_WROTE = 'board/DELTE_USER_WROTE';
+const RECENT_POSTS = 'board/RECENT_POSTS';
+const ON_PENDING = 'board/ON_PENDING';
 
 //function creating action
 export const getPosts = (category, query) => async (dispatch, getState) => {
@@ -119,6 +121,18 @@ export const getUserWrote = (type, query) => async (dispatch, getState) => {
     }
 };
 export const deleteUserWrote = () => ({type: DELETE_USER_WROTE});
+export const getRecentPosts = () => async (dispatch, getState) => {
+    dispatch({
+        type: ON_PENDING
+    })
+    const posts = await servicePosts.recentPosts();
+    console.log('recent posts');
+    console.log(posts);
+    dispatch({
+        type: RECENT_POSTS,
+        payload: posts
+    })
+}
 
 //module's initial state
 const initialState = {
@@ -135,7 +149,8 @@ const initialState = {
     searchType: 0,
     searchKeyword: '',
     userPosts: [],
-    userReplies: []
+    userReplies: [],
+    recentPosts: { qna: [], forum: [] }
 }
 
 //reducer
@@ -174,6 +189,11 @@ export default function reducer (state=initialState, action) {
                 now: action.payload.page, max: action.payload.data.max }
         case DELETE_USER_WROTE :
             return { ...state, userPosts: [], userReplies: [] }
+        case RECENT_POSTS :
+            return { ...state, recentPosts: { qna: [ ...action.payload.qnaArr ], forum: [ ...action.payload.forumArr ] },
+                listOnReady: true }
+        case ON_PENDING :
+            return { ...state, listOnReady: false }
         default :
             return state;
     }

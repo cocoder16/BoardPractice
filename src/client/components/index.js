@@ -18,6 +18,7 @@ import PageItem from './PageItem';
 import ReplyForm from './ReplyForm';
 import ReplyList from './ReplyList';
 import Reply from './Reply';
+import RecentPosts from './RecentPosts';
 
 export {
     SignUpForm,
@@ -39,5 +40,6 @@ export {
     PageItem,
     ReplyForm,
     ReplyList,
-    Reply
+    Reply,
+    RecentPosts
 }
