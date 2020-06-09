@@ -50,7 +50,7 @@ class SignUpContainer extends Component {
     }
 
     alertReject () {
-        alert('가입 양식을 다시 확인해주세요.');
+        alert('Please check the form again.');
     }
 
     handleFormSubmit = async (e) => {
@@ -102,7 +102,7 @@ class SignUpContainer extends Component {
             formData.append('pw', pw);
             const result = await deleteUser(formData);
             if (result.result == true) {
-                alert('회원탈퇴가 완료되었습니다.');
+                alert('Your account is deleted.');
                 window.location.replace('/');
             } else {
                 this.props.deleteFailed();

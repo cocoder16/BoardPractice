@@ -28,10 +28,10 @@ export default function reducer (state=initialState, action) {
             return { ...state, [action.payload.name]: action.payload.value };
         case FORM_VALIDATION_INPUT :
             if (!InputChecker.id(state.id) || !InputChecker.pw(state.pw)) {
-                return { ...state, span: '아이디와 비밀번호를 확인해주세요.', pass: false };
+                return { ...state, span: 'Please check the ID and Password and try again.', pass: false };
             } else return { ...state, span: '', pass: true };
         case LOG_IN_FAILED :
-            return { ...state, span: '아이디와 비밀번호를 확인해주세요.', pass: false };
+            return { ...state, span: 'Please check the ID and Password and try again.', pass: false };
         default :
             return state;
     }

@@ -1,36 +1,28 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const LogInForm = ({
     failSpan, onInputChange, onFormSubmit
 }) => {
     return (
-        <Fragment>
+        <div className='log-in-form'>
+            <h2>Login</h2>
             <form onSubmit={onFormSubmit}>
-                <table><tbody>
-                    <tr>
-                        <td>아이디</td>
-                        <td>
-                            <input type='text' maxLength='12' name='id'
-                                onChange={onInputChange}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>비밀번호</td>
-                        <td>
-                            <input type='password' maxLength='12' name='pw'
-                                onChange={onInputChange}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colSpan='2'><span>{failSpan}</span></td>
-                    </tr>
-                </tbody></table>
-                <input type='submit' value='로그인'/>
+                <p>ID</p>
+                <input type='text' maxLength='12' name='id'
+                    onChange={onInputChange}/>
+                <p>Password</p>
+                <input type='password' maxLength='12' name='pw'
+                    onChange={onInputChange}/>
+                <div className='fail-message'>
+                    <span>{failSpan}</span>
+                </div>
+                <button type='submit'>Log In</button>
             </form>
-            <Link to="/signup" className='link'>회원가입</Link>
-            <Link to="/help/pwreset" className='link'>비밀번호 재설정</Link>
-        </Fragment>
+            <Link to="/signup" className='link'>Sign Up</Link>
+            <div className='blank'></div>
+            <Link to="/help/pwreset" className='link'>Reset Password</Link>
+        </div>
     )
 };
 

@@ -7,7 +7,7 @@ const LoggedOut = ({
     return (
         <div className='logged-out'>
             <Link to="/login" className='link'>
-                Log In
+                Login
             </Link>
             <Link to="/signup" className='link'>
                 Join

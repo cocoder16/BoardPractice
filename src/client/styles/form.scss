@@ -1,0 +1,40 @@
+@import './var';
+
+.log-in-form, .sign-up-form {
+    width: $form-width; margin: auto;
+    h2 { text-align: center; }
+    p { line-height: 0; margin-left: 8px; }
+    input { 
+        display: block; width: $form-input-width; margin: auto;
+        border: 1px solid black; border-radius: 3px;
+        padding: 6px; background-color: #d5eaf7;
+    }
+    input:focus {
+        outline: 2px solid red; box-shadow: 0 0 1px red;
+    }
+    .fail-message { 
+        height: 35px; font-size: 0.7rem; color: red;
+        text-align: center; margin-top: 3px; }
+    button, input[type=button] {
+        display: block; width: $form-input-width; margin: auto;
+        height: 30px;
+        background: linear-gradient(to top,
+            rgb(0, 69, 115) 0%,
+            rgb(0, 119, 199) 100%
+        );
+        border-radius: 10px;
+    }
+    .blank { width: 30px; }
+    .link, a { 
+        display: inline-block; margin: 8px;
+        color: #737373; }
+    .link:visited, a:visited { color: #737373; }
+}
+
+.sign-up-form {
+    button { margin-top: 20px; }
+    input[type=button] {
+        margin-top: 10px; max-width: $form-btn-max-width;
+    }
+    .fail-message { height: 28px; }
+}

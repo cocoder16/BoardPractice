@@ -5,7 +5,6 @@ class SignUp extends Component {
 	render() {
 		return (
 			<Fragment>
-				<h1>Sign Up</h1>
 				<SignUpContainer/>
 			</Fragment>
 		);

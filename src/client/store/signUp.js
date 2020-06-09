@@ -111,24 +111,24 @@ export default function reducer (state=initialState, action) {
             switch (action.payload.name) {
                 case 'id':
                     if (!InputChecker.id(action.payload.value)) {
-                        return { ..._state, span: { ..._state.span, id: '아이디는 소문자 영문, 숫자를 조합하여 6 ~ 12자로 입력해주세요.' }}
+                        return { ..._state, span: { ..._state.span, id: '6~12 characters. Small letters and digits only.' }}
                     } else return setEmpty(action.payload.name);
                 case 'pw' :
                     _state = { ..._state, pw: _state.pw.toLowerCase(), pwConfirm: _state.pwConfirm.toLowerCase() };
                     if (!InputChecker.pw(_state.pw)) {
-                        return  { ..._state, span: { ..._state.span, pw: '비밀번호는 영문, 숫자, 특수문자를 조합하여 8 ~ 12자로 입력해주세요.' }}
+                        return  { ..._state, span: { ..._state.span, pw: '8~12 charactrers. Should contain small letter, number and specail character.' }}
                     } else return setEmpty(action.payload.name);
                 case 'pwConfirm' :
                     if (_state.pw !== _state.pwConfirm) {
-                        return { ..._state, span: { ..._state.span, pwConfirm: '비밀번호가 일치하지 않습니다.' }}
+                        return { ..._state, span: { ..._state.span, pwConfirm: 'Not the same password.' }}
                     } else return setEmpty(action.payload.name);
                 case 'nickname' :
                     if (!InputChecker.nickname(action.payload.value)) {
-                        return { ..._state, span: { ..._state.span, nickname: '닉네임은 한글(영문) 또는 숫자를 사용하여 2 ~ 12자로 입력해주세요.' }}
+                        return { ..._state, span: { ..._state.span, nickname: '2~12 characters. digits, Korean or English only.' }}
                     } else return setEmpty(action.payload.name);
                 case 'email' :
                     if (!InputChecker.email(action.payload.value)) {
-                        return { ..._state, span: { ..._state.span, email: '이메일 형식이 올바르지 않습니다.' }}
+                        return { ..._state, span: { ..._state.span, email: 'Invalid email.' }}
                     } else return setEmpty(action.payload.name);
             }
         case BEFORE_OVERLAP_CHECK :
@@ -147,15 +147,15 @@ export default function reducer (state=initialState, action) {
             switch (action.payload.name) {
                 case 'id' :
                     if (action.payload.isOverlap) {
-                        return { ...state, span: { ...state.span, id: '이미 사용중인 아이디입니다. 다른 아이디를 사용해주세요.'}}
+                        return { ...state, span: { ...state.span, id: 'This ID is already taken. Please use another ID.'}}
                     } else {
-                        return { ...state, span: { ...state.span, id: '사용 가능한 아이디입니다.'}}
+                        return { ...state, span: { ...state.span, id: 'This ID is available.'}}
                     }
                 case 'nickname' :
                     if (action.payload.isOverlap) {
-                        return { ...state, span: { ...state.span, nickname: '이미 사용중인 닉네임입니다. 다른 닉네임을 사용해주세요.'}}
+                        return { ...state, span: { ...state.span, nickname: 'This nickname is already taken. Please use another nickname.'}}
                     } else {
-                        return { ...state, span: { ...state.span, nickname: '사용 가능한 닉네임입니다.'}}
+                        return { ...state, span: { ...state.span, nickname: 'This nickname is available.'}}
                     }
             }
         case FORM_VALIDATION_INPUT :
@@ -173,10 +173,10 @@ export default function reducer (state=initialState, action) {
         case FORM_VALIDATION_OVERLAP :
             _state = { ...state };
             if (action.payload.id) {
-                _state = { ..._state, pass: false, span: { ..._state.span, id: '이미 사용중인 아이디입니다. 다른 아이디를 사용해주세요.'} };
+                _state = { ..._state, pass: false, span: { ..._state.span, id: 'This ID is already taken. Please use another ID.'} };
             }
             if (action.payload.nickname) {
-                _state = { ..._state, pass: false, span: { ..._state.span, nickname: '이미 사용중인 닉네임입니다. 다른 닉네임을 사용해주세요.'} };
+                _state = { ..._state, pass: false, span: { ..._state.span, nickname: 'This nickname is already taken. Please use another nickname.'} };
             }
             return _state;
         case SET_IS_MODIFY :
@@ -190,9 +190,9 @@ export default function reducer (state=initialState, action) {
         case DELETE_MODE_OFF :
             return { ...state, isDeleteMode: false, deleteFailedMessage: '' }
         case DELETE_FAILED :
-            return { ...state, deleteFailedMessage: '비밀번호가 틀렸습니다.' }
+            return { ...state, deleteFailedMessage: 'Wrong password.' }
         case PW_VALIDATION :
-            if (!InputChecker.pw(action.payload)) return { ...state, deleteFailedMessage: '비밀번호가 틀렸습니다.' }
+            if (!InputChecker.pw(action.payload)) return { ...state, deleteFailedMessage: 'Wrong password.' }
             else return { ...state, deleteFailedMessage: '' }
         default :
             return state;

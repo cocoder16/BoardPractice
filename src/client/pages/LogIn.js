@@ -5,7 +5,6 @@ class LogIn extends Component {
 	render() {
 		return (
 			<Fragment>
-				<h1>Log In</h1>
 				<LogInContainer/>
 			</Fragment>
 		);

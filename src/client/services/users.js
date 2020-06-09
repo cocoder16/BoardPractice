@@ -18,10 +18,10 @@ export const createUser = (formData) => {
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         if (res.data.result) {
-            alert('환영합니다. 회원가입이 완료되었습니다.');
+            alert('Welcome to my board :)');
             window.location.replace(res.data.url);
         } else {
-            alert('회원가입에 실패하였습니다. 다시 시도해주세요.');
+            alert('The registration is failed. Please try again.');
         }
     }).catch(err => console.log(err));
 }

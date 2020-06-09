@@ -7,20 +7,20 @@
     width: 100%;
     height: $sidebar-height;
     background-color: #0059ab;
-    color: white;
+    .link, a { color: white; }
     .link:visited, a:visited { color: white; }
     h1 {
         position: absolute; left: 50%; transform: translate(-50%, 0);
-        font-size: $h1-size; line-height: 0.7; text-align: center;
+        font-size: $h1-size; line-height: 0.8; text-align: center;
     }
     .user-box {
         position: absolute; top: 50%; transform: translate(0, -50%);
         right: 15px;
         height: $sidebar-btn-side-length;
         .logged-out { 
-            width: $user-box-logged-out-width;
+            width: $user-box-logged-out-width; height: $sidebar-btn-side-length;
             .link {
-                margin: 6px; line-height: 0; vertical-align: middle; 
+                margin: 6px; line-height: 2;
             }
         }
         .logged-in { width: $user-box-logged-in-width; }
