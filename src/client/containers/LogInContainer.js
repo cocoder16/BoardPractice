@@ -14,9 +14,6 @@ class UserContainer extends Component {
     
     componentDidUpdate () {
         console.log(this.props.isLoggedIn);
-        if (this.props.isLoggedIn) {
-            window.location.replace('/');
-        }
     }
     
     handleInputChange = (e) => {

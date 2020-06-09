@@ -3,9 +3,13 @@
 .log-in-form, .sign-up-form {
     width: $form-width; margin: auto;
     h2 { text-align: center; }
-    p { line-height: 0; margin-left: 8px; }
+    p { 
+        display: block; width: 100%; margin-left: 8px;
+        line-height: 0;
+    }
     input { 
-        display: block; width: $form-input-width; margin: auto;
+        display: block; width: calc(100% - 12px); //padding*2
+        margin: auto;
         border: 1px solid black; border-radius: 3px;
         padding: 6px; background-color: #d5eaf7;
     }
@@ -16,7 +20,7 @@
         height: 35px; font-size: 0.7rem; color: red;
         text-align: center; margin-top: 3px; }
     button, input[type=button] {
-        display: block; width: $form-input-width; margin: auto;
+        display: block; width: 100%; margin: auto;
         height: 30px;
         background: linear-gradient(to top,
             rgb(0, 69, 115) 0%,
@@ -24,17 +28,25 @@
         );
         border-radius: 10px;
     }
-    .blank { width: 30px; }
     .link, a { 
-        display: inline-block; margin: 8px;
-        color: #737373; }
+        margin: 8px;
+        color: #737373; 
+        &.left {
+            float: left;
+        }
+        &.right {
+            float: right;
+        }
+    }
     .link:visited, a:visited { color: #737373; }
 }
 
 .sign-up-form {
-    button { margin-top: 20px; }
-    input[type=button] {
-        margin-top: 10px; max-width: $form-btn-max-width;
+    button { 
+        margin-top: 10px; max-width: $form-btn-max-width; 
+    }
+    button.submit {
+        margin-top: 20px; max-width: initial; width: $form-signup-submit-btn-width;
     }
     .fail-message { height: 28px; }
 }

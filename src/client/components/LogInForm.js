@@ -19,9 +19,8 @@ const LogInForm = ({
                 </div>
                 <button type='submit'>Log In</button>
             </form>
-            <Link to="/signup" className='link'>Sign Up</Link>
-            <div className='blank'></div>
-            <Link to="/help/pwreset" className='link'>Reset Password</Link>
+            <Link to="/signup" className='link left'>Sign Up</Link>
+            <Link to="/help/pwreset" className='link right'>Reset Password</Link>
         </div>
     )
 };

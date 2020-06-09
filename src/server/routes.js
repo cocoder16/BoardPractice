@@ -47,12 +47,12 @@ router.delete('/user', upload.none(), async (req, res) => {
     res.send(result);
 })
 
-router.post('/login', upload.none(), async (req, res) => {
+router.post('/session/login', upload.none(), async (req, res) => {
     const result = await UserController.logInDataCheck(req, req.body);
     res.send(result);
 })
 
-router.delete('/logout', async (req, res) => {
+router.delete('/session/logout', async (req, res) => {
     const result = await UserController.logOut(req);
     res.send(result);
 })
@@ -157,6 +157,16 @@ router.get('/search', async (req, res) => {
 router.get('/recentposts', async (req, res) => {
     const posts = await PostController.recentPosts();
     res.send(posts);
+})
+
+router.get('/login', (req, res) => {
+    if (req.session.userid) res.redirect('/');
+    else res.sendFile(index);
+})
+
+router.get('/signup', (req, res) => {
+    if (req.session.userid) res.redirect('/');
+    else res.sendFile(index);
 })
 
 router.get('/modify*', (req, res) => {

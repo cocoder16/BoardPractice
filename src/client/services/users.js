@@ -56,7 +56,7 @@ export const deleteUser = (formData) => {
 export const tryLogIn = (formData) => {
     return axios({
         method: 'post',
-        url: '/login',
+        url: '/session/login',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
@@ -65,7 +65,7 @@ export const tryLogIn = (formData) => {
 }
 
 export const tryLogOut = () => {
-    return axios.delete('/logout').then(res => {
+    return axios.delete('/session/logout').then(res => {
         console.log(res.data);
         return res.data.result;
     }).catch(err => console.log(err));

@@ -152,7 +152,8 @@ const mapStateToProps = (state) => ({
     userEmail: state.userInfo.email,
     onPending: state.userInfo.onPending,
     isDeleteMode: state.signUp.isDeleteMode,
-    deleteFailedMessage: state.signUp.deleteFailedMessage
+    deleteFailedMessage: state.signUp.deleteFailedMessage,
+    isLoggedIn: state.userInfo.isLoggedIn
 })
 
 //props값으로 넣어줄 액션 함수들 정의

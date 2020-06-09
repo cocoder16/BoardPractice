@@ -37,8 +37,9 @@
     .menu {
         display: none; position: absolute;
         width: 100%; left: 0; top: $sidebar-menu-top;
-        padding: 0 0 8px 8px;
+        padding: 0 0 10px 10px;
         background-color: #0059ab;
+        li { margin-top: 15px; }
         &.show {
             display: block;
         }

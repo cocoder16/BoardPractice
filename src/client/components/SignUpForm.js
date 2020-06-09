@@ -57,7 +57,7 @@ const SignUpForm = ({
             <div className='fail-message'>
                 <span>{spanMessage.email}</span>
             </div>
-            <button type='submit'>{submitValue}</button>
+            <button type='submit' className='submit'>{submitValue}</button>
         </form>
 
     return (
