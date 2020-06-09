@@ -1,0 +1,13 @@
+@import './var';
+
+// board
+.info-head {
+    font-size: 0.9rem;
+    li {
+        display: inline-block; width: $info-head-li-width; margin: auto;
+        text-align: center;
+    }
+    li.line {
+        width: $info-head-li-line-width;
+    }
+}
