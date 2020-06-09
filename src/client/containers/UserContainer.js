@@ -1,44 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LogInForm, LoggedIn } from '~c/components';
+import { LoggedOut, LoggedIn } from '~c/components';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
 import * as boardActions from '~c/store/board';
 import { tryLogIn, tryLogOut } from '~c/services/users';
 
 class UserContainer extends Component {
-    componentDidMount () {
-        sessionStorage.removeItem('received newPw');
-        sessionStorage.removeItem('sent email');
-    }
-
-    handleInputChange = (e) => {
-        e.preventDefault();
-        const { name, value } = e.target;
-        this.props.inputChange({name: name, value: value});
-    }
-
-    handleFormSubmit = async (e) => {
-        e.preventDefault();
-
-        await this.props.formValidationInput();
-        if (!this.props.pass) {
-            console.log('fail form validation due to input value');
-            return false;
-        }
-
-        const { id, pw } = this.props;
-        const formData = new FormData();
-        formData.append('id', id);
-        formData.append('pw', pw);
-        const data = await tryLogIn(formData);
-        if (data.result) {
-            this.props.getUserInfo();
-        } else {
-            this.props.logInFailed();
-        }
-    }
-
     handleLogOut = async () => {
         const result = await tryLogOut();
         console.log(result);
@@ -53,24 +21,16 @@ class UserContainer extends Component {
     render () {        
         const { span, onPending, isLoggedIn, userNickname } = this.props;
         const { handleInputChange, handleFormSubmit, handleLogOut } = this;
-        let target;
-
-        if (onPending) target = null;
-        else {
-            if (!isLoggedIn) {
-                target = <LogInForm
-                    failSpan={span} onInputChange={handleInputChange} onFormSubmit={handleFormSubmit}
-                />;
-            } else {
-                target = <LoggedIn 
-                    userName={userNickname} logOut={handleLogOut}
-                />;
-            }
-        }
-
-        return (
-            <div>
-                {target}
+        return (     
+            <div className='user-box'>
+                { !isLoggedIn ?
+                    <LoggedOut
+                        failSpan={span} onInputChange={handleInputChange} onFormSubmit={handleFormSubmit}
+                    /> :
+                    <LoggedIn 
+                        logOut={handleLogOut}
+                    />
+                }
             </div>
         );
     }

@@ -30,6 +30,8 @@ class BoardContainer extends Component {
         if (prevProps.isLoggedIn != this.props.isLoggedIn) {
             this.getData();
         }
+        const menu = document.querySelector('.sidebar .menu');
+        menu.classList.remove('show');
     }
 
     getData = () => {

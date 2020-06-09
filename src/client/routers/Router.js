@@ -1,14 +1,13 @@
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import { Home, SignUp, PwReset, PwResetCompleted, NotFound } from '~c/pages/index';
+import { Home, SignUp, LogIn, PwReset, PwResetCompleted, NotFound } from '~c/pages/index';
 
 const Router = () => (
-    <div>
-        <h1>
-            <Link to="/" className='link'>게시판</Link>
-        </h1>
+    
+    <div className='main'>
         <Switch>
             <Route exact path="/signup" component={SignUp}/>
+            <Route exact path="/login" component={LogIn}/>
             <Route exact path="/help/pwreset" component={PwReset}/>
             <Route exact path="/help/pwreset/completed" component={PwResetCompleted}/>
             <Route path="/auth" component={PwResetCompleted}/>

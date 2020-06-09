@@ -1,0 +1,46 @@
+@import './var';
+
+.sidebar {
+    position: fixed; top: 0; left: 0;
+    z-index: 1;
+    padding: $sidebar-padding;
+    width: 100%;
+    height: $sidebar-height;
+    background-color: #0059ab;
+    color: white;
+    .link:visited, a:visited { color: white; }
+    h1 {
+        position: absolute; left: 50%; transform: translate(-50%, 0);
+        font-size: $h1-size; line-height: 0.7; text-align: center;
+    }
+    .user-box {
+        position: absolute; top: 50%; transform: translate(0, -50%);
+        right: 15px;
+        height: $sidebar-btn-side-length;
+        .logged-out { 
+            width: $user-box-logged-out-width;
+            .link {
+                margin: 6px; line-height: 0; vertical-align: middle; 
+            }
+        }
+        .logged-in { width: $user-box-logged-in-width; }
+        .icon {
+            display: inline-block;
+            width: $sidebar-btn-side-length; height: $sidebar-btn-side-length;
+            margin: 0 $user-box-icon-margin 0 $user-box-icon-margin;
+        }
+    }
+    button {
+        position: absolute; top: 50%; transform: translate(0, -50%);
+        width: $sidebar-btn-side-length * 1.2; height: $sidebar-btn-side-length;
+    }
+    .menu {
+        display: none; position: absolute;
+        width: 100%; left: 0; top: $sidebar-menu-top;
+        padding: 0 0 8px 8px;
+        background-color: #0059ab;
+        &.show {
+            display: block;
+        }
+    }
+}

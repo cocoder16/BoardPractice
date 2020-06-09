@@ -9,15 +9,8 @@ class Home extends Component {
   	render() {
     	return (
         	<Fragment>
-        		<h1 data-testid='h1tag' className='fancy-h1'>Hello React</h1>
-          		<UserContainer/>
-				<ul>
-					<li><Link to='/qna' className='link'>Q n A</Link></li>
-					<li><Link to='/forum' className='link'>Forum</Link></li>
-				</ul>
-				{/* {board main body} */}
 				<Switch>
-					<Route path="/" component={BoardContainer}/>
+					<Route exact path="/" component={BoardContainer}/>
 					<Route path='/info' component={InfoContainer}/>
 					{/* 페이지는 쿼리스트링으로 */}
 					<Route exact path='/qna' component={BoardContainer}/>

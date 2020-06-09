@@ -1,7 +1,15 @@
 @import './styles/index';
-body { background-color: #ddd; }
-.link { text-decoration: none; }
+html, body { background-color: #ddd; margin: 0; padding: 0; font-size: $font-size; }
+.link, a { text-decoration: none; }
+img { width: 100%; height: 100% }
+ul, ol { list-style: none; padding-left: 0px; }
+button, input[type=button], input[type=submit] { border: none; outline: none; background-color: rgba(0,0,0,0); }
 
+.main {
+    margin-top: $sidebar-height;
+    padding: 20px;
+}
+// auth
 .personal-btn {
     display: none;
     &.show {

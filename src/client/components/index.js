@@ -1,6 +1,7 @@
 import SignUpForm from './SignUpForm';
 import LogInForm from './LogInForm';
 import LoggedIn from './LoggedIn';
+import LoggedOut from './LoggedOut';
 import PwResetForm from './PwResetForm';
 import PwResetCompleted from './PwResetCompleted';
 import PwResetEmailSent from './PwResetEmailSent';
@@ -19,11 +20,14 @@ import ReplyForm from './ReplyForm';
 import ReplyList from './ReplyList';
 import Reply from './Reply';
 import RecentPosts from './RecentPosts';
+import Menu from './Menu';
+import Sidebar from './Sidebar';
 
 export {
     SignUpForm,
     LogInForm,
     LoggedIn,
+    LoggedOut,
     PwResetForm,
     PwResetCompleted,
     PwResetEmailSent,
@@ -41,5 +45,7 @@ export {
     ReplyForm,
     ReplyList,
     Reply,
-    RecentPosts
+    RecentPosts,
+    Menu,
+    Sidebar
 }

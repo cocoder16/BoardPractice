@@ -1,3 +1,16 @@
+// global
+$font-size: 1rem;
+
+// sidebar
+$sidebar-height: 40px;
+$sidebar-padding: 5px;
+$h1-size: 1.2rem;
+$sidebar-btn-side-length: 30px;
+$user-box-logged-out-width: 100px;
+$user-box-icon-margin: 4px;
+$user-box-logged-in-width: $sidebar-btn-side-length * 2 + $user-box-icon-margin * 4;
+$sidebar-menu-top: $sidebar-height - 6px;
+
 // write
 $write_contents_width: 1024px;
 $write_contents_height: 500px;
