@@ -4,13 +4,12 @@ const SignUpForm = ({
     spanMessage, onInputChange, onOverlapCheck, onFormSubmit, isModify, 
     onDeleteMode, isDeleteMode, onDelete, deleteFailedMessage
 }) => {
-    let idDisabled, idOverlap, submitValue, deleteUser, messageId;
+    let idDisabled, idOverlap, submitValue, messageId;
     if (isModify) {
         idDisabled = true;
         idOverlap = null;
         messageId = <span></span>
         submitValue = 'save'
-        deleteUser = true;
     } else {
         idDisabled = false;
         idOverlap = <button type='button' name='idCheck' onClick={onOverlapCheck}>Check Availability</button>;
@@ -62,17 +61,22 @@ const SignUpForm = ({
 
     return (
         <div className='sign-up-form'>
-            <h2>Sign Up</h2>
+            { !isModify ? <h2>Sign Up</h2> : <h2>Management</h2> }
             {template}
-            { deleteUser && <input type='button' value='Remove Acocount' onClick={onDeleteMode}/> }
-            { (deleteUser && isDeleteMode) && 
-                <form onSubmit={onDelete}>
+            { isModify &&
+                <button type='button' className='remove-btn' 
+                    onClick={onDeleteMode}
+                >Remove Acocount</button>
+            }
+            { (isModify && isDeleteMode) ?
+                <form onSubmit={onDelete} className='delete-form'>
                     <span>Are you sure you would like to remove this account?</span>
                     <input type='password' className='pw' maxLength='14'
                         placeholder='Input Password again.'/>
-                    <span>{deleteFailedMessage}</span><br/>
-                    <input type='submit' value='Delete'/>
-                </form>
+                    <span className='fail-message'>{deleteFailedMessage}</span><br/>
+                    <button type='submit'>Delete</button>
+                </form> :
+                <div className='block'></div>
             }
         </div>
     )

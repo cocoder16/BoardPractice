@@ -49,4 +49,22 @@
         margin-top: 20px; max-width: initial; width: $form-signup-submit-btn-width;
     }
     .fail-message { height: 28px; }
+    button.remove-btn {
+        margin-top: 20px;
+        background: linear-gradient(to top,
+            rgb(153, 5, 5) 0%,
+            rgb(214, 43, 43) 100%
+        );
+    }
+    .block {
+        height: 150px;
+    }
+    .delete-form {
+        span {
+            display: inline-block; margin: 12px 0 12px;
+        }
+        .fail-message {
+            height: 12px;
+        }
+    }
 }
