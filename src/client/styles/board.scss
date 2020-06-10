@@ -1,5 +1,50 @@
 @import './var';
 
+.board-head {
+    width: $board-width; margin: auto;
+    .link {
+        float: left; font-size: 0.9rem; color: black; margin: 0 10px 10px 0;
+        button {
+            width: 80px; height: 30px; font-weight: bolder;
+            background: $search-btn-linear-gradient;
+        }
+    }
+    form {
+        float: left;
+        .wrap {
+            float: left;
+            height: 30px;
+            &.left {
+                width: 80px; margin-right: 8px;
+            }
+            &.right {
+                width: 240px; max-width: calc(100% - 88px);
+            }
+        }
+        .input-search {
+            float: left;
+            font-size: 0.7rem;
+            box-shadow: 0 0 4px #c4c4c4;
+            &.type {
+                width: 80px; height: 30px; border: none;
+            }
+            &.keyword {
+                width: 180px; max-width: calc(100% - 46px); 
+                height: 28px; border: none;
+            }
+        }
+        button {
+            float: left;
+            width: 30px; margin-left: 8px;
+            height: 30px; background: $search-btn-linear-gradient;
+            box-shadow: 0 0 4px #c4c4c4;
+        }
+    }
+}
+.board-head:after {
+    clear: both; display: block; content: "";
+}
+
 .section {
     width: $board-width; margin: auto;
     .board, .info-board {

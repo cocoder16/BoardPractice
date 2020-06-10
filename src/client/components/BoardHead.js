@@ -16,17 +16,21 @@ const BoardHead = ({
         <div className='board-head'>
             <h2>{cate}</h2>
             {/* 글쓰기버튼, 검색 => 한줄에 오른쪽에 몰아서 */}
-            { (isLoggedIn && !isWrite && !isModify ) && <Link to='/write'><button type='button'>글쓰기</button></Link> }
+            { (isLoggedIn && !isWrite && !isModify ) && <Link to='/write' className='link'><button type='button'>글쓰기</button></Link> }
             <form action={`/${category}?type=${searchType}&keyword=${searchKeyword}`}>
-                <select name="type" className='input-search-type' defaultValue={searchType} onChange={onChangeSearchType}>
-                    <option value="0">제목</option>
-                    <option value="1">제목+본문</option>
-                    <option value="2">글쓴이</option>
-                </select>
-                <input type='text' name='keyword' className='input-search-keyword' 
-                    onChange={onChangeSearchKeyword}
-                />
-                <input type='submit' value='검색'/>
+                <div className='left wrap'>
+                    <select name="type" className='input-search type' defaultValue={searchType} onChange={onChangeSearchType}>
+                        <option value="0">제목</option>
+                        <option value="1">제목+본문</option>
+                        <option value="2">글쓴이</option>
+                    </select>
+                </div>
+                <div className='right wrap'>
+                    <input type='text' name='keyword' className='input-search keyword' maxLength='50'
+                        onChange={onChangeSearchKeyword}
+                    />
+                    <button type='submit'><img src='/images/SearchBtn.png'/></button>
+                </div>
             </form>
         </div>
     )

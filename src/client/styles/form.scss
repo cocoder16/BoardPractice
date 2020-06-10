@@ -22,10 +22,7 @@
     button, input[type=button] {
         display: block; width: 100%; margin: auto;
         height: 30px;
-        background: linear-gradient(to top,
-            rgb(0, 69, 115) 0%,
-            rgb(0, 119, 199) 100%
-        );
+        background: $submit-btn-linear-gradient;
         border-radius: 10px;
     }
     .link, a { 
@@ -51,10 +48,7 @@
     .fail-message { height: 28px; }
     button.remove-btn {
         margin-top: 20px;
-        background: linear-gradient(to top,
-            rgb(153, 5, 5) 0%,
-            rgb(214, 43, 43) 100%
-        );
+        background: $remove-btn-linear-gradient;
     }
     .block {
         height: 150px;

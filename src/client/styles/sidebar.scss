@@ -6,7 +6,7 @@
     padding: $sidebar-padding;
     width: 100%;
     height: $sidebar-height;
-    background-color: #0059ab;
+    background-color: $main-background-color;
     .link, a { color: white; }
     .link:visited, a:visited { color: white; }
     h1 {
@@ -38,7 +38,7 @@
         display: none; position: absolute;
         width: 100%; left: 0; top: $sidebar-menu-top;
         padding: 0 0 10px 10px;
-        background-color: #0059ab;
+        background-color: $main-background-color;
         li { margin-top: 15px; }
         &.show {
             display: block;

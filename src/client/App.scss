@@ -15,6 +15,13 @@ button, input[type=button], input[type=submit] {
 input:focus {
     outline: none;
 }
+select, option { 
+    outline: none;
+}
+
+select:focus {
+    outline: none;
+}
 
 .blank { display: inline-block; }
 

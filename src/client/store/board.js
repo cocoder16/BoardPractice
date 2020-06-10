@@ -39,8 +39,8 @@ export const getPosts = (category, query) => async (dispatch, getState) => {
             type: GET_SEARCH,
             payload: { type: 0, keyword: '' }
         });
-        document.querySelector('.input-search-type').value = 0;
-        document.querySelector('.input-search-keyword').value = '';
+        document.querySelector('.input-search.type').value = 0;
+        document.querySelector('.input-search.keyword').value = '';
     } else {
         window.location.replace(result.url);
     }
