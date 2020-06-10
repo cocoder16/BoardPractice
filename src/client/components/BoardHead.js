@@ -8,9 +8,13 @@ const BoardHead = ({
     let isWrite = false;
     if (path == '/write') isWrite = true;
 
+    let cate;
+    if (category == 'qna') cate = 'Q n A';
+    else if (category == 'forum') cate = 'Forum';
+
     return (
         <div className='board-head'>
-            <h1>{category}</h1>
+            <h2>{cate}</h2>
             {/* 글쓰기버튼, 검색 => 한줄에 오른쪽에 몰아서 */}
             { (isLoggedIn && !isWrite && !isModify ) && <Link to='/write'><button type='button'>글쓰기</button></Link> }
             <form action={`/${category}?type=${searchType}&keyword=${searchKeyword}`}>

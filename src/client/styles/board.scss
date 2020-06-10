@@ -1,34 +1,57 @@
 @import './var';
 
-// board, info-board
-.board, .info-board {
-    .item {
-        font-size: 0.9rem;
-        .id {
-            display: inline-block; width: 50px; border: 1px solid black;
+.section {
+    width: $board-width; margin: auto;
+    .board, .info-board {
+        .item {
+            font-size: 0.9rem; text-align: center;
+            background-color: white;
+            border-bottom: 1px solid #409ec7;
+            &:first-child {
+                border-top: 1px solid #409ec7;
+            }
+            .wrap {
+                width: 100%;
+                padding-top: $board-item-padding-side; padding-bottom: $board-item-padding-side;
+                //left
+                .id {
+                    font-size: 0.75rem; color: #808080;
+                    display: inline-block; width: $board-id-width;
+                }
+                .title, .contents {
+                    display: inline-block; width: $board-title-width; 
+                    text-align: left;
+                }
+                .link {
+                    text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+                    text-align: left;
+                }
+                //right
+                &.right {
+                    font-size: 0.75rem; color: #808080;
+                    .author, .category {
+                        display: inline-block; width: $board-author-width;
+                        span {
+                            text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+                        }
+                    }
+                    .read_count {
+                        display: inline-block; width: $board-read-count-width;
+                    }
+                    .created_at {
+                        display: inline-block; width: $board-time-width;
+                    }
+                }
+            }
         }
-        .title {
-            display: inline-block; width: 600px; max-width: 80%; border: 1px solid black;
-        }
-        .link {
-            display: inline-block; max-width: 85%; border: 1px solid black;
-            text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
-        }
-        .author {
-            display: inline-block; width: 200px; border: 1px solid black;
-        }
-        .read_count {
-            display: inline-block; width: 50px; border: 1px solid black;
-        }
-        .created_at {
-            display: inline-block; width: 50px; border: 1px solid black;
-        }
-        //info-board     
-        .category {
-            display: inline-block; width: 100px; border: 1px solid black;
-        }
-        .contents {
-            display: inline-block; width: 600px; border: 1px solid black;
+    }
+    .info-board {
+        .item {
+            .right.wrap.solo {
+                .created_at {
+                    width: calc(100% - 8px); padding-right: 8px; text-align: right;
+                }
+            }
         }
     }
 }

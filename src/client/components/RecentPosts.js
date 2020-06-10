@@ -8,11 +8,11 @@ const RecentPosts = ({
     console.log(posts);
     return (
         <Fragment>
-            <div>
+            <div className='section'>
                 <h2>Q n A</h2>
                 { onReady && <ArticleList posts={posts.qna}/> }
             </div>
-            <div>
+            <div className='section'>
                 <h2>Forum</h2>
                 { onReady && <ArticleList posts={posts.forum}/> }
             </div>

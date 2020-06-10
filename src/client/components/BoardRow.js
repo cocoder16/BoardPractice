@@ -7,16 +7,20 @@ const BoardRow = ({//id title author read_count reply_count created_at
 
     return (
         <li className='item'>
-            <div className='id'>
-                <span>{post.id}</span>
+            <div className='left wrap'>
+                <div className='id'>
+                    <span>{post.id}</span>
+                </div>
+                <div className='title'>
+                    <Link to={`/article/${post.id}`} className='link'>{post.title}</Link>
+                    { post.reply_count != 0 && <span className='reply_count'> [{post.reply_count}]</span> }
+                </div>
             </div>
-            <div className='title'>
-                <Link to={`/article/${post.id}`} className='link'>{post.title}</Link>
-                { post.reply_count != 0 && <span className='reply_count'> [{post.reply_count}]</span> }
+            <div className='right wrap'>
+                <div className='author'><span>{post.author}</span></div>
+                <div className='read_count'>조회 {post.read_count}</div>
+                <div className='created_at'>{post.created_at}</div>
             </div>
-            <div className='author'>{post.author}</div>
-            <div className='read_count'>{post.read_count}</div>
-            <div className='created_at'>{post.created_at}</div>
         </li>
         
     )

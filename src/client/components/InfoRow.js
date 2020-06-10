@@ -21,29 +21,37 @@ const InfoRow = ({
         <Fragment>
             { post &&
                 <li className='item'>
-                    <div className='id'>
-                        <span>{post.id}</span>
+                    <div className='left wrap'>
+                        <div className='id'>
+                            <span>{post.id}</span>
+                        </div>
+                        <div className='title'>
+                            <Link to={`/article/${post.id}`} className='link'>{post.title}</Link>
+                            { post.reply_count != 0 && <span className='reply_count'> [{post.reply_count}]</span> }
+                        </div>
                     </div>
-                    <div className='title'>
-                        <Link to={`/article/${post.id}`} className='link'>{post.title}</Link>
-                        { post.reply_count != 0 && <span className='reply_count'> [{post.reply_count}]</span> }
+                    <div className='right wrap'>
+                        <div className='category'>{category}</div>
+                        <div className='read_count'>조회 {post.read_count}</div>
+                        <div className='created_at'>{post.created_at}</div>
                     </div>
-                    <div className='category'>{category}</div>
-                    <div className='read_count'>{post.read_count}</div>
-                    <div className='created_at'>{post.created_at}</div>
                 </li>
             }
             { reply &&
                 <li className='item'>
-                    <div className='id'>
-                        <span>{reply.id}</span>
+                    <div className='left wrap'>
+                        <div className='id'>
+                            <span>{reply.id}</span>
+                        </div>
+                        <div className='contents'>
+                            <Link to={`/article/${reply.post_id}#comment_${reply.id}`} className='link'>
+                                {XSS.recover(reply.contents)}
+                            </Link>
+                        </div>
                     </div>
-                    <div className='contents'>
-                        <Link to={`/article/${reply.post_id}#comment_${reply.id}`} className='link'>
-                            {XSS.recover(reply.contents)}
-                        </Link>
+                    <div className='right wrap solo'>
+                        <div className='created_at'>{reply.created_at}</div>
                     </div>
-                    <div className='created_at'>{reply.created_at}</div>
                 </li>
             }
         </Fragment>

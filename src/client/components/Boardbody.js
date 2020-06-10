@@ -7,7 +7,9 @@ const BoardBody = ({
 }) => {
     return (
         <Fragment>
-            { onReady && <ArticleList posts={posts}/> }
+            <div className='section'>
+                { onReady && <ArticleList posts={posts}/> }
+            </div>
             <PaginationContainer/>
         </Fragment>
     );
