@@ -56,6 +56,7 @@ export const search = (category, query) => async (dispatch, getState) => {
     let page;
     if (!query.page) page = '1';
     else page = query.page;
+    console.log(query.type);
     const result = await servicePosts.search(category, query.type, query.keyword, page, getState().board.per);
     if (result.result) {
         dispatch({
@@ -66,8 +67,10 @@ export const search = (category, query) => async (dispatch, getState) => {
             type: GET_SEARCH,
             payload: { type: query.type, keyword: query.keyword }
         });
-        document.querySelector('.input-search-type').value = query.type;
-        document.querySelector('.input-search-keyword').value = query.keyword;
+        console.log('xxx');
+    console.log(query.type);
+        document.querySelector('.input-search.type').value = query.type;
+        document.querySelector('.input-search.keyword').value = query.keyword;
     } else {
         window.location.replace(result.url);
     }
@@ -142,10 +145,10 @@ const initialState = {
     article: {},
     articleOnReady: false,
     onDelete: false,
-    per: 2,
+    per: 20,
     now: 1,
     max: 1,
-    interval: 3,
+    interval: 10,
     searchType: 0,
     searchKeyword: '',
     userPosts: [],

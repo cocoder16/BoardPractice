@@ -6,9 +6,10 @@
         float: left; font-size: 0.9rem; color: black; margin: 0 10px 10px 0;
         button {
             width: 80px; height: 30px; font-weight: bolder;
-            background: $search-btn-linear-gradient;
+            background: $grey-btn-linear-gradient;
         }
     }
+    h2 > .link { font-size: 1.5rem; }
     form {
         float: left;
         .wrap {
@@ -18,26 +19,26 @@
                 width: 80px; margin-right: 8px;
             }
             &.right {
-                width: 240px; max-width: calc(100% - 88px);
+                width: 240px; max-width: calc(100% - 88px); //.left 100% - width - margin-right
             }
         }
         .input-search {
             float: left;
-            font-size: 0.7rem;
-            box-shadow: 0 0 4px #c4c4c4;
+            font-size: 12px;
+            box-shadow: 0 0 4px $shadow-color;
             &.type {
                 width: 80px; height: 30px; border: none;
             }
             &.keyword {
-                width: 180px; max-width: calc(100% - 46px); 
+                width: 180px; max-width: calc(100% - 46px); //button 100% - width - margin-left * 2
                 height: 28px; border: none;
             }
         }
         button {
             float: left;
             width: 30px; margin-left: 8px;
-            height: 30px; background: $search-btn-linear-gradient;
-            box-shadow: 0 0 4px #c4c4c4;
+            height: 30px; background: $grey-btn-linear-gradient;
+            box-shadow: 0 0 4px $shadow-color;
         }
     }
 }
@@ -51,16 +52,16 @@
         .item {
             font-size: 0.9rem; text-align: center;
             background-color: white;
-            border-bottom: 1px solid #409ec7;
+            border-bottom: 1px solid $border-color;
             &:first-child {
-                border-top: 1px solid #409ec7;
+                border-top: 1px solid $border-color;
             }
             .wrap {
                 width: 100%;
                 padding-top: $board-item-padding-side; padding-bottom: $board-item-padding-side;
                 //left
                 .id {
-                    font-size: 0.75rem; color: #808080;
+                    font-size: 0.75rem; color: $grey;
                     display: inline-block; width: $board-id-width;
                 }
                 .title, .contents {
@@ -73,7 +74,7 @@
                 }
                 //right
                 &.right {
-                    font-size: 0.75rem; color: #808080;
+                    font-size: 0.75rem; color: $grey;
                     .author, .category {
                         display: inline-block; width: $board-author-width;
                         span {

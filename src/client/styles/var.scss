@@ -1,5 +1,9 @@
 // global
 $main-background-color: #0059ab;
+$sub-background-color: #7bb1e3;
+$border-color: #409ec7;
+$shadow-color: #c4c4c4;
+$grey: #808080;
 $font-size: 1rem;
 $submit-btn-linear-gradient: linear-gradient(to top,
     rgb(0, 69, 115) 0%,
@@ -9,7 +13,7 @@ $remove-btn-linear-gradient: linear-gradient(to top,
     rgb(153, 5, 5) 0%,
     rgb(214, 43, 43) 100%
 );
-$search-btn-linear-gradient: linear-gradient(to top,
+$grey-btn-linear-gradient: linear-gradient(to top,
     rgb(186, 186, 186) 0%,
     rgb(186, 186, 186) 40%,
     rgb(227, 227, 227) 100%
@@ -35,8 +39,8 @@ $info-head-li-width: 32%;
 $info-head-li-line-width: 5px;
 
 // write
-$write_contents_width: 1024px;
-$write_contents_height: 500px;
+$write-contents-width: 1024px;
+$write-contents-height: 500px;
 
 //board
 $board-width: 96%;
@@ -46,6 +50,12 @@ $board-title-width: calc(100% - 50px); //100% - $board-id-width
 $board-read-count-width: 100px;
 $board-time-width: 70px;
 $board-author-width: calc(100% - 170px); //100% - readcount, time
+
+//pagination
+$side-length: 24px;
+
+// replies
+$reply-foot-right-box-width: 130px;
 
 // font
 @font-face {

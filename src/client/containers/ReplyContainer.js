@@ -4,10 +4,13 @@ import { ReplyForm, ReplyList } from '~c/components';
 import * as boardActions from '~c/store/board';
 import * as replyActions from '~c/store/reply';
 import { createReply, updateReply, deleteReply } from '~c/services/replies';
+import '~/modules/closest';
 
 class ReplyContainer extends Component {
     constructor (props) {
         super(props);
+
+        console.log(Element.prototype.closest);
         this.props.getReplies(location.pathname.split('/article/')[1]);
     }
 
@@ -31,7 +34,10 @@ class ReplyContainer extends Component {
     handleFormSubmit = async (e) => {
         e.preventDefault();
         const { contents, replyForm, unshown } = this.props;
-
+        if (contents == '') {
+            alert('Please fill out contents');
+            return null;
+        }
         const formData = new FormData();
         formData.append('contents', contents);
 
@@ -52,7 +58,7 @@ class ReplyContainer extends Component {
             this.props.getReplies(location.pathname.split('/article/')[1]);
             this.props.replyCountUp();
         } else {
-            alert('댓글 등록에 실패했습니다.');
+            alert('registering reply is failed.');
         }
     }
 
@@ -60,13 +66,13 @@ class ReplyContainer extends Component {
         e.preventDefault();
         if (!this.props.isLoggedIn) return null;
         this.props.clear();
-        const depth = e.target.parentNode.getAttribute('data-depth');
-        console.log(e.target.parentNode);
+        const depth = e.target.closest('li').getAttribute('data-depth');
+        console.log(e.target.closest('li'));
         console.log(depth);
-        let prevEle = e.target.parentNode;
+        let prevEle = e.target.closest('li');
         let nextEle;
-        if (e.target.parentNode.nextSibling) {
-            nextEle = e.target.parentNode.nextSibling;
+        if (e.target.closest('li').nextSibling) {
+            nextEle = e.target.closest('li').nextSibling;
             while (nextEle.getAttribute('data-depth') > depth) {
                 console.log('aa');
                 console.log(prevEle);
@@ -76,12 +82,12 @@ class ReplyContainer extends Component {
             }
         }
         console.log(prevEle);
-        this.props.loadReplyForm(prevEle.getAttribute('data-id'), e.target.parentNode.getAttribute('data-id'), depth*1 + 1);
+        this.props.loadReplyForm(prevEle.getAttribute('data-id'), e.target.closest('li').getAttribute('data-id'), depth*1 + 1);
     }
 
     onModifyMode = (e) => {
         e.preventDefault();
-        const reply = e.target.parentNode.parentNode;
+        const reply = e.target.closest('li');
         console.log(reply);
         const id = reply.getAttribute('data-id');
         const contents = reply.querySelector('.contents').textContent;
@@ -92,7 +98,7 @@ class ReplyContainer extends Component {
 
     onDeleteMode = (e) => {
         e.preventDefault();
-        const reply = e.target.parentNode.parentNode;
+        const reply = e.target;
         const id = reply.getAttribute('data-id');
         this.props.deleteModeOn(id);
     }
@@ -104,12 +110,12 @@ class ReplyContainer extends Component {
 
     onDelete = async (e) => {
         e.preventDefault();
-        const result = await deleteReply(e.target.parentNode.parentNode.getAttribute('data-id'));
+        const result = await deleteReply(e.target.getAttribute('data-id'));
         if (result) {
             this.props.clear();
             this.props.getReplies(location.pathname.split('/article/')[1]);
         } else {
-            alert('댓글 등록에 실패했습니다.');
+            alert('Deleting reply is failed.');
         }
     }
 

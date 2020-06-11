@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const PageItem = ({
-    to, className, val
+    to, classname, val
 }) => {
     return (
-        <li><Link to={to} className={className}>{val}</Link></li>
+        <li className={classname}><Link to={to} className='link'>{val}</Link></li>
     )
 };
 

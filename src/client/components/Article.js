@@ -12,23 +12,27 @@ const Article = ({
     return (
         <Fragment>
             { (onReady && !onDelete) && 
-            <div className='article'>
-                <div>
-                    <h3>{article.title}</h3>
-                    <span>{article.read_count}</span>
-                    <span>{article.created_at}</span>
+            <section>
+                <div className='article'>
+                    <div className='head'>
+                        <h3>{article.title}</h3>
+                        <div className='details'>
+                            <span className='read'>조회 {article.read_count}</span>
+                            <span className='time'>{article.created_at}</span>
+                        </div>
+                    </div>
+                    <div dangerouslySetInnerHTML={ {__html: article.contents} }>
+                    </div>
+                    <div className='foot'>
+                        <span>댓글 {article.reply_count}</span>
+                        <div className='btns'>
+                            <Link to={`/modify/${id}`} className='link'><button type='button' className={btnClass}>수정</button></Link>
+                            <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>삭제</button></Link>
+                        </div>
+                    </div>
                 </div>
-                <div dangerouslySetInnerHTML={ {__html: article.contents} }>
-                </div>
-                <div>
-                    <span>{article.reply_count}</span>
-                    <Link to={`/modify/${id}`} className='link'><button type='button' className={btnClass}>수정</button></Link>
-                    <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>삭제</button></Link>
-                </div>
-                <div>
-                    <ReplyContainer/>
-                </div>
-            </div> }
+                <ReplyContainer/>
+            </section> }
             { onDelete &&
                 <div>
                     <div>

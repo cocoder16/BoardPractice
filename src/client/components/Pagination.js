@@ -90,6 +90,21 @@ const Pagination = ({
         }
         return data;
     }
+
+    const classNameGenerator = (val) => {
+        switch (val) {
+            case '<<' :
+                return 'paging-item first'
+            case '<' :
+                return 'paging-item prev'
+            case '>' :
+                return 'paging-item next'
+            case '>>' :
+                return 'paging-item last'
+            default :
+                return 'paging-item'
+        }
+    }
     
     if (max <= interval) { // 페이지가 단 하나
         pageData = liGenerator(true, true, max);
@@ -103,18 +118,20 @@ const Pagination = ({
     }
 
     return (
-        <ul className='pagination'>
-            {pageData.map((cur, i) => {
-                return (<PageItem 
-                    to={cur.url} 
-                    className={
-                        cur.val == now ? 'link now' : 'link'
-                    }
-                    val={cur.val}
-                    key={i}
-                />);
-            })}
-        </ul>
+        <div className='pagination'>
+            <ul>
+                {pageData.map((cur, i) => {
+                    return (<PageItem 
+                        to={cur.url} 
+                        classname={
+                            cur.val == now ? 'paging-item now' : classNameGenerator(cur.val)
+                        }
+                        val={cur.val}
+                        key={i}
+                    />);
+                })}
+            </ul>
+        </div>
     )
 };
 

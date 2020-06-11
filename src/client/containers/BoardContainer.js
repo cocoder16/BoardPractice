@@ -37,6 +37,7 @@ class BoardContainer extends Component {
     getData = () => {
         if (location.pathname == '/') {
             this.props.getRecentPosts();
+            sessionStorage.clear('article-id');
         } else if (location.pathname == '/qna') {
             const query = qs.parse(location.search);
             if (query.type && query.keyword) {

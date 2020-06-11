@@ -17,6 +17,7 @@ class SignUpContainer extends Component {
         } else {
             this.props.setIsModify(false);
         }
+        document.ge
     }
 
     componentDidUpdate (prevProps, prevState) {

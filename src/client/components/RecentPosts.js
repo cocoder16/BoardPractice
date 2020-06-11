@@ -10,11 +10,11 @@ const RecentPosts = ({
     return (
         <Fragment>
             <div className='section'>
-                <Link to='/qna' className='link'><h2>Q n A</h2></Link>
+                <h2><Link to='/qna' className='link'>Q n A</Link></h2>
                 { onReady && <ArticleList posts={posts.qna}/> }
             </div>
             <div className='section'>
-                <Link to='/forum' className='link'><h2>Forum</h2></Link>
+                <h2><Link to='/forum' className='link'>Forum</Link></h2>
                 { onReady && <ArticleList posts={posts.forum}/> }
             </div>
         </Fragment>

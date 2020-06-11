@@ -1,2 +1,27 @@
 @import './var';
 
+.pagination {
+    width: $board-width; margin: auto; text-align: center;
+    font-size: $side-length * 0.5; line-height: $side-length;
+    .paging-item {
+        display: inline-block;
+        width: $side-length; height: $side-length;
+        outline: 1px solid #bababa;
+        vertical-align: middle; text-align: center;
+        &.now {
+            background-color: #bababa;
+        }
+        &.first, &.last {
+            background-color: $main-background-color;
+            .link, .link:active {
+                color: white;
+            }
+        }
+        &.prev, &.next {
+            background-color: $sub-background-color;
+            .link, .link:active {
+                color: white;
+            }
+        }
+    }
+}

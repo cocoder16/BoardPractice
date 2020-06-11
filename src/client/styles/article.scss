@@ -1,0 +1,38 @@
+@import './var';
+
+section {
+    .article {
+        width: calc($board-width - 8px); margin: auto;
+        padding: 8px; margin-top: 20px;
+        box-shadow: 0 0 4px $shadow-color;
+        background-color: white;
+        .head {
+            border-bottom: 1px solid $shadow-color;
+            h3 {
+                margin-top: 0; margin-bottom: 4px;
+            }
+            .details {
+                text-align: right;
+                span {
+                    color: $grey;
+                    font-size: 0.7rem;
+                }
+            }
+            .read {
+                margin-right: 10px;
+            }
+        }
+        .foot {
+            font-size: 0.8rem;
+            height: 24px;
+            line-height: 30px;
+            .btns {
+                float: right;
+            }
+        }
+        button {
+            margin: 3px;
+            background: $grey-btn-linear-gradient;
+        }
+    }
+}
