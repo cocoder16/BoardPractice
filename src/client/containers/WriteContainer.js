@@ -52,7 +52,7 @@ class WriteContainer extends Component {
     }
 
     alertReject () {
-        alert('글을 먼저 작성해주세요.');
+        alert('The contents is missing.');
     }
 
     handleFormSubmit = async (e) => {

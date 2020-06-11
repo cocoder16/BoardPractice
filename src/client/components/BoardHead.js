@@ -16,7 +16,11 @@ const BoardHead = ({
         <div className='board-head'>
             <h2><Link to={`/${category}`} className='link'>{cate}</Link></h2>
             {/* 글쓰기버튼, 검색 => 한줄에 오른쪽에 몰아서 */}
-            { (isLoggedIn && !isWrite && !isModify ) && <Link to='/write' className='link'><button type='button'>글쓰기</button></Link> }
+            { (isLoggedIn && !isWrite && !isModify ) && 
+                <Link to='/write' className='link'>
+                    <button type='button'>글쓰기</button>
+                </Link> 
+            }
             <form action={`/${category}?type=${searchType}&keyword=${searchKeyword}`}>
                 <div className='left wrap'>
                     <select name="type" className='input-search type' defaultValue={searchType} onChange={onChangeSearchType}>

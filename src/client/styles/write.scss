@@ -2,8 +2,16 @@
 
 // write
 .write {
-    textarea {
-        width: $write-contents-width;
-        height: $write-contents-height;
+    width: $board-width; margin: auto;
+    margin-top: 15px; padding: 8px;
+    box-shadow: 0 0 4px $shadow-color;
+    background-color: white;
+    input {
+        width: calc(100% - 12px); padding: 4px;
+        margin-top: 8px; margin-bottom: 8px;
+    }
+    button {
+        margin: 10px 4px 6px 0;
+        background: $grey-btn-linear-gradient;
     }
 }
