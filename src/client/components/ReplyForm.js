@@ -9,8 +9,8 @@ const ReplyForm = ({
             <form onSubmit={onSubmit}>
                 <textarea name='contents' className='contents' maxLength='4000'
                     onChange={onChange}></textarea>
-                <button type='submit'>등록</button>
-                { possibleCancel && <button type='button' onClick={clear}>취소</button> }
+                <button type='submit'>Post</button>
+                { possibleCancel && <button type='button' onClick={clear}>Cancel</button> }
             </form>
         </div>
     )

@@ -7,12 +7,12 @@ const WriteForm = ({
     return (
         <div>
             <form className='write' onSubmit={onSubmit}>
-                <input type='text' name='title' className='title' placeholder='제목을 입력해 주세요.' maxLength='50'
+                <input type='text' name='title' className='title' placeholder='Title' maxLength='50'
                     onChange={onTitleChange}
                 />
                 <MyCKEditor onChange={onContentsChange} contents={contents}/>
-                <button type='button' onClick={goBack}>취소</button>
-                <button type='submit'>등록</button>
+                <button type='submit'>Post</button>
+                <button type='button' onClick={goBack}>Cancle</button>
             </form>
         </div>
     )

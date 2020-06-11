@@ -21,9 +21,9 @@ class PwResetCompletedContainer extends Component {
         let target;
         
         if (failed) {
-            target = <p>인증에 실패하였습니다. 다시 진행해주세요.</p>
+            target = <p>Identification failed. Please try again.</p>
         } else {
-            if (onPending) target = <p>잠시만 기다려주세요.</p>
+            if (onPending) target = <p>Please wait a moment.</p>
             else target = <PwResetCompleted newPassword={newPw}/>
         }
 

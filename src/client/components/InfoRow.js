@@ -32,7 +32,7 @@ const InfoRow = ({
                     </div>
                     <div className='right wrap'>
                         <div className='category'>{category}</div>
-                        <div className='read_count'>조회 {post.read_count}</div>
+                        <div className='read_count'>views {post.read_count}</div>
                         <div className='created_at'>{post.created_at}</div>
                     </div>
                 </li>

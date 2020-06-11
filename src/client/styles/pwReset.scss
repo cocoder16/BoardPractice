@@ -1,0 +1,15 @@
+@import './var';
+
+.pw-reset {
+    button {
+        width: 40px; height: 20px; margin-left: 5px;
+        background: $submit-btn-linear-gradient;
+    }
+    #fail-find-id-message { 
+        display: block; margin-top: 8px;
+        font-size: 0.9rem; color: red;
+    }
+    #new-pw {
+        color: #d1af06;
+    }
+}

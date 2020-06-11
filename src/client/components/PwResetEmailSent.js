@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 const PwResetEmailSent = () => {
 
     return (
-        <Fragment>
-            <p>본인 인증 이메일이 발송되었습니다. 확인해주세요.</p>
-        </Fragment>
+        <div className='pw-reset'>
+            <p>An email has been sent to you. Please check to find your new password.</p>
+        </div>
     )
 }
 

@@ -12,8 +12,8 @@ const ArticleList = ({
     return (
         <ul className='board'>
             { (posts.length == 0 && query.type && query.keyword) ?
-                <div>
-                    <span>"{query.keyword}" 검색결과가 없습니다.</span>
+                <div id='search-fail'>
+                    <span>No results found for <span id='keyword'>"{query.keyword}"</span></span>
                 </div> : 
                 posts.map((cur, i) => <BoardRow post={cur} key={i}/>)
             }

@@ -18,15 +18,15 @@ const BoardHead = ({
             {/* 글쓰기버튼, 검색 => 한줄에 오른쪽에 몰아서 */}
             { (isLoggedIn && !isWrite && !isModify ) && 
                 <Link to='/write' className='link'>
-                    <button type='button'>글쓰기</button>
+                    <button type='button'>Write</button>
                 </Link> 
             }
             <form action={`/${category}?type=${searchType}&keyword=${searchKeyword}`}>
                 <div className='left wrap'>
                     <select name="type" className='input-search type' defaultValue={searchType} onChange={onChangeSearchType}>
-                        <option value="0">제목</option>
-                        <option value="1">제목+본문</option>
-                        <option value="2">글쓴이</option>
+                        <option value="0">title</option>
+                        <option value="1">title + text</option>
+                        <option value="2">author</option>
                     </select>
                 </div>
                 <div className='right wrap'>

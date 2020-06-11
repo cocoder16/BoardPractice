@@ -30,7 +30,7 @@ const Reply = ({//id contents author author_id depth parent_id is_deleted create
                 </div>
                 { reply.is_deleted ? 
                     <div className='contents'>
-                        <span>삭제된 댓글입니다.</span>
+                        <span>The reply was deleted.</span>
                     </div> :
                     <div className='contents' onClick={loadReplyForm}>
                         {XSS.recover(reply.contents)}
@@ -38,7 +38,7 @@ const Reply = ({//id contents author author_id depth parent_id is_deleted create
                 }
                 { isDeleteMode && 
                     <div className='delete-box'>
-                        <span>정말로 삭제하시겠습니까?</span>
+                        <span>Are you really sure to delete this reply?</span>
                         <button type='button' data-id={reply.id} onClick={onDelete}>O</button>
                         <button type='button' onClick={offDeleteMode}>X</button>
                     </div>
@@ -46,8 +46,8 @@ const Reply = ({//id contents author author_id depth parent_id is_deleted create
                 <div className='foot'>
                     <div className='right-box'>
                         <span>{reply.created_at}</span>
-                        <button type='button' className={btnClass} data-id={reply.id} onClick={onModifyMode}>수정</button>
-                        <button type='button' className={btnClass} data-id={reply.id} onClick={onDeleteMode}>삭제</button>
+                        <button type='button' className={btnClass} data-id={reply.id} onClick={onModifyMode}>Modify</button>
+                        <button type='button' className={btnClass} data-id={reply.id} onClick={onDeleteMode}>Delete</button>
                     </div>
                 </div>
             </div>

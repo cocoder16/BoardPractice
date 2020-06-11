@@ -50,13 +50,13 @@ export default function reducer (state=initialState, action) {
             return { ...state, id: action.payload }
         case FORM_VALIDATION :
             if (!InputChecker.id(state.id)) {
-                return { ...state, pass: false, span: '아이디를 확인해주세요.' };
+                return { ...state, pass: false, span: 'Please check your ID.' };
             }
             return { ...state, pass: true, span: '' };
         case SENT_EMAIL :
             return { ...state, isSentEmail: true };
         case REJECT_MESSAGE :
-            return { ...state, isSentEmail: false, span: '아이디를 확인해주세요.' };
+            return { ...state, isSentEmail: false, span: 'Please check your ID.' };
         case GET_NEW_PW :
             return { ...state, onPending: false, failed: false, newPw: action.payload };
         case GET_NEW_PW_FAILED :

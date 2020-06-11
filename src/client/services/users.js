@@ -34,10 +34,10 @@ export const updateUser = (formData) => {
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         if (res.data.result) {
-            alert('개인정보변경이 완료되었습니다.');
+            alert('User information update is completed.');
             window.location.replace(res.data.url);
         } else {
-            alert('개인정보변경에 실패하였습니다. 다시 시도해주세요.');
+            alert('User information update is failed. Please try again.');
         }
     }).catch(err => console.log(err));
 }
