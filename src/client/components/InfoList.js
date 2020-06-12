@@ -16,7 +16,7 @@ const InfoList = ({
     console.log(mode);
 
     return (
-        <div className='section'>
+        <section>
             <ul className='info-board'>
                 { mode == 'post' &&
                     posts.map((cur, i) => <InfoRow post={cur} key={i}/>)
@@ -26,7 +26,7 @@ const InfoList = ({
                 }
             </ul>
             <PaginationContainer/>
-        </div>
+        </section>
     )
 };
 

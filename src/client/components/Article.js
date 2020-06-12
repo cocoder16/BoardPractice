@@ -9,40 +9,38 @@ const Article = ({
     if (auth) btnClass = 'personal-btn show';
     else btnClass = 'personal-btn'
 
-    return (
-        <Fragment>            
-            <section>
-                { (onReady && !onDelete) && 
-                    <div className='article'>
-                        <div className='head'>
-                            <h3>{article.title}</h3>
-                            <div className='details'>
-                                <span className='read'>views {article.read_count}</span>
-                                <span className='time'>{article.created_at}</span>
-                            </div>
-                        </div>
-                        <div dangerouslySetInnerHTML={ {__html: article.contents} }>
-                        </div>
-                        <div className='foot'>
-                            <span>replies {article.reply_count}</span>
-                            <div className='btns'>
-                                <Link to={`/modify/${id}`} className='link'><button type='button' className={btnClass}>Modify</button></Link>
-                                <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>Delete</button></Link>
-                            </div>
+    return (   
+        <section>
+            { (onReady && !onDelete) && 
+                <div className='article'>
+                    <div className='head'>
+                        <h3>{article.title}</h3>
+                        <div className='details'>
+                            <span className='read'>views {article.read_count}</span>
+                            <span className='time'>{article.created_at}</span>
                         </div>
                     </div>
-                }
-                { onDelete &&
-                    <div className='article'>
-                        <div>
-                            <span>Are you really sure to delete this post?</span>
-                        </div>
-                        <button type='button' onClick={deletePost}>Delete</button><button type='button' onClick={goBack}>Cancel</button>
+                    <div dangerouslySetInnerHTML={ {__html: article.contents} }>
                     </div>
-                }
-                <ReplyContainer/>
-            </section>
-        </Fragment>
+                    <div className='foot'>
+                        <span>replies {article.reply_count}</span>
+                        <div className='btns'>
+                            <Link to={`/modify/${id}`} className='link'><button type='button' className={btnClass}>Modify</button></Link>
+                            <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>Delete</button></Link>
+                        </div>
+                    </div>
+                </div>
+            }
+            { onDelete &&
+                <div className='article'>
+                    <div>
+                        <span>Are you really sure to delete this post?</span>
+                    </div>
+                    <button type='button' onClick={deletePost}>Delete</button><button type='button' onClick={goBack}>Cancel</button>
+                </div>
+            }
+            <ReplyContainer/>
+        </section>
     );
 };
 

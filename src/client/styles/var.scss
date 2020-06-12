@@ -33,6 +33,7 @@ $sidebar-menu-top: $sidebar-height - 6px;
 $form-width: 80%;
 $form-btn-max-width: 130px;
 $form-signup-submit-btn-width: 200px;
+$form-max-width: 300px;
 
 // infohead
 $info-head-li-width: 32%;
@@ -44,7 +45,8 @@ $info-head-li-line-width: 5px;
 $board-width: 96%;
 $board-item-padding-side: 3px;
 $board-id-width: 50px;
-$board-title-width: calc(100% - 50px); //100% - $board-id-width
+$board-padding-right: 8px;
+$board-title-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
 $board-read-count-width: 100px;
 $board-time-width: 70px;
 $board-author-width: calc(100% - 170px); //100% - readcount, time
@@ -53,7 +55,7 @@ $board-author-width: calc(100% - 170px); //100% - readcount, time
 $side-length: 24px;
 
 // replies
-$reply-foot-right-box-width: 160px;
+$reply-foot-right-box-width: 190px;
 
 // font
 @font-face {

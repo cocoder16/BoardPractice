@@ -31,6 +31,7 @@
         }
     }
     button {
+        padding: initial;
         position: absolute; top: 50%; transform: translate(0, -50%);
         width: $sidebar-btn-side-length * 1.2; height: $sidebar-btn-side-length;
     }

@@ -47,7 +47,7 @@
     clear: both; display: block; content: "";
 }
 
-.section {
+section {
     width: $board-width; margin: auto;
     .board, .info-board {
         .item {
@@ -61,17 +61,25 @@
                 width: 100%;
                 padding-top: $board-item-padding-side; padding-bottom: $board-item-padding-side;
                 //left
-                .id {
-                    font-size: 0.75rem; color: $grey;
-                    display: inline-block; width: $board-id-width;
+                &.left{
+                    // line-height: 30px; 
+                    .id {
+                        float: left;
+                        font-size: 0.75rem; color: $grey;
+                        width: $board-id-width;
+                        height: 24px; line-height: 24px;
+                    }
+                    .title, .contents {
+                        float: left;
+                        width: $board-title-width;
+                        height: 24px; line-height: 24px;
+                        padding-right: $board-padding-right;
+                        text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+                        text-align: left;
+                    }
                 }
-                .title, .contents {
-                    display: inline-block; width: $board-title-width; 
-                    text-align: left;
-                }
-                .link {
-                    text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
-                    text-align: left;
+                &.left:after {
+                    clear: both; display: block; content: "";
                 }
                 //right
                 &.right {
@@ -101,7 +109,9 @@
         .item {
             .right.wrap.solo {
                 .created_at {
-                    width: calc(100% - 8px); padding-right: 8px; text-align: right;
+                    width: calc(100% - 8px); //8px = $board-padding-right
+                    padding-right: $board-padding-right;
+                    text-align: right;
                 }
             }
         }

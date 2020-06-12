@@ -2,6 +2,7 @@
 
 .log-in-form, .sign-up-form {
     width: $form-width; margin: auto;
+    max-width: $form-max-width;
     h2 { text-align: center; }
     p { 
         display: block; width: 100%; margin-left: 8px;
