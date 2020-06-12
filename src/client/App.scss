@@ -30,6 +30,12 @@ select:focus {
     margin-top: $sidebar-height;
     padding: 20px;
 }
+@media (min-width: 993px) {
+    .main {
+        margin-left: $m993-sidebar-width;
+    }
+}
+
 // auth
 .personal-btn {
     display: none;

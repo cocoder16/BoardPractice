@@ -98,14 +98,14 @@ section {
                 }
             }
 
-            @media (min-width: 768px) {
+            @media (min-width: 769px) {
                 .wrap {
                     width: initial;
                     &.left {
-                        width: $m768-board-left-wrap-width;
+                        width: $m769-board-left-wrap-width;
                         display: inline-block; vertical-align: middle;
                         .title {
-                            width: $m768-board-title-width;
+                            width: $m769-board-title-width;
                         }
                     }
                     &.left:after {
@@ -114,7 +114,7 @@ section {
                     &.right {
                         display: inline-block; vertical-align: middle;
                         .author, .category {
-                            width: $m768-board-author-width;
+                            width: $m769-board-author-width;
                         }
                     }
                 }
@@ -135,12 +135,12 @@ section {
                     text-align: right;
                 }
             }
-            @media (min-width: 768px) {
+            @media (min-width: 769px) {
                 .wrap {
                     &.left {
-                        width: $m768-info-board-replies-left-wrap-width;
+                        width: $m769-info-board-replies-left-wrap-width;
                         .contents {
-                            width: $m768-info-board-replies-contents-width;
+                            width: $m769-info-board-replies-contents-width;
                         }
                     }
                     &.right {

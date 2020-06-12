@@ -19,16 +19,17 @@ class UserContainer extends Component {
     }
 
     render () {        
-        const { span, onPending, isLoggedIn, userNickname } = this.props;
+        const { span, onPending, isLoggedIn, deviceType } = this.props;
         const { handleInputChange, handleFormSubmit, handleLogOut } = this;
         return (     
             <div className='user-box'>
                 { !isLoggedIn ?
                     <LoggedOut
                         failSpan={span} onInputChange={handleInputChange} onFormSubmit={handleFormSubmit}
+                        deviceType={deviceType}
                     /> :
                     <LoggedIn 
-                        logOut={handleLogOut}
+                        logOut={handleLogOut} deviceType={deviceType}
                     />
                 }
             </div>
@@ -45,7 +46,8 @@ const mapStateToProps = (state) => ({
     isLoggedIn: state.userInfo.isLoggedIn,
     userId: state.userInfo.id,
     userNickname: state.userInfo.nickname,
-    userEmail: state.userInfo.email
+    userEmail: state.userInfo.email,
+    deviceType: state.viewport.type
 })
 
 const mapDispatchToProps = (dispatch) => ({

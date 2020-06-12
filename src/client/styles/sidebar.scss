@@ -12,37 +12,111 @@
     h1 {
         position: absolute; left: 50%; transform: translate(-50%, 0);
         font-size: $h1-size; line-height: 0.8; text-align: center;
+
+        @media (min-width: 993px) {
+            font-size: $m993-h1-size;
+        }
     }
     .user-box {
         position: absolute; top: 50%; transform: translate(0, -50%);
         right: 15px;
         height: $sidebar-btn-side-length;
         .logged-out { 
-            width: $user-box-logged-out-width; height: $sidebar-btn-side-length;
+            height: $sidebar-btn-side-length;
             .link {
                 margin: 6px; line-height: 2;
             }
         }
-        .logged-in { width: $user-box-logged-in-width; }
+        .logged-in { 
+            width: $user-box-logged-in-width; 
+
+            @media (min-width: 769px) {
+                width: $m769-user-box-logged-in-width;
+                button {
+                    width: initial;
+                }
+            }
+        }
         .icon {
             display: inline-block;
-            width: $sidebar-btn-side-length; height: $sidebar-btn-side-length;
+            height: $sidebar-btn-side-length;
             margin: 0 $user-box-icon-margin 0 $user-box-icon-margin;
+            img {
+                float: left;
+                width: $sidebar-btn-side-length; height: $sidebar-btn-side-length;
+                margin: 0 4px 0 4px;
+            }
+            span {
+                float: left; line-height: $sidebar-btn-side-length;
+            }
         }
     }
     button {
         padding: initial;
-        position: absolute; top: 50%; transform: translate(0, -50%);
+        position: absolute; top: calc(50% - 1px); transform: translate(0, -50%);
         width: $sidebar-btn-side-length * 1.2; height: $sidebar-btn-side-length;
+        font-size: 1rem;
     }
     .menu {
         display: none; position: absolute;
         width: 100%; left: 0; top: $sidebar-menu-top;
         padding: 0 0 10px 10px;
         background-color: $main-background-color;
-        li { margin-top: 15px; }
+        li {
+            margin-top: 15px; 
+            .item-box {
+                height: $sidebar-btn-side-length;
+                img {
+                    float: left;
+                    width: $sidebar-btn-side-length; height: $sidebar-btn-side-length;
+                    margin: 0 10px 0 10px;
+                }
+                span {
+                    float: left; line-height: $sidebar-btn-side-length;
+                }
+            }
+        }
         &.show {
             display: block;
+        }
+    }
+
+    @media (min-width: 993px) {
+        &.left {
+            width: $m993-sidebar-width;
+            height: 100%;
+            .menu {
+                display: block;
+                width: $m993-sidebar-menu-width;
+                padding: initial;
+                top: 150px;
+                font-size: 1.1rem;
+            }
+            .user-box {
+                height: $sidebar-btn-side-length;
+                top: 100px; left: 4px;
+                font-size: 0.9rem;
+                .logged-out { 
+                    height: $sidebar-btn-side-length;
+                    .link {
+                        margin: 6px; line-height: 2;
+                    }
+                }
+                .logged-in { 
+                    width: initial;
+                    .link:after {
+                        display: block; content: '';
+                    }
+                    button {
+                        top: 48px; left: 1px;
+                        font-size: 0.9rem;
+                    }
+                }
+                .icon {
+                    display: inline-block;
+                    margin: 0 $user-box-icon-margin 0 $user-box-icon-margin;
+                }
+            }
         }
     }
 }

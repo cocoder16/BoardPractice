@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { Menu } from './index';
 import UserContainer from '~c/containers/UserContainer';
 
-const Sidebar = () => {
+const Sidebar = ({
+    deviceType
+}) => {
     const showMenu = () => {
         const menu = document.querySelector('.sidebar .menu');
         if (menu.className == 'menu') {
@@ -13,15 +15,25 @@ const Sidebar = () => {
         }
     }
 
+    let classname;
+
+    if (deviceType == 2) {
+        classname = 'sidebar left';
+    } else {
+        classname = 'sidebar';
+    }
+
     return (
-        <div className='sidebar'>
+        <div className={classname}>
             <h1>
                 <Link to="/" className='link'>Board</Link>
             </h1>
             <UserContainer/>
-            <button type='button' onClick={showMenu}>
-                <img src='/images/Hamburger_icon.png' alt='menu'/>
-            </button>
+            { deviceType < 2 &&
+                <button type='button' onClick={showMenu}>
+                    <img src='/images/Hamburger_icon.png' alt='menu'/>
+                </button>
+            }
             <Menu/>
         </div>
     );

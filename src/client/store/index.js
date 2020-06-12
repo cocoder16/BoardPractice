@@ -7,9 +7,10 @@ import pwReset from './pwReset';
 import board from './board';
 import write from './write';
 import reply from './reply';
+import viewport from './viewport';
 
 const store = createStore(combineReducers({
-    signUp, logIn, userInfo, pwReset, board, write, reply
+    signUp, logIn, userInfo, pwReset, board, write, reply, viewport
 }), applyMiddleware(thunk));
 
 store.subscribe(() => {

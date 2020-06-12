@@ -12,7 +12,7 @@ const WriteForm = ({
                 />
                 <MyCKEditor onChange={onContentsChange} contents={contents}/>
                 <button type='submit'>Post</button>
-                <button type='button' onClick={goBack}>Cancle</button>
+                <button type='button' onClick={goBack}>Cancel</button>
             </form>
         </div>
     )

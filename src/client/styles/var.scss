@@ -23,11 +23,16 @@ $grey-btn-linear-gradient: linear-gradient(to top,
 $sidebar-height: 40px;
 $sidebar-padding: 5px;
 $h1-size: 1.2rem;
+$m993-h1-size: 1.6rem;
 $sidebar-btn-side-length: 30px;
-$user-box-logged-out-width: 100px;
 $user-box-icon-margin: 4px;
-$user-box-logged-in-width: $sidebar-btn-side-length * 2 + $user-box-icon-margin * 4;
+$user-box-logged-in-width: 100px;
+$m769-user-box-logged-in-width: 210px;
 $sidebar-menu-top: $sidebar-height - 6px;
+$m993-sidebar-width: 200px;
+$m993-sidebar-menu-width: $m993-sidebar-width + $sidebar-padding * 2 - 10px; //10 은 .menu의 paddng
+// $m993-sidebar-menu-top: 
+// $m993
 
 // login, signup
 $form-width: 80%;
@@ -48,16 +53,16 @@ $board-item-padding-side: 3px;
 // left wrap
 $board-id-width: 50px;
 $board-padding-right: 8px;
-$board-title-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
-$m768-board-left-wrap-width: calc(100% - 140px - 100px - 70px); //100% - $m768-board-author-width - $board-read-count-width - $board-time-width
-$m768-board-title-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
-$m768-info-board-replies-left-wrap-width: calc(100% - 70px); // 100% - $board-time-width
-$m768-info-board-replies-contents-width: calc(100% - 50px - 8px); // 100% - $board-id-width - $board-padding-right
+$board-title-width: calc(100% - 50px - 8px); // 100% - $board-id-width - $board-padding-right
+$m769-board-left-wrap-width: calc(100% - 140px - 100px - 70px); //100% - $m769-board-author-width - $board-read-count-width - $board-time-width
+$m769-board-title-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
+$m769-info-board-replies-left-wrap-width: calc(100% - 70px); //100% - $board-time-width
+$m769-info-board-replies-contents-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
 // right wrap
 $board-read-count-width: 100px;
 $board-time-width: 70px;
-$board-author-width: calc(100% - 170px); //100% - readcount, time
-$m768-board-author-width: 140px;
+$board-author-width: calc(100% - 100px - 70px); //100% - $board-read-count-width - $board-time-width
+$m769-board-author-width: 140px;
 
 //pagination
 $side-length: 24px;
