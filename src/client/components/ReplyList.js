@@ -9,6 +9,11 @@ const ReplyList = ({
 
     return (
         <ul className='replies'>
+            {replies.length == 0 && 
+                <div className='no-replies'>
+                    <span>No replies</span>        
+                </div>
+            }
             {replies.map((cur, i) => {
                 if (unshown == cur.id) return (
                     <ReplyForm 
