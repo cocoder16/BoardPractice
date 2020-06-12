@@ -40,16 +40,24 @@ $info-head-li-width: 32%;
 $info-head-li-line-width: 5px;
 
 // write
+$write-width: calc(96% - 16px); //16px = padding
 
 //board
 $board-width: 96%;
 $board-item-padding-side: 3px;
+// left wrap
 $board-id-width: 50px;
 $board-padding-right: 8px;
 $board-title-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
+$m768-board-left-wrap-width: calc(100% - 140px - 100px - 70px); //100% - $m768-board-author-width - $board-read-count-width - $board-time-width
+$m768-board-title-width: calc(100% - 50px - 8px); //100% - $board-id-width - $board-padding-right
+$m768-info-board-replies-left-wrap-width: calc(100% - 70px); // 100% - $board-time-width
+$m768-info-board-replies-contents-width: calc(100% - 50px - 8px); // 100% - $board-id-width - $board-padding-right
+// right wrap
 $board-read-count-width: 100px;
 $board-time-width: 70px;
 $board-author-width: calc(100% - 170px); //100% - readcount, time
+$m768-board-author-width: 140px;
 
 //pagination
 $side-length: 24px;

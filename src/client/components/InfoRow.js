@@ -38,7 +38,7 @@ const InfoRow = ({
                 </li>
             }
             { reply &&
-                <li className='item'>
+                <li className='item info-reply'>
                     <div className='left wrap'>
                         <div className='id'>
                             <span>{reply.id}</span>
@@ -49,7 +49,7 @@ const InfoRow = ({
                             </Link>
                         </div>
                     </div>
-                    <div className='right wrap solo'>
+                    <div className='right wrap'>
                         <div className='created_at'>{reply.created_at}</div>
                     </div>
                 </li>

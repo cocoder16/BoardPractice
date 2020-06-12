@@ -62,7 +62,6 @@ section {
                 padding-top: $board-item-padding-side; padding-bottom: $board-item-padding-side;
                 //left
                 &.left{
-                    // line-height: 30px; 
                     .id {
                         float: left;
                         font-size: 0.75rem; color: $grey;
@@ -98,6 +97,28 @@ section {
                     }
                 }
             }
+
+            @media (min-width: 768px) {
+                .wrap {
+                    width: initial;
+                    &.left {
+                        width: $m768-board-left-wrap-width;
+                        display: inline-block; vertical-align: middle;
+                        .title {
+                            width: $m768-board-title-width;
+                        }
+                    }
+                    &.left:after {
+                        clear: initial; 
+                    }
+                    &.right {
+                        display: inline-block; vertical-align: middle;
+                        .author, .category {
+                            width: $m768-board-author-width;
+                        }
+                    }
+                }
+            }
         }
         #search-fail {
             #keyword {
@@ -106,12 +127,25 @@ section {
         }
     }
     .info-board {
-        .item {
-            .right.wrap.solo {
+        .item.info-reply {
+            .right.wrap {
                 .created_at {
                     width: calc(100% - 8px); //8px = $board-padding-right
                     padding-right: $board-padding-right;
                     text-align: right;
+                }
+            }
+            @media (min-width: 768px) {
+                .wrap {
+                    &.left {
+                        width: $m768-info-board-replies-left-wrap-width;
+                        .contents {
+                            width: $m768-info-board-replies-contents-width;
+                        }
+                    }
+                    &.right {
+                        width: $board-time-width;
+                    }
                 }
             }
         }
