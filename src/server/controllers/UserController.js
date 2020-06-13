@@ -251,9 +251,13 @@ class UserController {
     static async issueNewPw (id, token) {
         let newPw = '';
         for (let i = 0; i < 12; i++) {
-            if (i < 4) newPw += String.fromCharCode((Math.random() * 26) + 97); //a-z
-            else if (i < 8) newPw += String.fromCharCode((Math.random() * 10) + 48); //0-9
-            else newPw += String.fromCharCode((Math.random() * 15) + 33); //특수문자
+            if (Math.random() <= 1/3) {
+                newPw += String.fromCharCode((Math.random() * 26) + 97); //a-z
+            } else if (Math.random() <= 2/3) {
+                newPw += String.fromCharCode((Math.random() * 10) + 48); //0-9
+            } else {
+                newPw += String.fromCharCode((Math.random() * 15) + 33); //특수문자
+            }
         } 
         console.log('#### new pw : ' + newPw);
         const buffer = await new Promise((res, rej) => {

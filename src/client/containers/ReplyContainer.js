@@ -20,7 +20,7 @@ class ReplyContainer extends Component {
             console.log('componentDidUpdate');
             document.querySelector('.reply-form .contents').value = this.props.contents;
         }
-        if (replyForm.space !== null && prevProps.contents == contents) {
+        if (replyForm.space !== null && (prevProps.contents == contents || prevProps.unshown != 0 && unshown == 0)) {
             const tar = document.querySelectorAll(`li[data-id="${replyForm.id}"]`)[0];
             this.focusingForm(replyForm.space, tar);
         }
@@ -68,7 +68,7 @@ class ReplyContainer extends Component {
         }
     }
 
-    loadReplyForm = async (e) => {
+    loadReplyForm = (e) => {
         e.preventDefault();
         if (!this.props.isLoggedIn) return null;
         this.props.clear();
@@ -86,14 +86,11 @@ class ReplyContainer extends Component {
                 console.log(nextEle);
                 prevEle = nextEle;
                 nextEle = nextEle.nextSibling;
+                if (!nextEle) break;
             }
         }
         console.log(prevEle);
-        const space = prevEle.getAttribute('data-id');
-        const idTarget = targetLi;
-        console.log('loadReplyForm');
-        console.log(idTarget);
-        this.props.loadReplyForm(space, idTarget.getAttribute('data-id'), depth*1 + 1);
+        this.props.loadReplyForm(prevEle.getAttribute('data-id'), targetLi.getAttribute('data-id'), depth*1 + 1);
     }
 
     focusingForm (space, idTarget) {
@@ -114,6 +111,8 @@ class ReplyContainer extends Component {
 
     onModifyMode = (e) => {
         e.preventDefault();
+        this.clear();
+
         const reply = e.target.closest('li');
         console.log(reply);
         const id = reply.getAttribute('data-id');

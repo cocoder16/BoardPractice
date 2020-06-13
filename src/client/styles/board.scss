@@ -5,7 +5,7 @@
     .link {
         float: left; font-size: 0.9rem; color: black; margin: 0 10px 10px 0;
         button {
-            width: 80px; height: 30px; font-weight: bolder;
+            width: 72px; height: 24px; font-weight: bolder;
             background: $grey-btn-linear-gradient;
         }
     }
@@ -15,7 +15,7 @@
         float: left;
         .wrap {
             float: left;
-            height: 30px;
+            height: 24px;
             &.left {
                 width: 80px; margin-right: 8px;
             }
@@ -28,17 +28,17 @@
             font-size: 12px;
             box-shadow: 0 0 4px $shadow-color;
             &.type {
-                width: 80px; height: 30px; border: none;
+                width: 80px; height: 24px; border: none;
             }
             &.keyword {
                 width: 180px; max-width: calc(100% - 46px); //button 100% - width - margin-left * 2
-                height: 28px; border: none;
+                height: 22px; border: none;
             }
         }
         button {
             float: left;
-            width: 30px; margin-left: 8px;
-            height: 30px; background: $grey-btn-linear-gradient;
+            width: 24px; margin-left: 8px;
+            height: 24px; background: $grey-btn-linear-gradient;
             box-shadow: 0 0 4px $shadow-color;
         }
     }

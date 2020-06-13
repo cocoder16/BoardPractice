@@ -30,7 +30,7 @@ select:focus {
     margin-top: $sidebar-height;
     padding: 20px;
     .section-wrap {
-        min-height: 455px; //최소길이일때 스크롤 없을 만큼
+        min-height: calc(100vh - 195px); //최소길이일때 스크롤 없을 만큼
     }
 }
 
@@ -39,7 +39,7 @@ select:focus {
         margin-top: 0;
         margin-left: $m993-sidebar-width;
         .section-wrap {
-            min-height: 495px; //최소길이일때 스크롤 없을 만큼
+            min-height: calc(100vh - 145px); //최소길이일때 스크롤 없을 만큼
         }
     }
 }
