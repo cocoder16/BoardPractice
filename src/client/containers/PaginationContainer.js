@@ -1,15 +1,13 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch} from 'react-router-dom';
 import { Pagination } from '~c/components';
-import * as boardActions from '~c/store/board';
-import WriteContainer from './WriteContainer';
 
 class PaginationContainer extends Component {
     render () {
         const { category, now, max, interval } = this.props;
         return (
-            <Pagination now={now} max={max} interval={interval} category={category}
+            <Pagination 
+                now={now} max={max} interval={interval} category={category}
             />
         );
     };

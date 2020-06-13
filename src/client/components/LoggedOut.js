@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const LoggedOut = ({
-    userName, onWrite, logOut, deviceType
+    deviceType
 }) => {
     return (
         <div className='logged-out'>

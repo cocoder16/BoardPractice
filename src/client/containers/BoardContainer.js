@@ -97,7 +97,7 @@ class BoardContainer extends Component {
                 { isHome 
                     ? <RecentPosts posts={recentPosts} onReady={listOnReady}/>
                     :
-                    <div>
+                    <Fragment>
                         <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify} 
                             searchType={searchType} searchKeyword={searchKeyword}
                             onChangeSearchType={handleChangeSearchType}
@@ -121,7 +121,7 @@ class BoardContainer extends Component {
                                 deletePost={handleDeletePost}/>}
                             />
                         </Switch>
-                    </div>
+                    </Fragment>
                 }
             </Fragment>
         );

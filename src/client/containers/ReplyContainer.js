@@ -126,12 +126,12 @@ class ReplyContainer extends Component {
         e.preventDefault();
         const reply = e.target;
         const id = reply.getAttribute('data-id');
-        this.props.deleteModeOn(id);
+        this.props.onDeleteMode(id);
     }
 
     offDeleteMode = (e) => {
         e.preventDefault();
-        this.props.deleteModeOn(0);
+        this.props.onDeleteMode(0);
     }
 
     onDelete = async (e) => {
@@ -199,7 +199,7 @@ const mapDispatchToProps = (dispatch) => ({
     loadReplyForm: (space, id, depth) => dispatch(replyActions.loadReplyForm(space, id, depth)),
     displayOff: (id) => dispatch(replyActions.displayOff(id)),
     loadContents: (contents) => dispatch(replyActions.loadContents(contents)),
-    deleteModeOn: (id) => dispatch(replyActions.deleteModeOn(id)),
+    onDeleteMode: (id) => dispatch(replyActions.onDeleteMode(id)),
     clearReplies: () => dispatch(replyActions.clearReplies()),
     replyCountUp: () => dispatch(boardActions.replyCountUp())
 })

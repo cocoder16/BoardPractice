@@ -1,9 +1,7 @@
-import React, {Component, Fragment} from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
-import UserContainer from '~c/containers/UserContainer';
+import React, { Component, Fragment } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import InfoContainer from '~c/containers/InfoContainer';
 import BoardContainer from '~c/containers/BoardContainer';
-import WriteContainer from '~c/containers/WriteContainer';
 
 class Home extends Component {
   	render() {

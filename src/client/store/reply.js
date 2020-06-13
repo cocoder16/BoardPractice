@@ -6,7 +6,7 @@ const GET_REPLIES = 'reply/GET_REPLIES';
 const LOAD_REPLY_FORM = 'reply/LOAD_REPLY_FORM';
 const DISPLAY_OFF = 'reply/DISPLAY_OFF';
 const LOAD_CONTENTS = 'reply/LOAD_CONTENTS';
-const DELETE_MODE_ON = 'reply/DELETE_MODE_ON';
+const ON_DELETE_MODE = 'reply/ON_DELETE_MODE';
 const CLEAR_REPLIES = 'reply/CLEAR_REPLIES';
 
 export const textChange = (payload) => ({
@@ -34,8 +34,8 @@ export const loadContents = (contents) => ({
     type: LOAD_CONTENTS,
     payload: contents
 });
-export const deleteModeOn = (id) => ({
-    type: DELETE_MODE_ON,
+export const onDeleteMode = (id) => ({
+    type: ON_DELETE_MODE,
     payload: id
 });
 export const clearReplies = () => ({type: CLEAR_REPLIES});
@@ -63,7 +63,7 @@ export default function reducer (state=initialState, action) {
             return { ...state, unshown: action.payload };
         case LOAD_CONTENTS :
             return { ...state, contents: action.payload };
-        case DELETE_MODE_ON :
+        case ON_DELETE_MODE :
             return { ...state, deleteMode: action.payload };
         case CLEAR_REPLIES :
             return { ...state, replies: [] };

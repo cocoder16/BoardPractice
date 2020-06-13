@@ -5,7 +5,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const MyCKEditor = ({
     onChange, contents
 }) => {
-    console.log(contents);
     return (
         <CKEditor
             editor={ ClassicEditor }

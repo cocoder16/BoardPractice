@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LoggedOut, LoggedIn } from '~c/components';
-import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
 import * as boardActions from '~c/store/board';
-import { tryLogIn, tryLogOut } from '~c/services/users';
+import { tryLogOut } from '~c/services/users';
 
 class UserContainer extends Component {
     handleLogOut = async () => {
@@ -19,13 +18,12 @@ class UserContainer extends Component {
     }
 
     render () {        
-        const { span, onPending, isLoggedIn, deviceType } = this.props;
-        const { handleInputChange, handleFormSubmit, handleLogOut } = this;
+        const { isLoggedIn, deviceType } = this.props;
+        const { handleLogOut } = this;
         return (     
             <div className='user-box'>
                 { !isLoggedIn ?
                     <LoggedOut
-                        failSpan={span} onInputChange={handleInputChange} onFormSubmit={handleFormSubmit}
                         deviceType={deviceType}
                     /> :
                     <LoggedIn 
@@ -38,23 +36,11 @@ class UserContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    id: state.logIn.id,
-    pw: state.logIn.pw,
-    span: state.logIn.span,
-    pass: state.logIn.pass,
-    onPending: state.userInfo.onPending,
     isLoggedIn: state.userInfo.isLoggedIn,
-    userId: state.userInfo.id,
-    userNickname: state.userInfo.nickname,
-    userEmail: state.userInfo.email,
     deviceType: state.viewport.type
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    inputChange: (payload) => dispatch(logInActions.inputChange(payload)),
-    formValidationInput: () => dispatch(logInActions.formValidationInput()),
-    logInFailed: () => dispatch(logInActions.logInFailed()),
-    getUserInfo: () => dispatch(userInfoActions.getUserInfo()),
     deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo()),
     deleteUserWrote: () => dispatch(boardActions.deleteUserWrote())
 })

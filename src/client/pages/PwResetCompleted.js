@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component } from 'react';
 import PwResetCompletedContainer from '~c/containers/PwResetCompletedContainer';
 
 class PwResetCompleted extends Component {

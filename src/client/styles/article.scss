@@ -1,8 +1,8 @@
 @import './var';
 
 section {
-    .article {
-        width: calc($board-width - 8px); margin: auto;
+    article {
+        margin: auto;
         padding: 8px; margin-top: 20px;
         box-shadow: 0 0 4px $shadow-color;
         background-color: white;

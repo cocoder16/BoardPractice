@@ -118,7 +118,7 @@ const Pagination = ({
     }
 
     return (
-        <div className='pagination'>
+        <nav className='pagination'>
             <ul>
                 {pageData.map((cur, i) => {
                     return (<PageItem 
@@ -131,7 +131,7 @@ const Pagination = ({
                     />);
                 })}
             </ul>
-        </div>
+        </nav>
     )
 };
 

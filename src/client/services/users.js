@@ -65,14 +65,20 @@ export const tryLogIn = (formData) => {
 }
 
 export const tryLogOut = () => {
-    return axios.delete('/session/logout').then(res => {
+    return axios({
+        method: 'delete',
+        url: '/session/logout',
+    }).then(res => {
         console.log(res.data);
         return res.data.result;
     }).catch(err => console.log(err));
 }
 
 export const getUserInfo = () => {
-    return axios.get('/userinfo').then(res => {
+    return axios({
+        method: 'get',
+        url: '/userinfo',
+    }).then(res => {
         return res.data;
     }).catch(err => console.log(err));
 }

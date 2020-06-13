@@ -1,4 +1,4 @@
-import React, {  Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import ReplyContainer from '~c/containers/ReplyContainer';
 
@@ -12,7 +12,7 @@ const Article = ({
     return (   
         <section>
             { (onReady && !onDelete) && 
-                <div className='article'>
+                <article>
                     <div className='head'>
                         <h3>{article.title}</h3>
                         <div className='details'>
@@ -29,15 +29,15 @@ const Article = ({
                             <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>Delete</button></Link>
                         </div>
                     </div>
-                </div>
+                </article>
             }
             { onDelete &&
-                <div className='article'>
+                <article>
                     <div>
                         <span>Are you really sure to delete this post?</span>
                     </div>
                     <button type='button' onClick={deletePost}>Delete</button><button type='button' onClick={goBack}>Cancel</button>
-                </div>
+                </article>
             }
             <ReplyContainer/>
         </section>

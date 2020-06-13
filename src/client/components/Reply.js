@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import XSS from '~/modules/XSS';
 
 const Reply = ({//id contents author author_id depth parent_id is_deleted created_at
     reply, loadReplyForm, onModifyMode, onDeleteMode, isDeleteMode, offDeleteMode, onDelete
 }) => {
-    let btnClass, marginLeft, parent_nickname;
+    let btnClass, marginLeft;
     
     // 권한
     if (reply.auth && !reply.is_deleted) btnClass = 'personal-btn show';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Home, SignUp, LogIn, PwReset, PwResetCompleted, NotFound } from '~c/pages/index';
 
 const Router = () => (

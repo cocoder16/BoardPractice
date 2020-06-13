@@ -10,8 +10,8 @@ const FORM_VALIDATION_OVERLAP = 'signUp/FORM_VALIDATION_OVERLAP';
 const SET_IS_MODIFY = 'signUp/SET_IS_MODIFY';
 const SET_INPUT_VALUE = 'signUp/SET_INPUT_VALUE';
 const CLEAR = 'signUpCLEAR';
-const DELETE_MODE_ON = 'signUp/DELETE_MODE_ON';
-const DELETE_MODE_OFF = 'signUp/DELETE_MODE_OFF';
+const ON_DELETE_MODE = 'signUp/ON_DELETE_MODE';
+const OFF_DELETE_MODE = 'signUp/OFF_DELETE_MODE';
 const DELETE_FAILED = 'signUp/DELETE_FAILED';
 const PW_VALIDATION = 'signUp/PW_VALIDATION';
 
@@ -69,8 +69,8 @@ export const setInputValue = (payload) => ({
     payload: payload
 })
 export const clear = () => ({type: CLEAR});
-export const deleteModeOn = () => ({type: DELETE_MODE_ON});
-export const deleteModeOff = () => ({type: DELETE_MODE_OFF});
+export const onDeleteMode = () => ({type: ON_DELETE_MODE});
+export const offDeleteMode = () => ({type: OFF_DELETE_MODE});
 export const deleteFailed = () => ({type: DELETE_FAILED});
 export const pwValidation = (pw) => ({
     type: PW_VALIDATION,
@@ -185,9 +185,9 @@ export default function reducer (state=initialState, action) {
             return { ...state, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
         case CLEAR :
             return { ...state, span: { ...state.span, id: '', pw: '', pwConfirm: '', nickname: '', email: '' } }
-        case DELETE_MODE_ON :
+        case ON_DELETE_MODE :
             return { ...state, isDeleteMode: true }
-        case DELETE_MODE_OFF :
+        case OFF_DELETE_MODE :
             return { ...state, isDeleteMode: false, deleteFailedMessage: '' }
         case DELETE_FAILED :
             return { ...state, deleteFailedMessage: 'Wrong password.' }

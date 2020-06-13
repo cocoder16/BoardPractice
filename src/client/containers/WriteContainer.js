@@ -104,8 +104,6 @@ const mapStateToProps = (state) => ({
     isModify: state.write.isModify,
     title: state.write.title,
     contents: state.write.contents,
-
-    article: state.board.article,
 })
 
 const mapDispatchToProps = (dispatch) => ({

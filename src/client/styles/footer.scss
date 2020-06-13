@@ -1,7 +1,7 @@
 @import './var';
 
 footer {
-    width: $board-width; margin: auto;
+    width: $board-width; margin: auto; margin-top: 50px;
     border-top: 1px solid $shadow-color;
     padding-top: 15px;
     color: $grey; font-size: 0.7rem;

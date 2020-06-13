@@ -4,7 +4,6 @@ import { SignUpForm } from '~c/components';
 import * as signUpActions from '~c/store/signUp';
 import * as userInfoActions from '~c/store/userInfo';
 import { createUser, updateUser, deleteUser } from '~c/services/users';
-import { applyMiddleware } from 'redux';
 
 class SignUpContainer extends Component {
     constructor (props) {
@@ -17,7 +16,6 @@ class SignUpContainer extends Component {
         } else {
             this.props.setIsModify(false);
         }
-        document.ge
     }
 
     componentDidUpdate (prevProps, prevState) {
@@ -34,7 +32,7 @@ class SignUpContainer extends Component {
 
     componentWillUnmount () {
         this.props.clear();
-        this.props.deleteModeOff();
+        this.props.offDeleteMode();
     }
 
     handleInputChange = (e) => {
@@ -87,7 +85,7 @@ class SignUpContainer extends Component {
 
     onDeleteMode = (e) => {
         e.preventDefault();
-        this.props.deleteModeOn();
+        this.props.onDeleteMode();
     }
 
     onDelete = async (e) => {
@@ -135,16 +133,9 @@ class SignUpContainer extends Component {
 const mapStateToProps = (state) => ({
     id: state.signUp.id,
     pw: state.signUp.pw,
-    pwConfirm: state.signUp.pwConfirm,
     nickname: state.signUp.nickname,
     email: state.signUp.email,
-    span: {
-        id: state.signUp.span.id,
-        pw: state.signUp.span.pw,
-        pwConfirm: state.signUp.span.pwConfirm,
-        nickname: state.signUp.span.nickname,
-        email: state.signUp.span.email
-    },
+    span: state.signUp.span,
     goOverlapCheck: state.signUp.goOverlapCheck,
     pass: state.signUp.pass,
     isModify: state.signUp.isModify,
@@ -154,7 +145,6 @@ const mapStateToProps = (state) => ({
     onPending: state.userInfo.onPending,
     isDeleteMode: state.signUp.isDeleteMode,
     deleteFailedMessage: state.signUp.deleteFailedMessage,
-    isLoggedIn: state.userInfo.isLoggedIn
 })
 
 //props값으로 넣어줄 액션 함수들 정의
@@ -168,8 +158,8 @@ const mapDispatchToProps = (dispatch) => ({
     setInputValue: (payload) => dispatch(signUpActions.setInputValue(payload)),
     clear: () => dispatch(signUpActions.clear()),
     getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload)),
-    deleteModeOn: () => dispatch(signUpActions.deleteModeOn()),
-    deleteModeOff: () => dispatch(signUpActions.deleteModeOff()),
+    onDeleteMode: () => dispatch(signUpActions.onDeleteMode()),
+    offDeleteMode: () => dispatch(signUpActions.offDeleteMode()),
     deleteFailed: () => dispatch(signUpActions.deleteFailed()),
     pwValidation: (pw) => dispatch(signUpActions.pwValidation(pw))
 })

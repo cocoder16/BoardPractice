@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from './index';
 import UserContainer from '~c/containers/UserContainer';
@@ -24,7 +24,7 @@ const Sidebar = ({
     }
 
     return (
-        <div className={classname}>
+        <header className={classname}>
             <h1>
                 <Link to="/" className='link'>Board</Link>
             </h1>
@@ -35,7 +35,7 @@ const Sidebar = ({
                 </button>
             }
             <Menu/>
-        </div>
+        </header>
     );
 }
 

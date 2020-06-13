@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { LogInForm } from '~c/components';
 import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
-import * as boardActions from '~c/store/board';
 import { tryLogIn } from '~c/services/users';
 
 class UserContainer extends Component {
@@ -45,7 +44,7 @@ class UserContainer extends Component {
     }
 
     render () {        
-        const { span, onPending } = this.props;
+        const { span } = this.props;
         const { handleInputChange, handleFormSubmit } = this;
 
         return (
@@ -62,7 +61,6 @@ const mapStateToProps = (state) => ({
     pw: state.logIn.pw,
     span: state.logIn.span,
     pass: state.logIn.pass,
-    onPending: state.userInfo.onPending,
     isLoggedIn: state.userInfo.isLoggedIn,
     userId: state.userInfo.id,
     userNickname: state.userInfo.nickname,
