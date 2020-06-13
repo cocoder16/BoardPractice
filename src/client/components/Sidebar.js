@@ -30,7 +30,7 @@ const Sidebar = ({
             </h1>
             <UserContainer/>
             { deviceType < 2 &&
-                <button type='button' onClick={showMenu}>
+                <button type='button' id='hamburger' onClick={showMenu}>
                     <img src='/images/Hamburger_icon.png' alt='menu'/>
                 </button>
             }

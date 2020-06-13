@@ -5,10 +5,14 @@
     font-size: 0.9rem;
     margin-bottom: 25px;
     li {
-        display: inline-block; width: $info-head-li-width; margin: auto;
+        display: inline-block; width: $info-head-li-width;
+        margin: auto;
         text-align: center;
     }
     li.line {
         width: $info-head-li-line-width;
+    }
+    li .link.active {
+        color: #9c0606;
     }
 }

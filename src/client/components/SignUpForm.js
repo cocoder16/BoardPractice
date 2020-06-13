@@ -20,7 +20,7 @@ const SignUpForm = ({
     const template = 
         <form onSubmit={onFormSubmit}>
             <p>ID</p>
-            <input type='text' maxLength='12' name='id'
+            <input type='text' maxLength='12' name='id' autoFocus
                 onChange={onInputChange} disabled={idDisabled}
             />
             {idOverlap}

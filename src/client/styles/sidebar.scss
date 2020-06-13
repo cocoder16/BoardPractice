@@ -9,6 +9,9 @@
     background-color: $main-background-color;
     .link, a { color: white; }
     .link:visited, a:visited { color: white; }
+    #hamburger {
+        width: $sidebar-btn-side-length * 1.5; height: $sidebar-btn-side-length * 1.8;
+    }
     h1 {
         position: absolute; left: 50%; transform: translate(-50%, 0);
         font-size: $h1-size; line-height: 0.8; text-align: center;
@@ -95,7 +98,6 @@
             .user-box {
                 height: $sidebar-btn-side-length;
                 top: 100px; left: 4px;
-                font-size: 0.9rem;
                 .logged-out { 
                     height: $sidebar-btn-side-length;
                     .link {
@@ -109,7 +111,6 @@
                     }
                     button {
                         top: 48px; left: 1px;
-                        font-size: 0.9rem;
                     }
                 }
                 .icon {

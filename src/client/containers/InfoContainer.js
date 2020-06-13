@@ -16,6 +16,7 @@ class InfoContainer extends Component {
             console.log("on route change");
             this.getData();
         });
+        this.activation();
     }
 
     componentWillUnmount() {
@@ -26,6 +27,7 @@ class InfoContainer extends Component {
         if (prevProps.isLoggedIn != this.props.isLoggedIn) {
             this.getData();
         }
+        this.activation();
     }
 
     getData () {
@@ -33,6 +35,19 @@ class InfoContainer extends Component {
             console.log('x');
             const query = qs.parse(location.search);
             this.props.getUserWrote(location.pathname.split('/info/')[1], query);
+        }
+    }
+
+    activation () {
+        if (document.querySelector('.info-head .link.active')) {
+            document.querySelector('.info-head .link.active').classList.remove('active');
+        }
+        if (location.pathname == '/info/privacy') {
+            document.querySelectorAll('.info-head .link')[0].classList.add('active');
+        } else if (location.pathname == '/info/posts') {
+            document.querySelectorAll('.info-head .link')[1].classList.add('active');
+        } else if (location.pathname == '/info/replies') {
+            document.querySelectorAll('.info-head .link')[2].classList.add('active');
         }
     }
 

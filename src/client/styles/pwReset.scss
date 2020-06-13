@@ -1,9 +1,17 @@
 @import './var';
 
 .pw-reset {
+    input {
+        border: 1px solid black; border-radius: 3px;
+        padding: 4px;
+    }
+    input:focus {
+        outline: 2px solid red; box-shadow: 0 0 1px red;
+    }
     button {
-        width: 40px; height: 20px; margin-left: 5px;
+        width: 45px; height: 20px; margin-left: 5px;
         background: $submit-btn-linear-gradient;
+        vertical-align: middle; line-height: 0px;
     }
     #fail-find-id-message { 
         display: block; margin-top: 8px;

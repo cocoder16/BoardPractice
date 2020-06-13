@@ -15,14 +15,20 @@ class ReplyContainer extends Component {
     }
 
     componentDidUpdate (prevProps, prevState) {
-        if (prevProps.unshown != this.props.unshown) {
+        const { unshown, replyForm, contents } = this.props;
+        if (prevProps.unshown != unshown) {
             console.log('componentDidUpdate');
             document.querySelector('.reply-form .contents').value = this.props.contents;
+        }
+        if (replyForm.space !== null && prevProps.contents == contents) {
+            const tar = document.querySelectorAll(`li[data-id="${replyForm.id}"]`)[0];
+            this.focusingForm(replyForm.space, tar);
         }
     }
 
     componentWillUnmount () {
         this.props.clearReplies();
+        this.clearFocusingForm();
     }
 
     handleTextChange = (e) => {
@@ -62,17 +68,18 @@ class ReplyContainer extends Component {
         }
     }
 
-    loadReplyForm = (e) => {
+    loadReplyForm = async (e) => {
         e.preventDefault();
         if (!this.props.isLoggedIn) return null;
         this.props.clear();
-        const depth = e.target.closest('li').getAttribute('data-depth');
-        console.log(e.target.closest('li'));
+        const targetLi = e.target.closest('li');
+        const depth = targetLi.getAttribute('data-depth');
+        console.log(targetLi);
         console.log(depth);
-        let prevEle = e.target.closest('li');
+        let prevEle = targetLi;
         let nextEle;
-        if (e.target.closest('li').nextSibling) {
-            nextEle = e.target.closest('li').nextSibling;
+        if (targetLi.nextSibling) {
+            nextEle = targetLi.nextSibling;
             while (nextEle.getAttribute('data-depth') > depth) {
                 console.log('aa');
                 console.log(prevEle);
@@ -82,7 +89,27 @@ class ReplyContainer extends Component {
             }
         }
         console.log(prevEle);
-        this.props.loadReplyForm(prevEle.getAttribute('data-id'), e.target.closest('li').getAttribute('data-id'), depth*1 + 1);
+        const space = prevEle.getAttribute('data-id');
+        const idTarget = targetLi;
+        console.log('loadReplyForm');
+        console.log(idTarget);
+        this.props.loadReplyForm(space, idTarget.getAttribute('data-id'), depth*1 + 1);
+    }
+
+    focusingForm (space, idTarget) {
+        this.clearFocusingForm();
+        window.location.replace(`${location.pathname}#comment_${space}`);
+        if (idTarget) idTarget.classList.add('active');
+    }
+
+    clearFocusingForm () {
+        const prev = document.querySelector('.replies .reply.active');
+        console.log('clearFocusingForm');
+        console.log(prev);
+        if (prev) {
+            console.log(prev);
+            document.querySelector('.replies .reply.active').classList.remove('active');
+        }
     }
 
     onModifyMode = (e) => {
@@ -119,11 +146,15 @@ class ReplyContainer extends Component {
         }
     }
 
+    clear = () => {
+        this.clearFocusingForm();
+        this.props.clear();
+    }
+    
     render() {
         const { handleTextChange, handleFormSubmit, loadReplyForm, onModifyMode,
-            onDeleteMode, offDeleteMode, onDelete } = this;
-        const { replies, isLoggedIn, replyForm, unshown, deleteMode,
-            clear } = this.props;
+            onDeleteMode, offDeleteMode, onDelete, clear } = this;
+        const { replies, isLoggedIn, replyForm, unshown, deleteMode } = this.props;
 
         return (
             <Fragment>

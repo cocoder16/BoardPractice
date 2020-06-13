@@ -43,7 +43,7 @@ export const clearReplies = () => ({type: CLEAR_REPLIES});
 const initialState = {
     contents: '',
     replies: [],
-    replyForm: { space: null, id: 0, depth: 0 },
+    replyForm: { space: null, id: 0, depth: 0, tarEle: null },
     unshown: 0,
     deleteMode: 0
 };
