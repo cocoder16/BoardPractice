@@ -29,10 +29,18 @@ select:focus {
 .main {
     margin-top: $sidebar-height;
     padding: 20px;
+    .section-wrap {
+        min-height: 455px; //최소길이일때 스크롤 없을 만큼
+    }
 }
+
 @media (min-width: 993px) {
     .main {
+        margin-top: 0;
         margin-left: $m993-sidebar-width;
+        .section-wrap {
+            min-height: 495px; //최소길이일때 스크롤 없을 만큼
+        }
     }
 }
 

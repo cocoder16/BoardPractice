@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Link } from 'react-router-dom';
 import Router from './routers/Router';
 import {connect} from 'react-redux';
-import { Sidebar } from '~c/components';
+import { Sidebar, Footer } from '~c/components';
 import * as userInfoActions from '~c/store/userInfo';
 import * as viewportActions from '~c/store/viewport';
 
@@ -26,7 +26,12 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Sidebar deviceType={deviceType}/>
-                <Router/>
+                <div className='main'>
+                    <div className='section-wrap'>
+                        <Router/>
+                    </div>
+                    <Footer/>
+                </div>
             </BrowserRouter>
         );
     }

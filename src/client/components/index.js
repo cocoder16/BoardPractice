@@ -22,6 +22,7 @@ import Reply from './Reply';
 import RecentPosts from './RecentPosts';
 import Menu from './Menu';
 import Sidebar from './Sidebar';
+import Footer from './Footer';
 
 export {
     SignUpForm,
@@ -47,5 +48,6 @@ export {
     Reply,
     RecentPosts,
     Menu,
-    Sidebar
+    Sidebar,
+    Footer
 }

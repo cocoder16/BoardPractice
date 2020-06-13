@@ -1,0 +1,20 @@
+@import './var';
+
+footer {
+    width: $board-width; margin: auto;
+    border-top: 1px solid $shadow-color;
+    padding-top: 15px;
+    color: $grey; font-size: 0.7rem;
+    a {
+        display: inline-block;
+        margin: 0 20px 10px 20px;
+        color: $grey; font-size: 0.7rem;
+    }
+    a:visited {
+        color: $grey;
+    }
+    span {
+        display: inline-block;
+        margin-left: 20px;
+    }
+}
