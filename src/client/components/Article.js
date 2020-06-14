@@ -20,13 +20,16 @@ const Article = ({
                             <span className='time'>{article.created_at}</span>
                         </div>
                     </div>
-                    <div dangerouslySetInnerHTML={ {__html: article.contents} }>
-                    </div>
+                    <div dangerouslySetInnerHTML={ {__html: article.contents} }></div>
                     <div className='foot'>
                         <span>replies {article.reply_count}</span>
                         <div className='btns'>
-                            <Link to={`/modify/${id}`} className='link'><button type='button' className={btnClass}>Modify</button></Link>
-                            <Link to={`/delete/${id}`} className='link'><button type='button' className={btnClass}>Delete</button></Link>
+                            <Link to={`/modify/${id}`} className='link'>
+                                <button type='button' className={btnClass}>Modify</button>
+                            </Link>
+                            <Link to={`/delete/${id}`} className='link'>
+                                <button type='button' className={btnClass}>Delete</button>
+                            </Link>
                         </div>
                     </div>
                 </article>
@@ -36,7 +39,8 @@ const Article = ({
                     <div>
                         <span>Are you really sure to delete this post?</span>
                     </div>
-                    <button type='button' onClick={deletePost}>Delete</button><button type='button' onClick={goBack}>Cancel</button>
+                    <button type='button' onClick={deletePost}>Delete</button>
+                    <button type='button' onClick={goBack}>Cancel</button>
                 </article>
             }
             <ReplyContainer/>

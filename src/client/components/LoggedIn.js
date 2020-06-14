@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 const LoggedIn = ({
     logOut, deviceType
 }) => {
-
     return (
         <div className='logged-in'>
             <Link to='/info/privacy' className='link'>

@@ -10,10 +10,12 @@ const LogInForm = ({
             <form onSubmit={onFormSubmit}>
                 <p>ID</p>
                 <input type='text' maxLength='12' name='id' autoFocus
-                    onChange={onInputChange}/>
+                    onChange={onInputChange}
+                />
                 <p>Password</p>
                 <input type='password' maxLength='12' name='pw'
-                    onChange={onInputChange}/>
+                    onChange={onInputChange}
+                />
                 <div className='fail-message'>
                     <span>{failSpan}</span>
                 </div>

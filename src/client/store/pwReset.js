@@ -17,9 +17,9 @@ export const inputChange = (payload) => ({
 export const formValidation = () => ({type: FORM_VALIDATION});
 export const sentEmail = () => ({type: SENT_EMAIL});
 export const rejectMessage = () => ({type: REJECT_MESSAGE});
-export const getNewPw = (payload) => async (dispatch, getState) => {
-    const id = payload.id;
-    const token = payload.token;
+export const getNewPw = (query) => async (dispatch, getState) => {
+    const id = query.id;
+    const token = query.token;
     const resData = await issueNewPw(id, token);
     if (resData.result) {
         sessionStorage.setItem('received newPw', true);

@@ -8,6 +8,21 @@ import Reply from '../models/reply';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
+class Read {
+    static async info (Model, filter, select, skip, per) {
+        return Model.find(filter)
+            .select(select)
+            .sort({id: -1}).skip(skip).limit(per*1).then(arr => {
+                const today = new Date().format('yy-MM-dd');
+                arr.map(cur => {
+                    if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                    else cur.created_at = cur.created_at.split(' ')[0];
+                });
+                return arr;
+            });
+    }
+}
+
 class UserController {
     static async checkOverlap (target) { //하나만 찾고 멈추는 쿼리를..
         if (target.id) {
@@ -24,9 +39,9 @@ class UserController {
     static async testFormAndCreateUser (formData) {
         //form vaildation test
         if(InputChecker.id(formData.id) && InputChecker.pw(formData.pw) && InputChecker.nickname(formData.nickname) 
-        && InputChecker.email(formData.email)) {
+            && InputChecker.email(formData.email)) {
+
             const isOverlap_id = await this.checkOverlap({user_id: formData.id});
-            console.log(isOverlap_id);
             if (isOverlap_id.result === true) return {result: false};
             const isOverlap_nickname = await this.checkOverlap({nickname: formData.nickname});
             if (isOverlap_nickname.result === true) return {result: false};
@@ -96,14 +111,16 @@ class UserController {
                 const salt = user[0].salt;
                 const key = crypto.pbkdf2Sync(formData.pw, salt, process.env.ITERATIONS*1, 64, 'sha512');
                 if (key.toString('base64') === user[0].password) {
-                    User.updateOne({id: session.userid, is_deleted: false}, 
-                        {$set: {is_login: false, is_deleted: true}}, (err, raw) => {
-                            if (err) console.log(err);
-                            else {
-                                session.destroy();
-                                console.log(raw);
-                            }
-                        })
+                    User.updateOne({id: session.userid, is_deleted: false}, {$set: {
+                        is_login: false, 
+                        is_deleted: true
+                    }}, (err, raw) => {
+                        if (err) console.log(err);
+                        else {
+                            session.destroy();
+                            console.log(raw);
+                        }
+                    })
                     return {result: true}
                 } else return {result: false}
             }
@@ -126,7 +143,9 @@ class UserController {
                     req.session.usernickname = user[0].nickname;
                     req.session.save();
                     MeasureRunTime.start('findOneAndUpdate');
-                    User.updateOne({user_id: formData.id, is_deleted: false}, {$set: {is_login: true}}, (err, rawResponse) => {
+                    User.updateOne({user_id: formData.id, is_deleted: false}, {$set: {
+                        is_login: true
+                    }}, (err, rawResponse) => {
                         if (err) console.log(err);
                         else {
                             console.log(rawResponse);
@@ -140,15 +159,16 @@ class UserController {
     }
 
     static async logOut (req) {
-        return User.updateOne({id: req.session.userid, is_deleted: false},
-            {$set: {is_login: false, last_logout: Date.now() + 3600000 * 9}}, (err, rawResponse) => {
-                if (err) console.log(err);
-                else {
-                    console.log(rawResponse);
-                    req.session.destroy();
-                }
+        return User.updateOne({id: req.session.userid, is_deleted: false}, {$set: {
+            is_login: false, 
+            last_logout: Date.now() + 3600000 * 9
+        }}, (err, rawResponse) => {
+            if (err) console.log(err);
+            else {
+                console.log(rawResponse);
+                req.session.destroy();
             }
-        ).then(res => {
+        }).then(res => {
             console.log(res);
             if (res.n == 1) return {result: true}
             else return {result: false}
@@ -175,33 +195,18 @@ class UserController {
         const query = req.query;
         const per = query.per*1;
         const skip = (query.page - 1) * per;
-        const today = new Date().format('yy-MM-dd');
 
         if (query.type == 'posts') {
             const total = await Post.countDocuments({author_id: req.session.userid, is_deleted: false}).exec();
             const max = Math.ceil(total / per);
-            const postArr = await Post.find({author_id: req.session.userid, is_deleted: false})
-                .select('id title category read_count reply_count created_at')
-                .sort({id: -1}).skip(skip).limit(per*1).then(postArr => {
-                    postArr.map(cur => {
-                        if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                        else cur.created_at = cur.created_at.split(' ')[0];
-                    });
-                    return postArr;
-                });
+            const postArr = await Read.info(Post, {author_id: req.session.userid, is_deleted: false}, 
+                'id title category read_count reply_count created_at', skip, per);
             return {result: true, max, postArr, replyArr: []}
         } else if (query.type == 'replies') {
             const total = await Reply.countDocuments({author_id: req.session.userid, is_deleted: false}).exec();
             const max = Math.ceil(total / per);
-            const replyArr = await Reply.find({author_id: req.session.userid, is_deleted: false})
-                .select('id post_id contents created_at')
-                .sort({id: -1}).skip(skip).limit(per*1).then(replyArr => {
-                    replyArr.map(cur => {
-                        if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                        else cur.created_at = cur.created_at.split(' ')[0];
-                    });
-                    return replyArr;
-                });
+            const replyArr = await Read.info(Reply, {author_id: req.session.userid, is_deleted: false},
+                'id post_id contents created_at', skip, per);
             return {result: true, max, postArr: [], replyArr};
         }
     }
@@ -217,10 +222,10 @@ class UserController {
             crypto.randomBytes(64, (err, buf) => {
                 crypto.pbkdf2(userEmail, buf.toString('base64'), process.env.ITERATIONS*1, 64, 'sha512', (err, key) => {
                     let emailToken = key.toString('base64');
-                    emailToken = emailToken.replaceAll('+', '-'); //url safe base64
-                    emailToken = emailToken.replaceAll('/', '_');
-                    User.updateOne({user_id: id, is_deleted: false},
-                    {$set: {email_token: emailToken}}, (err, rawResponse) => {
+                    emailToken = emailToken.replaceAll('+', '-').replaceAll('/', '_'); //url safe base64
+                    User.updateOne({user_id: id, is_deleted: false}, {$set: {
+                        email_token: emailToken
+                    }}, (err, rawResponse) => {
                         const transporter = nodemailer.createTransport({
                             service: 'gmail',
                             auth: {
@@ -239,7 +244,7 @@ class UserController {
                         transporter.sendMail(mailOptions, (err, info) => {
                             if (err) console.log(err);
                             else console.log('Email sent: ' + info.response);
-                        })
+                        });
                     });
                 });
             });
@@ -269,10 +274,12 @@ class UserController {
         const buf = buffer.toString('base64');
         const key = crypto.pbkdf2Sync(newPw, buf, process.env.ITERATIONS*1, 64, 'sha512');
         const newPwHash = key.toString('base64');
-        //
         const resData = await new Promise((res, rej) => {
-            User.updateOne({id: id, email_token: token},
-            {$set: {salt: buf, password: newPwHash, email_token: ''}}, (err, rawResponse) => {
+            User.updateOne({id: id, email_token: token}, {$set: {
+                salt: buf, 
+                password: newPwHash, 
+                email_token: ''
+            }}, (err, rawResponse) => {
                 console.log(rawResponse);
                 if (rawResponse.n == 0) res({result: false, pw: ''});
                 else res({result: true, pw: newPw});

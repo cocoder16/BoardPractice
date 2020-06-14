@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Router from './routers/Router';
 import {connect} from 'react-redux';
 import { Sidebar, Footer } from '~c/components';

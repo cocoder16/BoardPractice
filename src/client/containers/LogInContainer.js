@@ -18,7 +18,7 @@ class UserContainer extends Component {
     handleInputChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
-        this.props.inputChange({name: name, value: value});
+        this.props.inputChange({ name: name, value: value });
     }
 
     handleFormSubmit = async (e) => {

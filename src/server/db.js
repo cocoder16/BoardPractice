@@ -7,10 +7,10 @@ export default () => {
         mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true, useUnifiedTopology: true
         }, function(err) {
-        if (err) {
-            console.error('#### mongodb connection error : ', err);
-        }
-        console.log('#### mongodb connected ####');
+            if (err) {
+                console.error('#### mongodb connection error : ', err);
+            }
+            console.log('#### mongodb connected ####');
         });
     }
     connect();

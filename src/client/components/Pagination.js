@@ -21,72 +21,52 @@ const Pagination = ({
     if (pathname == '/info/posts') type = 2;
     else if (pathname == '/info/replies') type = 3;
 
-    const reviseStartVal = () => {
+    const adjustedStartVal = () => {
         if (now % interval == 0) return now - interval + 1;
         return now - now % interval + 1;
-    }
+    };
 
     const lastPageCount = () => {
         if (max % interval == 0) return interval;
         return max % interval;
+    };
+
+    const dataArrGenerator = (first, last, len, start, url) => {
+        const data = [];
+        let separator;
+        if (url.indexOf('?') != -1) separator = '&';
+        else separator = '?';
+        
+        if (!first) {
+            data.push({ url, val: '<<'});
+            data.push({ url: `${url}${separator}page=${start-1}`, val: '<'});
+        }
+        for (let i = 0; i < len; i++) {
+            data.push({ url: `${url}${separator}page=${start+i}`, val: `${start+i}`});
+        }
+        if (!last) {
+            data.push({ url: `${url}${separator}page=${start+interval}`, val: '>'});
+            data.push({ url: `${url}${separator}page=${max}`, val: '>>'});
+        }
+        return data;
     }
 
-    const liGenerator = (first, last, len=interval, start=reviseStartVal(), _type=type) => {
-        const data = [];
+    const liGenerator = (first, last, len=interval, start=adjustedStartVal(), _type=type) => {
         console.log(category);
         console.log(_type);
-        if (_type == 1) {
+        let data;
+        if (_type == 0) {
+            data = dataArrGenerator(first, last, len, start, `/${category}`);
+        } else if (_type == 1) {
             console.log('onSearch');
             const type = query.type;
             const keyword = query.keyword;
-            if (!first) {
-                data.push({ url: `/${category}?type=${type}&keyword=${keyword}`, val: '<<'});
-                data.push({ url: `/${category}?type=${type}&keyword=${keyword}&page=${start-1}`, val: '<'});
-            }
-            for (let i = 0; i < len; i++) {
-                data.push({ url: `/${category}?type=${type}&keyword=${keyword}&page=${start+i}`, val: `${start+i}`});
-            }
-            if (!last) {
-                data.push({ url: `/${category}?type=${type}&keyword=${keyword}&page=${start+interval}`, val: '>'});
-                data.push({ url: `/${category}?type=${type}&keyword=${keyword}&page=${max}`, val: '>>'});
-            }
+            data = dataArrGenerator(first, last, len, start, `/${category}?type=${type}&keyword=${keyword}`);
             console.log(data);
-        } else if (_type == 0) {
-            if (!first) {
-                data.push({ url: `/${category}`, val: '<<'});
-                data.push({ url: `/${category}?page=${start-1}`, val: '<'});
-            }
-            for (let i = 0; i < len; i++) {
-                data.push({ url: `/${category}?page=${start+i}`, val: `${start+i}`});
-            }
-            if (!last) {
-                data.push({ url: `/${category}?page=${start+interval}`, val: '>'});
-                data.push({ url: `/${category}?page=${max}`, val: '>>'});
-            }
         } else if (_type == 2) {
-            if (!first) {
-                data.push({ url: `/info/posts`, val: '<<'});
-                data.push({ url: `/info/posts?page=${start-1}`, val: '<'});
-            }
-            for (let i = 0; i < len; i++) {
-                data.push({ url: `/info/posts?page=${start+i}`, val: `${start+i}`});
-            }
-            if (!last) {
-                data.push({ url: `/info/posts?page=${start+interval}`, val: '>'});
-                data.push({ url: `/info/posts?page=${max}`, val: '>>'});
-            }
+            data = dataArrGenerator(first, last, len, start, `/info/posts`);
         } else if (_type == 3) {
-            if (!first) {
-                data.push({ url: `/info/replies`, val: '<<'});
-                data.push({ url: `/info/replies?page=${start-1}`, val: '<'});
-            }
-            for (let i = 0; i < len; i++) {
-                data.push({ url: `/info/replies?page=${start+i}`, val: `${start+i}`});
-            }
-            if (!last) {
-                data.push({ url: `/info/replies?page=${start+interval}`, val: '>'});
-                data.push({ url: `/info/replies?page=${max}`, val: '>>'});
-            }
+            data = dataArrGenerator(first, last, len, start, `/info/replies`);
         }
         return data;
     }

@@ -29,7 +29,9 @@ export default function reducer (state=initialState, action) {
         case FORM_VALIDATION_INPUT :
             if (!InputChecker.id(state.id) || !InputChecker.pw(state.pw)) {
                 return { ...state, span: 'Please check the ID and Password and try again.', pass: false };
-            } else return { ...state, span: '', pass: true };
+            } else {
+                return { ...state, span: '', pass: true };
+            }
         case LOG_IN_FAILED :
             return { ...state, span: 'Please check the ID and Password and try again.', pass: false };
         default :

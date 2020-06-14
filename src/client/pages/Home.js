@@ -10,10 +10,8 @@ class Home extends Component {
 				<Switch>
 					<Route exact path="/" component={BoardContainer}/>
 					<Route path='/info' component={InfoContainer}/>
-					{/* 페이지는 쿼리스트링으로 */}
 					<Route exact path='/qna' component={BoardContainer}/>
 					<Route exact path='/forum' component={BoardContainer}/>
-					{/* 모든 게시글은 article url로 통합 post 모델로 관리 */}
 					<Route path='/article' component={BoardContainer}/>
 					<Route exact path='/write' component={BoardContainer}/>
 					<Route path='/modify' component={BoardContainer}/>

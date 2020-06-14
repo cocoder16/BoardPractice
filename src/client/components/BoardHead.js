@@ -14,9 +14,10 @@ const BoardHead = ({
 
     return (
         <div className='board-head'>
-            <h2><Link to={`/${category}`} className='link'>{cate}</Link></h2>
-            {/* 글쓰기버튼, 검색 => 한줄에 오른쪽에 몰아서 */}
-            { (isLoggedIn && !isWrite && !isModify ) && 
+            <h2>
+                <Link to={`/${category}`} className='link'>{cate}</Link>
+            </h2>
+            { (isLoggedIn && !isWrite && !isModify) && 
                 <Link to='/write' className='link'>
                     <button type='button'>Write</button>
                 </Link> 
@@ -33,7 +34,9 @@ const BoardHead = ({
                     <input type='text' name='keyword' className='input-search keyword' maxLength='50'
                         onChange={onChangeSearchKeyword}
                     />
-                    <button type='submit'><img src='/images/SearchBtn.png'/></button>
+                    <button type='submit'>
+                        <img src='/images/SearchBtn.png'/>
+                    </button>
                 </div>
             </form>
         </div>

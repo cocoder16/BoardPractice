@@ -22,7 +22,6 @@ const BoardRow = ({//id title author read_count reply_count created_at
                 <div className='created_at'>{post.created_at}</div>
             </div>
         </li>
-        
     )
 };
 

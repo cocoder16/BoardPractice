@@ -1,10 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
 import { WriteForm } from '~c/components';
-import * as boardActions from '~c/store/board';
 import * as writeActions from '~c/store/write';
-import { stringify } from 'query-string';
 import { createPost, updatePost } from '~c/services/posts';
 
 class WriteContainer extends Component {
@@ -108,7 +105,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(writeActions.inputChange(payload)),
-    setIsModify: (payload) => dispatch(writeActions.setIsModify(payload)),
+    setIsModify: (isModify) => dispatch(writeActions.setIsModify(isModify)),
     clear: () => dispatch(writeActions.clear()),
     setInputValue: (payload) => dispatch(writeActions.setInputValue(payload))
 })

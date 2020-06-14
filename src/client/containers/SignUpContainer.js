@@ -25,8 +25,11 @@ class SignUpContainer extends Component {
             document.getElementsByName('id')[0].value = this.props.userId;
             document.getElementsByName('nickname')[0].value = this.props.userNickname;
             document.getElementsByName('email')[0].value = this.props.userEmail;
-            this.props.setInputValue({id: this.props.userId, nickname: this.props.userNickname, 
-            email: this.props.userEmail});
+            this.props.setInputValue({
+                id: this.props.userId, 
+                nickname: this.props.userNickname, 
+                email: this.props.userEmail
+            });
         }
     }
 
@@ -60,14 +63,14 @@ class SignUpContainer extends Component {
         if (!this.props.pass) {
             console.log('fail form validation due to input value');
             this.alertReject();
-            return false;
+            return null;
         }
 
         await this.props.formValidationOverlap();
         if (!this.props.pass) {
             console.log('fail form validation due to overlap');
             this.alertReject();
-            return false;
+            return null;
         }
 
         const { id, pw, nickname, email } = this.props;
@@ -150,11 +153,11 @@ const mapStateToProps = (state) => ({
 //props값으로 넣어줄 액션 함수들 정의
 const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(signUpActions.inputChange(payload)),
-    beforeOverlapCheck: (payload) => dispatch(signUpActions.beforeOverlapCheck(payload)),
-    overlapCheck: (payload) => dispatch(signUpActions.overlapCheck(payload)),
+    beforeOverlapCheck: (name) => dispatch(signUpActions.beforeOverlapCheck(name)),
+    overlapCheck: (name) => dispatch(signUpActions.overlapCheck(name)),
     formValidationInput: () => dispatch(signUpActions.formValidationInput()),
     formValidationOverlap: () => dispatch(signUpActions.formValidationOverlap()),
-    setIsModify: (payload) => dispatch(signUpActions.setIsModify(payload)),
+    setIsModify: (isModify) => dispatch(signUpActions.setIsModify(isModify)),
     setInputValue: (payload) => dispatch(signUpActions.setInputValue(payload)),
     clear: () => dispatch(signUpActions.clear()),
     getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload)),

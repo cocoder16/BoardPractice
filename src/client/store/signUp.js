@@ -112,35 +112,49 @@ export default function reducer (state=initialState, action) {
                 case 'id':
                     if (!InputChecker.id(action.payload.value)) {
                         return { ..._state, span: { ..._state.span, id: '6~12 characters. Small letters and digits only.' }}
-                    } else return setEmpty(action.payload.name);
+                    } else {
+                        return setEmpty(action.payload.name);
+                    }
                 case 'pw' :
                     _state = { ..._state, pw: _state.pw.toLowerCase(), pwConfirm: _state.pwConfirm.toLowerCase() };
                     if (!InputChecker.pw(_state.pw)) {
                         return  { ..._state, span: { ..._state.span, pw: '8~12 charactrers. Should contain small letter, number and specail character.' }}
-                    } else return setEmpty(action.payload.name);
+                    } else {
+                        return setEmpty(action.payload.name);
+                    }
                 case 'pwConfirm' :
                     if (_state.pw !== _state.pwConfirm) {
                         return { ..._state, span: { ..._state.span, pwConfirm: 'Not the same password.' }}
-                    } else return setEmpty(action.payload.name);
+                    } else {
+                        return setEmpty(action.payload.name);
+                    }
                 case 'nickname' :
                     if (!InputChecker.nickname(action.payload.value)) {
                         return { ..._state, span: { ..._state.span, nickname: '2~12 characters. digits, Korean or English only.' }}
-                    } else return setEmpty(action.payload.name);
+                    } else {
+                        return setEmpty(action.payload.name);
+                    }
                 case 'email' :
                     if (!InputChecker.email(action.payload.value)) {
                         return { ..._state, span: { ..._state.span, email: 'Invalid email.' }}
-                    } else return setEmpty(action.payload.name);
+                    } else {
+                        return setEmpty(action.payload.name);
+                    }
             }
         case BEFORE_OVERLAP_CHECK :
             switch (action.payload) {
                 case 'idCheck' :
                     if (!InputChecker.id(state.id)) {
                         return { ...state, goOverlapCheck: false } 
-                    } else return { ...state, goOverlapCheck: true }
+                    } else {
+                        return { ...state, goOverlapCheck: true }
+                    }
                 case 'nicknameCheck' :
                     if (!InputChecker.nickname(state.nickname)) {
                         return { ...state, goOverlapCheck: false }
-                    } else return { ...state, goOverlapCheck: true }
+                    } else {
+                        return { ...state, goOverlapCheck: true }
+                    }
             }
         case OVERLAP_CHECK :
             console.log(action.payload);
@@ -163,12 +177,16 @@ export default function reducer (state=initialState, action) {
                 if (!InputChecker.id(state.id) || !InputChecker.pw(state.pw) || state.pw !== state.pwConfirm
                 || !InputChecker.nickname(state.nickname) || !InputChecker.email(state.email)) {
                     return { ...state, pass: false };
-                } else return { ...state, pass: true };
+                } else {
+                    return { ...state, pass: true };
+                }
             } else {
                 console.log('me');
                 if (!InputChecker.nickname(state.nickname) || !InputChecker.email(state.email)) {
                     return { ...state, pass: false };
-                } else return { ...state, pass: true };
+                } else {
+                    return { ...state, pass: true };
+                }
             }
         case FORM_VALIDATION_OVERLAP :
             _state = { ...state };
@@ -192,8 +210,11 @@ export default function reducer (state=initialState, action) {
         case DELETE_FAILED :
             return { ...state, deleteFailedMessage: 'Wrong password.' }
         case PW_VALIDATION :
-            if (!InputChecker.pw(action.payload)) return { ...state, deleteFailedMessage: 'Wrong password.' }
-            else return { ...state, deleteFailedMessage: '' }
+            if (!InputChecker.pw(action.payload)) {
+                return { ...state, deleteFailedMessage: 'Wrong password.' }
+            } else {
+                return { ...state, deleteFailedMessage: '' }
+            } 
         default :
             return state;
     }

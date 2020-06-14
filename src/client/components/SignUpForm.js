@@ -64,15 +64,14 @@ const SignUpForm = ({
             { !isModify ? <h2>Sign Up</h2> : <h2>Management</h2> }
             {template}
             { isModify &&
-                <button type='button' className='remove-btn' 
-                    onClick={onDeleteMode}
-                >Remove Acocount</button>
+                <button type='button' className='remove-btn' onClick={onDeleteMode}>
+                    Remove Acocount
+                </button>
             }
             { (isModify && isDeleteMode) ?
                 <form onSubmit={onDelete} className='delete-form'>
                     <span>Are you sure you would like to remove this account?</span>
-                    <input type='password' className='pw' maxLength='14'
-                        placeholder='Input Password again.'/>
+                    <input type='password' className='pw' maxLength='14' placeholder='Input Password again.'/>
                     <span className='fail-message'>{deleteFailedMessage}</span><br/>
                     <button type='submit'>Delete</button>
                 </form> :

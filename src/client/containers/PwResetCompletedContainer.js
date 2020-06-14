@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { PwResetCompleted } from '~c/components';
 import qs from 'query-string';
@@ -28,9 +28,9 @@ class PwResetCompletedContainer extends Component {
         }
 
         return (
-            <div>
+            <Fragment>
                 {target}
-            </div>
+            </Fragment>
         );
     }
 }
@@ -43,7 +43,7 @@ const mapStateToProps = (state) => ({
 
 //props값으로 넣어줄 액션 함수들 정의
 const mapDispatchToProps = (dispatch) => ({
-    getNewPw: (payload) => dispatch(pwResetActions.getNewPw(payload)),
+    getNewPw: (query) => dispatch(pwResetActions.getNewPw(query)),
     reinitial: () => dispatch(pwResetActions.reinitial())
 })
 

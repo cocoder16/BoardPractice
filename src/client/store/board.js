@@ -1,6 +1,5 @@
 import * as servicePosts from '~c/services/posts';
 import * as serviceUsers from '~c/services/users';
-import session from 'express-session';
 
 //action type
 const SET_CATEGORY = 'board/SET_CATEGORY';
@@ -68,21 +67,21 @@ export const search = (category, query) => async (dispatch, getState) => {
             payload: { type: query.type, keyword: query.keyword }
         });
         console.log('xxx');
-    console.log(query.type);
+        console.log(query.type);
         document.querySelector('.input-search.type').value = query.type;
         document.querySelector('.input-search.keyword').value = query.keyword;
     } else {
         window.location.replace(result.url);
     }
 };
-export const getArticle = (num) => async (dispatch, getState) => {
+export const getArticle = (id) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
     let newGet = 0;
-    console.log(num);
+    console.log(id);
     console.log(sessionStorage.getItem('article-id'));
-    if (sessionStorage.getItem('article-id') != num) newGet = 1;
-    sessionStorage.setItem('article-id', num);
-    const article = await servicePosts.getArticle(num, newGet);
+    if (sessionStorage.getItem('article-id') != id) newGet = 1;
+    sessionStorage.setItem('article-id', id);
+    const article = await servicePosts.getArticle(id, newGet);
     if (article.result) {
         dispatch({
             type: GET_ARTICLE,

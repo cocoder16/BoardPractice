@@ -150,7 +150,7 @@ router.delete('/reply', async (req, res) => {
 })
 
 router.get('/search', async (req, res) => {
-    const result = await PostController.search(req.query);
+    const result = await PostController.getPosts(req.query);
     res.send(result);
 })
 

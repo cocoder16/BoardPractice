@@ -58,6 +58,7 @@ class ReplyContainer extends Component {
             result = await updateReply(formData);
         }
         console.log(result);
+
         if (result) {
             document.querySelector('.reply-form .contents').value = '';
             this.props.clear();
@@ -104,7 +105,6 @@ class ReplyContainer extends Component {
         console.log('clearFocusingForm');
         console.log(prev);
         if (prev) {
-            console.log(prev);
             document.querySelector('.replies .reply.active').classList.remove('active');
         }
     }
@@ -171,11 +171,13 @@ class ReplyContainer extends Component {
                     offDeleteMode={offDeleteMode}
                     onDelete={onDelete}
                 />
-                { (isLoggedIn && replyForm.depth == 0) && <ReplyForm 
-                    onChange={handleTextChange} 
-                    onSubmit={handleFormSubmit}
-                    posibleCancel={false}
-                /> }
+                { (isLoggedIn && replyForm.depth == 0) && 
+                    <ReplyForm 
+                        onChange={handleTextChange} 
+                        onSubmit={handleFormSubmit}
+                        posibleCancel={false}
+                    /> 
+                }
             </Fragment>
         )
     }
@@ -193,9 +195,9 @@ const mapStateToProps = (state) => ({
 
 //props값으로 넣어줄 액션 함수들 정의
 const mapDispatchToProps = (dispatch) => ({
-    textChange: (payload) => dispatch(replyActions.textChange(payload)),
+    textChange: (value) => dispatch(replyActions.textChange(value)),
     clear: () => dispatch(replyActions.clear()),
-    getReplies: (payload) => dispatch(replyActions.getReplies(payload)),
+    getReplies: (post_id) => dispatch(replyActions.getReplies(post_id)),
     loadReplyForm: (space, id, depth) => dispatch(replyActions.loadReplyForm(space, id, depth)),
     displayOff: (id) => dispatch(replyActions.displayOff(id)),
     loadContents: (contents) => dispatch(replyActions.loadContents(contents)),

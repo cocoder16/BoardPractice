@@ -38,21 +38,14 @@ class BoardContainer extends Component {
         if (location.pathname == '/') {
             this.props.getRecentPosts();
             sessionStorage.clear('article-id');
-        } else if (location.pathname == '/qna') {
+        } else if (location.pathname == '/qna' || location.pathname == '/forum') {
             const query = qs.parse(location.search);
+            const category = location.pathname.split('/')[1]
             if (query.type && query.keyword) {
                 console.log(query);                
-                this.props.search('qna', query);
+                this.props.search(category, query);
             } else {
-                this.props.getPosts('qna', query);
-            }
-            sessionStorage.clear('article-id');
-        } else if (location.pathname == '/forum') {
-            const query = qs.parse(location.search);
-            if (query.type && query.keyword) {
-                this.props.search('forum', query);
-            } else {
-                this.props.getPosts('forum', query);
+                this.props.getPosts(category, query);
             }
             sessionStorage.clear('article-id');
         } else if (location.pathname.split('/')[1] == 'article') {
@@ -112,13 +105,16 @@ class BoardContainer extends Component {
                             />
                             <Route path='/article'
                                 render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
-                                id={article.id}/>}
+                                    id={article.id}
+                                />}
                             />
                             <Route exact path='/write' component={WriteContainer}/>
                             <Route path='/modify' component={WriteContainer}/>
                             <Route path='/delete'
-                                render={() => <Article auth={article.auth} onDelete={onDelete} goBack={goBackOnDelete}
-                                deletePost={handleDeletePost}/>}
+                                render={() => <Article auth={article.auth} onDelete={onDelete} 
+                                    goBack={goBackOnDelete}
+                                    deletePost={handleDeletePost}
+                                />}
                             />
                         </Switch>
                     </Fragment>
@@ -144,10 +140,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     getPosts: (category, query) => dispatch(boardActions.getPosts(category, query)),
-    getArticle: (payload) => dispatch(boardActions.getArticle(payload)),
+    getArticle: (id) => dispatch(boardActions.getArticle(id)),
     getDeleteAlert: () => dispatch(boardActions.getDeleteAlert()),
     skimOnDelete: () => dispatch(boardActions.skimOnDelete()),
-    deletePost: (payload) => dispatch(boardActions.deletePost(payload)),
+    deletePost: (id) => dispatch(boardActions.deletePost(id)),
     setSearchType: (val) => dispatch(boardActions.setSearchType(val)),
     setSearchKeyword: (val) => dispatch(boardActions.setSearchKeyword(val)),
     search: (cate, query) => dispatch(boardActions.search(cate, query)),

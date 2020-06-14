@@ -3,20 +3,50 @@ import '../../modules/DateFormat';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
+class Converter {
+    static CategoryStrToNum (str) {
+        switch (str) {
+            case 'qna' :
+                return 0;
+            case 'forum' :
+                return 1;
+        }
+    }
+    static mappingPostsTime (posts) {
+        const today = new Date().format('yy-MM-dd');
+        posts.map(cur => {
+            if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+            else cur.created_at = cur.created_at.split(' ')[0]
+        });
+    }
+}
+
+class Read {
+    static async generalPosts (filter, skip, per, max) {
+        return Post.find(filter)
+        .select('id title author read_count reply_count created_at')
+        .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
+            Converter.mappingPostsTime(posts);
+            if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
+            return {result: true, max, posts};
+        }).catch(err => console.log(err));
+    }
+
+    static async recentsPosts (filter) {
+        return Post.find(filter)
+        .select('id title author read_count reply_count created_at')
+        .sort({id: -1}).limit(5).then(posts => {
+            Converter.mappingPostsTime(posts);
+            return posts
+        });
+    }
+}
+
 class PostController {
     static async createPost (formData, session) { 
-        if (!session.userid) return {result: false, url: '/'};
-        let cate;
-        switch (formData.category) {
-            case 'qna' :
-                cate = 0;
-                break;
-            case 'forum' :
-                cate = 1;
-                break;
-        }
+        const category = Converter.CategoryStrToNum(formData.category);
         const newPost = new Post({
-            category: cate,
+            category,
             title: formData.title,
             contents: formData.contents,
             author: session.usernickname,
@@ -30,13 +60,15 @@ class PostController {
     }
 
     static async updatePost (formData, session) {
-        return Post.updateOne({id: formData.id, author_id: session.userid, is_deleted: false},
-        {$set: {title: formData.title, contents: formData.contents, 
-        updated_at: new Date().format('yy-MM-dd HH:mm:ss')}}, (err, rawResponse) => {
+        return Post.updateOne({ id: formData.id, author_id: session.userid }, {$set: {
+            title: formData.title, 
+            contents: formData.contents, 
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss')
+        }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
-            if (res.n == 0) return {result: false, url: '/'};
-            else return {result: true, url: `/article/${formData.id}`};
+            if (res.n == 0) return { result: false, url: '/' };
+            else return { result: true, url: `/article/${formData.id}` };
         });
     }
 
@@ -44,8 +76,10 @@ class PostController {
         console.log('### del ###');
         console.log(id);
         console.log(session.userid);
-        return Post.updateOne({id: id, author_id: session.userid},
-        {$set: {is_deleted: true, updated_at: new Date().format('yy-MM-dd HH:mm:ss')}}, (err, rawResponse) => {
+        return Post.updateOne({id: id, author_id: session.userid}, {$set: {
+            is_deleted: true, 
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss')
+        }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
             if (res.n == 1) return {result: true, url: `/${category}`};
@@ -60,37 +94,41 @@ class PostController {
         })
     }
 
-    static async getPosts (query) {
-        let cate;
-        switch (query.category) {
-            case 'qna' :
-                cate = 0;
-                break;
-            case 'forum' :
-                cate = 1;
-                break;
+    static async getPosts (query) { //search에도 이걸로
+        console.log("#### getPosts ####");
+        
+        const category = Converter.CategoryStrToNum(query.category);
+
+        let filter = {category, is_deleted: false};
+        
+        //search인 경우에 필터내용추가
+        if (query.type) {
+            let tempFilter;
+            switch (query.type) {
+                case '0' :
+                    tempFilter = { title: new RegExp(query.keyword) }; 
+                    break;
+                case '1' :
+                    tempFilter = { $or: [ {title: new RegExp(query.keyword)}, {contents: new RegExp(query.keyword)} ] };
+                    break;
+                case '2' :
+                    tempFilter = { author: new RegExp(query.keyword) };
+                    break;
+            }
+            filter = {category, is_deleted: false, ...tempFilter}
         }
+        
         const per = query.per*1;
         const skip = (query.page - 1) * per;
-        console.log("#### getPosts ####");
+
         console.log(skip);
         console.log(per);
 
-        const total = await Post.countDocuments({category: cate, is_deleted: false}).exec();
+        const total = await Post.countDocuments(filter).exec();
         console.log(total);
         const max = Math.ceil(total / per);
-        return Post.find({category: cate, is_deleted: false})
-        .select('id title author read_count reply_count created_at')
-        .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
-            const today = new Date().format('yy-MM-dd');
-            console.log(today);
-            posts.map(cur => {
-                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                else cur.created_at = cur.created_at.split(' ')[0]
-            });
-            if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
-            return {result: true, max, posts};
-        }).catch(err => console.log(err));
+        
+        return Read.generalPosts(filter, skip, per, max);
     }
 
     static async getArticle (num, session, newGet) {
@@ -116,71 +154,10 @@ class PostController {
         });
     }
 
-    static async search (query) {
-        let cate;
-        switch (query.category) {
-            case 'qna' :
-                cate = 0;
-                break;
-            case 'forum' :
-                cate = 1;
-                break;
-        }
-        let filter;
-        switch (query.type) {
-            case '0' :
-                filter = { title: new RegExp(query.keyword) }; 
-                break;
-            case '1' :
-                filter = { $or: [ {title: new RegExp(query.keyword)}, {contents: new RegExp(query.keyword)} ] };
-                break;
-            case '2' :
-                filter = { author: new RegExp(query.keyword) };
-                break;
-        }
-
-        const per = query.per*1;
-        const skip = (query.page - 1) * per;
-
-        const total = await Post.countDocuments({category: cate, ...filter, is_deleted: false}).exec();
-        console.log(total);
-        const max = Math.ceil(total / per);
-
-        return Post.find({category: cate, ...filter,  is_deleted: false})
-        .select('id title author read_count reply_count created_at')
-        .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
-            const today = new Date().format('yy-MM-dd');
-            console.log(today);
-            posts.map(cur => {
-                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                else cur.created_at = cur.created_at.split(' ')[0]
-            });
-            if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
-            return {result: true, max: max, posts};
-        }).catch(err => console.log(err));
-    }
-
     static async recentPosts () {
         let qnaArr, forumArr;
-        const today = new Date().format('yy-MM-dd');
-        qnaArr = await Post.find({category: 0, is_deleted: false})
-        .select('id title author read_count reply_count created_at')
-        .sort({id: -1}).limit(5).then(posts => {
-            posts.map(cur => {
-                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                else cur.created_at = cur.created_at.split(' ')[0]
-            });
-            return posts
-        });
-        forumArr = await Post.find({category: 1, is_deleted: false})
-        .select('id title author read_count reply_count created_at')
-        .sort({id: -1}).limit(5).then(posts => {
-            posts.map(cur => {
-                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                else cur.created_at = cur.created_at.split(' ')[0]
-            });
-            return posts
-        });
+        qnaArr = await Read.recentsPosts({category: 0, is_deleted: false});
+        forumArr = await Read.recentsPosts({category: 1, is_deleted: false});
         return { qnaArr, forumArr }
     }
 }

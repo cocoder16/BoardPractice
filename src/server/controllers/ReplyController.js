@@ -7,7 +7,6 @@ import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
 class ReplyController {
     static async createReply (formData, session) { 
-        if (!session.userid) return {result: false};
         // -- 검사
         const contents = XSS.Filter(formData.contents);
         // -- 통과
@@ -18,7 +17,7 @@ class ReplyController {
         });
         const newReply = new Reply({
             post_id: formData.post_id,
-            contents: contents,
+            contents,
             author: session.usernickname,
             author_id: session.userid,
             depth: formData.depth,

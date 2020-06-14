@@ -1,8 +1,8 @@
 export default (function () {
-    Date.prototype.format = function(formatString) {
+    Date.prototype.format = function (formatString) {
         if (!this.valueOf()) return " ";
     
-        var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        var weekName = [ "일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일" ];
         var d = this;
         var h;
         
@@ -23,9 +23,18 @@ export default (function () {
         });
     };
     
-    String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
-    String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
-    Number.prototype.zf = function(len){return this.toString().zf(len);};
+    String.prototype.string = function(len){
+        var s = '', i = 0; 
+        while (i++ < len) { 
+            s += this; 
+        } 
+        return s;};
+    String.prototype.zf = function(len){
+        return "0".string(len - this.length) + this;
+    };
+    Number.prototype.zf = function(len){
+        return this.toString().zf(len);
+    };
 })();
 // //ex
 // //2011년 09월 11일 오후 03시 45분 42초

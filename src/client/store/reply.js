@@ -9,9 +9,9 @@ const LOAD_CONTENTS = 'reply/LOAD_CONTENTS';
 const ON_DELETE_MODE = 'reply/ON_DELETE_MODE';
 const CLEAR_REPLIES = 'reply/CLEAR_REPLIES';
 
-export const textChange = (payload) => ({
+export const textChange = (value) => ({
     type: TEXT_CHANGE,
-    payload: payload
+    payload: value
 });
 export const clear = () => ({type: CLEAR});
 export const getReplies = (post_id) => async (dispatch, getState) => {
@@ -54,7 +54,7 @@ export default function reducer (state=initialState, action) {
             return { ...state, contents: action.payload };
         case CLEAR :
             return { ...state, contents: '', replyForm: { space: null, id: 0, depth: 0 },
-            unshown: 0, deleteMode: 0 };
+                unshown: 0, deleteMode: 0 };
         case GET_REPLIES :
             return { ...state, replies: action.payload };
         case LOAD_REPLY_FORM :

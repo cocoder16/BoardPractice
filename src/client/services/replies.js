@@ -39,7 +39,9 @@ export const deleteReply = (id) => {
     return axios({
         method: 'delete',
         url: '/reply',
-        params: { id }
+        params: { 
+            id 
+        }
     }).then(res => {
         return res.data.result;
     }).catch(err => console.log(err));
