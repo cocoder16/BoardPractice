@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Exception from './Exception';
 
 export const isOverlap = (target) => {
     return axios({
@@ -7,7 +8,10 @@ export const isOverlap = (target) => {
         params: target
     }).then(res => {
         return res.data.result;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const createUser = (formData) => {
@@ -17,13 +21,11 @@ export const createUser = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        if (res.data.result) {
-            alert('Welcome to my board :)');
-            window.location.replace(res.data.url);
-        } else {
-            alert('The registration is failed. Please try again.');
-        }
-    }).catch(err => console.log(err));
+        alert('Welcome to my board :)');
+        window.location.replace('/');
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'The registration is failed. Please try again.');
+    });
 }
 
 export const updateUser = (formData) => {
@@ -33,13 +35,11 @@ export const updateUser = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        if (res.data.result) {
-            alert('User information update is completed.');
-            window.location.replace(res.data.url);
-        } else {
-            alert('User information update is failed. Please try again.');
-        }
-    }).catch(err => console.log(err));
+        alert('User information update is completed.');
+        window.location.replace('/');
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'User information update is failed. Please try again.');
+    });
 }
 
 export const deleteUser = (formData) => {
@@ -49,8 +49,11 @@ export const deleteUser = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        return res.data;
-    }).catch(err => console.log(err));
+        return res.data.result;
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const tryLogIn = (formData) => {
@@ -60,8 +63,11 @@ export const tryLogIn = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        return res.data;
-    }).catch(err => console.log(err));
+        return res.data.result;
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const tryLogOut = () => {
@@ -69,9 +75,11 @@ export const tryLogOut = () => {
         method: 'delete',
         url: '/session/logout',
     }).then(res => {
-        console.log(res.data);
-        return res.data.result;
-    }).catch(err => console.log(err));
+        return true;
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const getUserInfo = () => {
@@ -80,7 +88,10 @@ export const getUserInfo = () => {
         url: '/userinfo',
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const getUserWrote = (type, page, per) => {
@@ -92,7 +103,10 @@ export const getUserWrote = (type, page, per) => {
         }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const goAuthEmail = (formData) => {
@@ -103,14 +117,16 @@ export const goAuthEmail = (formData) => {
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         return res.data.result;
-    }).catch(err => console.log(err));
+    }).catch(err => {console.log(err)});
 }
 
 export const issueNewPw = (id, token) => {
     return axios({
         method: 'post',
         url: '/help/pwreset/issue',
-        data: {id: id, token: token}
+        data: {
+            id, token
+        }
     }).then(res => {
         return res.data;
     }).catch(err => console.log(err));

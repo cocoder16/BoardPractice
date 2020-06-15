@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Exception from './Exception';
 
 export const createReply = (formData) => {
     return axios({
@@ -7,9 +8,10 @@ export const createReply = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        console.log(res.data);
-        return res.data.result;
-    }).catch(err => console.log(err));
+        return true;
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'registering reply is failed.');
+    });
 }
 
 export const getReplies = (post_id) => {
@@ -17,11 +19,14 @@ export const getReplies = (post_id) => {
         method: 'get',
         url: '/reply',
         params: {
-            post_id: post_id
+            post_id
         }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const updateReply = (formData) => {
@@ -31,8 +36,10 @@ export const updateReply = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        return res.data.result;
-    }).catch(err => console.log(err));
+        return true;
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'modifying reply is failed.');
+    });
 }
 
 export const deleteReply = (id) => {
@@ -43,6 +50,8 @@ export const deleteReply = (id) => {
             id 
         }
     }).then(res => {
-        return res.data.result;
-    }).catch(err => console.log(err));
+        return true
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'deleting reply is failed.');
+    });
 }

@@ -27,7 +27,7 @@ export const beforeOverlapCheck = (name) => ({
 export const overlapCheck = (name) => async (dispatch, getState) => {
     if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return null;
     let _name = name.split('Check')[0];
-    const isOverlap = await serviceUsers.isOverlap({[_name]: getState().signUp[_name]});
+    const isOverlap = await serviceUsers.isOverlap({ [_name]: getState().signUp[_name] });
     
     console.log('isOverlap : ' + isOverlap);
     dispatch({
@@ -42,15 +42,15 @@ export const formValidationInput = () => ({type: FORM_VALIDATION_INPUT});
 export const formValidationOverlap = () => async (dispatch, getState) => {
     let isOverlap = {};
     if (!getState().signUp.isModify) {
-        isOverlap.id = await serviceUsers.isOverlap({user_id: getState().signUp.id});
+        isOverlap.id = await serviceUsers.isOverlap({ id: getState().signUp.id });
         console.log('isOverlap_id : ' + isOverlap.id); 
-        isOverlap.nickname = await serviceUsers.isOverlap({nickname: getState().signUp.nickname});
+        isOverlap.nickname = await serviceUsers.isOverlap({ nickname: getState().signUp.nickname });
         console.log('isOverlap_nickname : ' + isOverlap.nickname);
     } else {
         isOverlap.id = false;
         isOverlap.nickname = false;
         if (getState().signUp.nickname != getState().userInfo.nickname) {
-            isOverlap.nickname = await serviceUsers.isOverlap({nickname: getState().signUp.nickname});
+            isOverlap.nickname = await serviceUsers.isOverlap({ nickname: getState().signUp.nickname });
             console.log('isOverlap_nickname : ' + isOverlap.nickname);
         }
     }
@@ -161,15 +161,15 @@ export default function reducer (state=initialState, action) {
             switch (action.payload.name) {
                 case 'id' :
                     if (action.payload.isOverlap) {
-                        return { ...state, span: { ...state.span, id: 'This ID is already taken. Please use another ID.'}}
+                        return { ...state, span: { ...state.span, id: 'This ID is already taken. Please use another ID.' }}
                     } else {
-                        return { ...state, span: { ...state.span, id: 'This ID is available.'}}
+                        return { ...state, span: { ...state.span, id: 'This ID is available.' }}
                     }
                 case 'nickname' :
                     if (action.payload.isOverlap) {
-                        return { ...state, span: { ...state.span, nickname: 'This nickname is already taken. Please use another nickname.'}}
+                        return { ...state, span: { ...state.span, nickname: 'This nickname is already taken. Please use another nickname.' }}
                     } else {
-                        return { ...state, span: { ...state.span, nickname: 'This nickname is available.'}}
+                        return { ...state, span: { ...state.span, nickname: 'This nickname is available.' }}
                     }
             }
         case FORM_VALIDATION_INPUT :
@@ -191,10 +191,10 @@ export default function reducer (state=initialState, action) {
         case FORM_VALIDATION_OVERLAP :
             _state = { ...state };
             if (action.payload.id) {
-                _state = { ..._state, pass: false, span: { ..._state.span, id: 'This ID is already taken. Please use another ID.'} };
+                _state = { ..._state, pass: false, span: { ..._state.span, id: 'This ID is already taken. Please use another ID.' }};
             }
             if (action.payload.nickname) {
-                _state = { ..._state, pass: false, span: { ..._state.span, nickname: 'This nickname is already taken. Please use another nickname.'} };
+                _state = { ..._state, pass: false, span: { ..._state.span, nickname: 'This nickname is already taken. Please use another nickname.' }};
             }
             return _state;
         case SET_IS_MODIFY :
@@ -202,7 +202,7 @@ export default function reducer (state=initialState, action) {
         case SET_INPUT_VALUE :
             return { ...state, id: action.payload.id, nickname: action.payload.nickname, email: action.payload.email }
         case CLEAR :
-            return { ...state, span: { ...state.span, id: '', pw: '', pwConfirm: '', nickname: '', email: '' } }
+            return { ...state, span: { ...state.span, id: '', pw: '', pwConfirm: '', nickname: '', email: '' }}
         case ON_DELETE_MODE :
             return { ...state, isDeleteMode: true }
         case OFF_DELETE_MODE :

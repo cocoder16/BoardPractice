@@ -24,7 +24,7 @@ export const getReplies = (post_id) => async (dispatch, getState) => {
 };
 export const loadReplyForm = (space, id, depth) => ({
     type: LOAD_REPLY_FORM,
-    payload: {space, id, depth}
+    payload: { space, id, depth }
 });
 export const displayOff = (id) => ({
     type: DISPLAY_OFF,

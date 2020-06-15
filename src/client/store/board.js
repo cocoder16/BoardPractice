@@ -29,20 +29,16 @@ export const getPosts = (category, query) => async (dispatch, getState) => {
     const result = await servicePosts.getPosts(category, page, getState().board.per);
     console.log('getPosts');
     console.log(result);
-    if (result.result) {
-        dispatch({
-            type: GET_POSTS,
-            payload: { posts: result.posts, page, max: result.max }
-        });
-        dispatch({
-            type: GET_SEARCH,
-            payload: { type: 0, keyword: '' }
-        });
-        document.querySelector('.input-search.type').value = 0;
-        document.querySelector('.input-search.keyword').value = '';
-    } else {
-        window.location.replace(result.url);
-    }
+    dispatch({
+        type: GET_POSTS,
+        payload: { posts: result.posts, page, max: result.max }
+    });
+    dispatch({
+        type: GET_SEARCH,
+        payload: { type: 0, keyword: '' }
+    });
+    document.querySelector('.input-search.type').value = 0;
+    document.querySelector('.input-search.keyword').value = '';
 };
 export const search = (category, query) => async (dispatch, getState) => {
     console.log('search');
@@ -57,22 +53,18 @@ export const search = (category, query) => async (dispatch, getState) => {
     else page = query.page;
     console.log(query.type);
     const result = await servicePosts.search(category, query.type, query.keyword, page, getState().board.per);
-    if (result.result) {
-        dispatch({
-            type: GET_POSTS,
-            payload: { posts: result.posts, page, max: result.max }
-        });
-        dispatch({
-            type: GET_SEARCH,
-            payload: { type: query.type, keyword: query.keyword }
-        });
-        console.log('xxx');
-        console.log(query.type);
-        document.querySelector('.input-search.type').value = query.type;
-        document.querySelector('.input-search.keyword').value = query.keyword;
-    } else {
-        window.location.replace(result.url);
-    }
+    dispatch({
+        type: GET_POSTS,
+        payload: { posts: result.posts, page, max: result.max }
+    });
+    dispatch({
+        type: GET_SEARCH,
+        payload: { type: query.type, keyword: query.keyword }
+    });
+    console.log('xxx');
+    console.log(query.type);
+    document.querySelector('.input-search.type').value = query.type;
+    document.querySelector('.input-search.keyword').value = query.keyword;
 };
 export const getArticle = (id) => async (dispatch, getState) => {
     dispatch({type: ARTICLE_PENDING});
@@ -82,14 +74,10 @@ export const getArticle = (id) => async (dispatch, getState) => {
     if (sessionStorage.getItem('article-id') != id) newGet = 1;
     sessionStorage.setItem('article-id', id);
     const article = await servicePosts.getArticle(id, newGet);
-    if (article.result) {
-        dispatch({
-            type: GET_ARTICLE,
-            payload: { article: article.article }
-        });
-    } else {
-        window.location.replace(article.url);
-    }
+    dispatch({
+        type: GET_ARTICLE,
+        payload: { article: article.article }
+    });
 };
 export const getDeleteAlert = () => ({type: GET_DELETE_ALERT});
 export const skimOnDelete = () => ({type: SKIM_ON_DELETE});
@@ -113,14 +101,10 @@ export const getUserWrote = (type, query) => async (dispatch, getState) => {
     const data = await serviceUsers.getUserWrote(type, page, getState().board.per);
     console.log('getUserWrote');
     console.log(data);
-    if (data.result) {
-        dispatch({
-            type: GET_USER_WROTE,
-            payload: { data, page }
-        });
-    } else {
-        window.location.replace(data.url);
-    }
+    dispatch({
+        type: GET_USER_WROTE,
+        payload: { data, page }
+    })
 };
 export const deleteUserWrote = () => ({type: DELETE_USER_WROTE});
 export const getRecentPosts = () => async (dispatch, getState) => {

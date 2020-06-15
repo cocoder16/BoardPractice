@@ -24,52 +24,49 @@ const index = path.resolve(__dirname, '../../dist/index.html');
 
 router.get('/check/overlap', async (req, res) => {
     let result;
-    console.log('### overlap');
-    console.log(req.query);
-    console.log(req.query.id);
     if (req.query.id) result = await UserController.checkOverlap({id: req.query.id, is_deleted: false});
     else if (req.query.nickname) result = await UserController.checkOverlap({nickname: req.query.nickname, is_deleted: false});
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.post('/user', upload.none(), async (req, res) => {
     const result = await UserController.testFormAndCreateUser(req.body);
-    res.send(result);
+    res.status(result.status).send();
 })
 
 router.put('/user', upload.none(), async (req, res) => {
     const result = await UserController.testFormAndUpdateUser(req.body, req.session);
-    res.send(result);
+    res.status(result.status).send();
 })
 
 router.delete('/user', upload.none(), async (req, res) => {
     const result = await UserController.deleteUser(req.body, req.session);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.post('/session/login', upload.none(), async (req, res) => {
     const result = await UserController.logInDataCheck(req, req.body);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.delete('/session/logout', async (req, res) => {
     const result = await UserController.logOut(req);
-    res.send(result);
+    res.status(result.status).send();
 })
 
 router.get('/userinfo', async (req, res) => {
     const result = await UserController.getUserInfo(req);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.get('/userwrote', async (req, res) => {
     const result = await UserController.getUserWrote(req);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.post('/help/pwreset/authemail', upload.none(), async (req, res) => {
     const result = await UserController.sendPwAuthEmail(req.body.id);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.post('/help/pwreset/issue', async (req, res) => {
@@ -77,42 +74,45 @@ router.post('/help/pwreset/issue', async (req, res) => {
     const token = req.body.token;
     const result = await UserController.issueNewPw(id, token);
     console.log(result);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.post('/upload/test', upload.single('upload'), (req, res) => {  
     console.log(path.resolve(__dirname, `../../public/uploads/${req.file.filename.toLowerCase()}`));
-    res.send({
+    res.status(201).send({
         "uploaded": true,
         "url": `${process.env.DEV_DOMAIN}/uploads/${req.file.filename.toLowerCase()}`
     })
 })
 
 router.get('/post/:num', async (req, res) => {
-    const article = await PostController.getArticle(req.params.num, req.session, req.query.newGet);
-    res.send(article);
+    const result = await PostController.getArticle(req.params.num, req.session, req.query.newGet);
+    res.status(result.status).send(result.data);
 })
 
 router.get('/post', async (req, res) => {
-    console.log(req.query);
-    const posts = await PostController.getPosts(req.query);
-    res.send(posts);
+    const result = await PostController.getPosts(req.query);
+    res.status(result.status).send(result.data);
+})
+
+router.get('/search', async (req, res) => {
+    const result = await PostController.getPosts(req.query);
+    res.status(result.status).send(result.data);
 })
 
 router.post('/post', upload.none(), async (req, res) => {
     const result = await PostController.createPost(req.body, req.session);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.put('/post', upload.none(), async (req, res) => {
     const result = await PostController.updatePost(req.body, req.session);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.delete('/post', async (req, res) => {
     const result = await PostController.deletePost(req.query.id, req.query.category, req.session);
-    console.log(result);
-    res.send(result);
+    res.status(result.status).send(result.data);
 })
 
 router.get('/info*', (req, res) => {
@@ -121,42 +121,34 @@ router.get('/info*', (req, res) => {
 })
 
 router.get('/modify/:num', async (req, res) => {
-    if(!req.params || !req.session.userid) {
-        res.redirect('/');
-        return null;
-    }
     const result = await PostController.authModify(req.params.num, req.session);
-    if (!result) res.redirect('/');
+    if (result.status != 200) res.status(result.status).redirect(result.data.url);
+    else res.status(result.status).sendFile(index);
 })
 
 router.post('/reply', upload.none(), async (req, res) => {
     const result = await ReplyController.createReply(req.body, req.session);
-    res.send(result);
+    res.status(result.status).send();
 })
 
 router.get('/reply', async (req, res) => {
-    const replies = await ReplyController.getReplies(req.query.post_id, req.session);
-    res.send(replies);
+    const result = await ReplyController.getReplies(req.query.post_id, req.session);
+    res.status(result.status).send(result.data);
 })
 
 router.put('/reply', upload.none(), async (req, res) => {
     const result = await ReplyController.updateReply(req.body, req.session);
-    res.send(result);
+    res.status(result.status).send();
 })
 
 router.delete('/reply', async (req, res) => {
     const result = await ReplyController.deleteReply(req.query.id, req.session);
-    res.send(result);
-})
-
-router.get('/search', async (req, res) => {
-    const result = await PostController.getPosts(req.query);
-    res.send(result);
+    res.status(result.status).send();
 })
 
 router.get('/recentposts', async (req, res) => {
     const posts = await PostController.recentPosts();
-    res.send(posts);
+    res.status(200).send(posts);
 })
 
 router.get('/login', (req, res) => {

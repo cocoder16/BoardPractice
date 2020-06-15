@@ -24,6 +24,9 @@ class ReplyContainer extends Component {
             const tar = document.querySelectorAll(`li[data-id="${replyForm.id}"]`)[0];
             this.focusingForm(replyForm.space, tar);
         }
+        if (prevProps.isLoggedIn != this.props.isLoggedIn) {
+            this.props.getReplies(location.pathname.split('/article/')[1]);
+        }
     }
 
     componentWillUnmount () {
@@ -47,26 +50,20 @@ class ReplyContainer extends Component {
         const formData = new FormData();
         formData.append('contents', contents);
 
-        let result;
         if (unshown == 0) {
             formData.append('post_id', location.pathname.split('/article/')[1]);
             formData.append('depth', replyForm.depth);
             formData.append('parent_id', replyForm.id);
-            result = await createReply(formData);
+            await createReply(formData);
         } else {
             formData.append('id', replyForm.id);
-            result = await updateReply(formData);
+            await updateReply(formData);
         }
-        console.log(result);
 
-        if (result) {
-            document.querySelector('.reply-form .contents').value = '';
-            this.props.clear();
-            this.props.getReplies(location.pathname.split('/article/')[1]);
-            this.props.replyCountUp();
-        } else {
-            alert('registering reply is failed.');
-        }
+        document.querySelector('.reply-form .contents').value = '';
+        this.props.clear();
+        this.props.getReplies(location.pathname.split('/article/')[1]);
+        this.props.replyCountUp();
     }
 
     loadReplyForm = (e) => {
@@ -136,13 +133,10 @@ class ReplyContainer extends Component {
 
     onDelete = async (e) => {
         e.preventDefault();
-        const result = await deleteReply(e.target.getAttribute('data-id'));
-        if (result) {
-            this.props.clear();
-            this.props.getReplies(location.pathname.split('/article/')[1]);
-        } else {
-            alert('Deleting reply is failed.');
-        }
+        await deleteReply(e.target.getAttribute('data-id'));
+
+        this.props.clear();
+        this.props.getReplies(location.pathname.split('/article/')[1]);
     }
 
     clear = () => {

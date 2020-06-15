@@ -1,5 +1,6 @@
 import Post from '../models/post';
 import '../../modules/DateFormat';
+import Exception from './Exception';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
@@ -27,9 +28,11 @@ class Read {
         .select('id title author read_count reply_count created_at')
         .sort({id: -1}).skip(skip).limit(per*1).then(posts => {
             Converter.mappingPostsTime(posts);
-            if (posts.length == 0 && skip != 0) return {result: false, url: '/'};
-            return {result: true, max, posts};
-        }).catch(err => console.log(err));
+            if (posts.length == 0 && skip != 0) return { status: 404 };
+            return { status: 200, data: { max, posts }};
+        }).catch(err => {
+            return Exception._400(err, '#### catch : deletePost failed ####');
+        });
     }
 
     static async recentsPosts (filter) {
@@ -54,21 +57,26 @@ class PostController {
         });
         console.log(newPost);
         return newPost.save().then(res => {
+            console.log('#### new Post ####');
             console.log(res);
-            return {result: true, url: `/article/${res.id}`};
+            return { status: 201, data: { url: `/article/${res.id}` }};
+        }).catch(err => {
+            return Exception._400(err, '#### catch : createPost failed ####');
         });
     }
 
     static async updatePost (formData, session) {
-        return Post.updateOne({ id: formData.id, author_id: session.userid }, {$set: {
+        return Post.updateOne({ id: formData.id, author_id: session.userid }, { $set: {
             title: formData.title, 
             contents: formData.contents, 
             updated_at: new Date().format('yy-MM-dd HH:mm:ss')
         }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
-            if (res.n == 0) return { result: false, url: '/' };
-            else return { result: true, url: `/article/${formData.id}` };
+            if (res.n == 0) return { status: 401 };
+            else return { status: 200, data: { url: `/article/${formData.id}` }};
+        }).catch(err => {
+            return Exception._400(err, '#### catch : updatePost failed ####');
         });
     }
 
@@ -76,21 +84,25 @@ class PostController {
         console.log('### del ###');
         console.log(id);
         console.log(session.userid);
-        return Post.updateOne({id: id, author_id: session.userid}, {$set: {
+        return Post.updateOne({ id, author_id: session.userid }, { $set: {
             is_deleted: true, 
             updated_at: new Date().format('yy-MM-dd HH:mm:ss')
         }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
-            if (res.n == 1) return {result: true, url: `/${category}`};
-            else return {result: false, url: '/'};            
-        })
+            if (res.n == 0) return { status: 401 };
+            else return { status: 200, data: { result: true, url: `/${category}` }};            
+        }).catch(err => {
+            return Exception._400(err, '#### catch : deletePost failed ####');
+        });
     }
 
     static async authModify (id, session) {
-        return Post.find({id: id}).then(post => {
-            if (post[0].author_id == session.userid) return true;
-            else return false;
+        return Post.find({ id }).then(post => {
+            if (post[0].author_id == session.userid) return { status: 200 };
+            else return { status: 404, data: { url: '/' }};
+        }).catch(err => {
+            return Exception._400URL(err, '#### catch : authModify failed ####', '/');
         })
     }
 
@@ -99,7 +111,7 @@ class PostController {
         
         const category = Converter.CategoryStrToNum(query.category);
 
-        let filter = {category, is_deleted: false};
+        let filter = { category, is_deleted: false };
         
         //search인 경우에 필터내용추가
         if (query.type) {
@@ -109,13 +121,13 @@ class PostController {
                     tempFilter = { title: new RegExp(query.keyword) }; 
                     break;
                 case '1' :
-                    tempFilter = { $or: [ {title: new RegExp(query.keyword)}, {contents: new RegExp(query.keyword)} ] };
+                    tempFilter = { $or: [{ title: new RegExp(query.keyword) }, { contents: new RegExp(query.keyword) }]};
                     break;
                 case '2' :
                     tempFilter = { author: new RegExp(query.keyword) };
                     break;
             }
-            filter = {category, is_deleted: false, ...tempFilter}
+            filter = { ...filter, ...tempFilter }
         }
         
         const per = query.per*1;
@@ -135,29 +147,33 @@ class PostController {
         console.log('#### getArticle ####');
         console.log(newGet);
         if (newGet == 1) {
-            await Post.updateOne({id: num}, {$inc: {
+            await Post.updateOne({ id: num }, {$inc: {
                 read_count: 1
             }}).then(res => {
                 console.log(res);
+            }).catch(err => {
+                return Exception._400(err, '#### catch : authModify failed ####');
             });
         }
-        return Post.find({id: num, is_deleted: false})
+        return Post.find({ id: num, is_deleted: false })
         .select('id category title contents author author_id read_count reply_count created_at').then(posts => {
-            if (posts.length == 0) return {result: false, url: '/'};
+            if (posts.length == 0) return { status: 404 };
             let auth = false;
             if (session.userid) {
                 if (posts[0].author_id == session.userid) auth = true;
             }
             posts[0]._doc.auth = auth;
             console.log(posts[0]);
-            return {result: true, article: posts[0]};
+            return { status: 200, data: { article: posts[0] }};
+        }).catch(err => {
+            return Exception._400(err, '#### catch : authModify failed ####');
         });
     }
 
     static async recentPosts () {
         let qnaArr, forumArr;
-        qnaArr = await Read.recentsPosts({category: 0, is_deleted: false});
-        forumArr = await Read.recentsPosts({category: 1, is_deleted: false});
+        qnaArr = await Read.recentsPosts({ category: 0, is_deleted: false });
+        forumArr = await Read.recentsPosts({ category: 1, is_deleted: false });
         return { qnaArr, forumArr }
     }
 }

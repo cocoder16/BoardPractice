@@ -2,15 +2,17 @@ import Reply from '../models/reply';
 import Post from '../models/post';
 import '../../modules/DateFormat';
 import XSS from '../../modules/XSS';
+import Exception from './Exception';
 
 import MeasureRunTime from '../../modules/dev/MeasureRunTime';
 
 class ReplyController {
     static async createReply (formData, session) { 
         // -- 검사
+        if (!session.userid) return { status: 401 }
         const contents = XSS.Filter(formData.contents);
         // -- 통과
-        await Post.updateOne({id: formData.post_id}, {$inc: {
+        await Post.updateOne({ id: formData.post_id }, { $inc: {
             reply_count: 1
         }}).then(res => {
             console.log(res);
@@ -26,36 +28,42 @@ class ReplyController {
         console.log(newReply);
         return newReply.save().then(res => {
             console.log(res);
-            return {result: true};
+            return { status: 201 };
+        }).catch(err => {
+            return Exception._400(err, '#### catch : createReply failed ####');
         });
     }
 
     static async updateReply (formData, session) {
-        if (!session.userid) return {result: false};
+        if (!session.userid) return { status: 401 };
         console.log('#### update Reply ####');
         console.log(formData);
         console.log(session);
-        return Reply.updateOne({id: formData.id, author_id: session.userid}, {$set: {
+        return Reply.updateOne({ id: formData.id, author_id: session.userid }, { $set: {
             contents: formData.contents, 
             updated_at: new Date().format('yy-MM-dd HH:mm:ss')
         }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
-            if (res.n == 0) return {result: false};
-            else return {result: true};
+            if (res.n == 0) return { status: 401 };
+            else return { status: 200 };
+        }).catch(err => {
+            return Exception._400(err, '#### catch : updateReply failed ####');
         });
     }
 
     static async deleteReply (id, session) {
-        if (!session.userid) return {result: false};
-        return Reply.updateOne({id, author_id: session.userid}, {$set: {
+        if (!session.userid) return { status: 401 };
+        return Reply.updateOne({ id, author_id: session.userid }, { $set: {
             is_deleted: true,
             updated_at: new Date().format('yy-MM-dd HH:mm:ss')
         }}, (err, rawResponse) => {
             console.log(rawResponse);
         }).then(res => {
-            if (res.n == 0) return {result: false};
-            else return {result: true};
+            if (res.n == 0) return { status: 400 };
+            else return { status: 200 };
+        }).catch(err => {
+            return Exception._400(err, '#### catch : deleteReply failed ####');
         });
     }
 
@@ -92,7 +100,7 @@ class ReplyController {
             const newArr = [];
             for (let i = 0; i < lowArr.length; i++) {
                 // console.log('#### resort ####');
-                const newEle = searchParent( highArr, lowArr[i].id);
+                const newEle = searchParent(highArr, lowArr[i].id);
                 // console.log(`#### new Ele - ${i}####`);
                 // console.log(newEle);
                 newEle.unshift( lowArr[i]);
@@ -103,18 +111,21 @@ class ReplyController {
             return newArr;
         };
 
-        const maxDepth = await Reply.find({post_id: post_id}).sort({depth: -1}).limit(1).then(replies => {
+        const maxDepth = await Reply.find({ post_id }).sort({ depth: -1 }).limit(1).then(replies => {
             if (replies.length == 0) return -1;
             return replies[0].depth;
+        }).catch(err => {
+            return Exception._400(err, '#### catch : getReply failed ####');
         });
         // console.log('#### max Depth ####');
         // console.log(maxDepth);
+        if (maxDepth == { status: 404 }) return { status: 404 };
 
         console.log('#### post_id ####');
         console.log(post_id);
-        return Reply.find({post_id: post_id})
+        return Reply.find({ post_id })
         .select('id contents author author_id depth parent_id is_deleted created_at')
-        .sort({id: 1}).then(replies => {
+        .sort({ id: 1 }).then(replies => {
             console.log('#### replies ####');
             console.log(replies);
             const today = new Date().format('yy-MM-dd');
@@ -160,7 +171,6 @@ class ReplyController {
                 });
                 // console.log('#### replies ####');
                 // console.log(replies);
-                return replies;
             } else if (replies.length > 0 && maxDepth == 0) {
                 replies.map(cur => {
                     let auth = false;
@@ -172,8 +182,10 @@ class ReplyController {
                     else cur.created_at = cur.created_at.split(' ')[0]
                 });
             }
-            return replies;
-        }).catch(err => console.log(err));
+            return { status: 200, data: replies };
+        }).catch(err => {
+            return Exception._400(err, '#### catch : getReplies failed ####');
+        });
     }
 }
 

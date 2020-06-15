@@ -7,14 +7,11 @@ import { tryLogOut } from '~c/services/users';
 
 class UserContainer extends Component {
     handleLogOut = async () => {
-        const result = await tryLogOut();
-        console.log(result);
-        if (result) {
-            this.props.deleteUserInfo();
-            this.props.deleteUserWrote();
-            console.log(this.props.isLoggedIn);
-            window.location.replace('/');
-        }
+        await tryLogOut();
+
+        this.props.deleteUserInfo();
+        this.props.deleteUserWrote();
+        console.log(this.props.isLoggedIn);
     }
 
     render () {        

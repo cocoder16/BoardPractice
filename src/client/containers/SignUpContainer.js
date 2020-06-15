@@ -103,7 +103,7 @@ class SignUpContainer extends Component {
             const formData = new FormData();
             formData.append('pw', pw);
             const result = await deleteUser(formData);
-            if (result.result == true) {
+            if (result == true) {
                 alert('Your account is deleted.');
                 window.location.replace('/');
             } else {

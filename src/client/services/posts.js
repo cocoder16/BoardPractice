@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Exception from './Exception';
 
 export const createPost = (formData) => {
     axios({
@@ -7,13 +8,10 @@ export const createPost = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        if (res.data.result) {
-            window.location.replace(res.data.url);
-        } else {
-            window.location.replace(res.data.url);
-            console.log('!!!!!!! failed createPost !!!!!!!');
-        }
-    }).catch(err => console.log(err));
+        window.location.replace(res.data.url);
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'failed to create post...');
+    });
 }
 
 export const getPosts = (category, page, per) => {
@@ -21,13 +19,14 @@ export const getPosts = (category, page, per) => {
         method: 'get',
         url: '/post',
         params: {
-            category: category,
-            page: page,
-            per: per
+            category, page, per
         }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const updatePost = (formData) => {
@@ -37,13 +36,10 @@ export const updatePost = (formData) => {
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        if (res.data.result) {
-            window.location.replace(res.data.url);
-        } else {
-            window.location.replace(res.data.url);
-            console.log('!!!!!!! failed updatePost !!!!!!!');
-        }
-    }).catch(err => console.log(err));
+        window.location.replace(res.data.url);
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'failed to update post...');
+    });
 }
 
 export const deletePost = (id, category) => {
@@ -51,17 +47,13 @@ export const deletePost = (id, category) => {
         method: 'delete',
         url: '/post',
         params: {
-            id: id,
-            category: category
+            id, category
         }
     }).then(res => {
-        if (res.data.result) {
-            window.location.replace(res.data.url);
-        } else {
-            window.location.replace(res.data.url);
-            console.log('!!!!!! failed deletePost !!!!!!!');
-        }
-    }).catch(err => console.log(err));
+        window.location.replace(res.data.url);
+    }).catch(err => {
+        Exception.logAlertRedirect(err, 'failed to delete post...');
+    });
 }
 
 export const getArticle = (num, newGet) => {
@@ -75,7 +67,10 @@ export const getArticle = (num, newGet) => {
         }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const search = (category, type, keyword, page, per) => {
@@ -87,7 +82,10 @@ export const search = (category, type, keyword, page, per) => {
         }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        console.log(err);
+        Exception.basicRedirect();
+    });
 }
 
 export const recentPosts = () => {
