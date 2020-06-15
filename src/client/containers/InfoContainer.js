@@ -8,7 +8,7 @@ class InfoContainer extends Component {
     constructor (props) {
         super(props);
         console.log('a');
-        // this.getData();
+        this.getData();
     }
 
     componentDidMount() {
