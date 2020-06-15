@@ -10,7 +10,7 @@ class BoardContainer extends Component {
     constructor (props) {
         super(props);
         console.log('con');
-        this.getData();
+        // this.getData();
 
         this.goBackOnDelete = this.goBackOnDelete.bind(this); //왜 붙였지?
     }

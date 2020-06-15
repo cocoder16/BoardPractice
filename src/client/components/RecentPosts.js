@@ -9,14 +9,18 @@ const RecentPosts = ({
     console.log(posts);
     return (
         <Fragment>
-            <section>
-                <h2><Link to='/qna' className='link'>Q n A</Link></h2>
-                { onReady && <ArticleList posts={posts.qna}/> }
-            </section>
-            <section>
-                <h2><Link to='/forum' className='link'>Forum</Link></h2>
-                { onReady && <ArticleList posts={posts.forum}/> }
-            </section>
+            { onReady && 
+                <Fragment>
+                    <section>
+                        <h2><Link to='/qna' className='link'>Q n A</Link></h2>
+                        <ArticleList posts={posts.qna}/>
+                    </section>
+                    <section>
+                        <h2><Link to='/forum' className='link'>Forum</Link></h2>
+                        <ArticleList posts={posts.forum}/>
+                    </section>
+                </Fragment>
+            }
         </Fragment>
     );
 };

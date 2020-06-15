@@ -14,6 +14,15 @@ class App extends Component {
         window.addEventListener('resize', this.setDeviceType);
     }
 
+    shouldComponentUpdate () {
+        console.log('### App - shouldComponentUpdate');
+        return true;
+    }
+
+    componentDidUpdate () {
+        console.log('### App - componentDidUpdate');
+    }
+
     setDeviceType = () => {
         if (window.innerWidth > 992) this.props.setDeviceType(2);
         else if (window.innerWidth > 768) this.props.setDeviceType(1);

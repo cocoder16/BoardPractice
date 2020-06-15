@@ -8,7 +8,7 @@ class InfoContainer extends Component {
     constructor (props) {
         super(props);
         console.log('a');
-        this.getData();
+        // this.getData();
     }
 
     componentDidMount() {
@@ -32,7 +32,8 @@ class InfoContainer extends Component {
 
     getData () {
         if (location.pathname == '/info/posts' || location.pathname == '/info/replies') {
-            console.log('x');
+            console.log('# location.href');
+            console.log(location.href);
             const query = qs.parse(location.search);
             this.props.getUserWrote(location.pathname.split('/info/')[1], query);
         }
@@ -64,6 +65,7 @@ class InfoContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
+    board: state.board,
     posts: state.board.userPosts,
     replies: state.board.userReplies
 })

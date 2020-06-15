@@ -8,6 +8,7 @@ const DISPLAY_OFF = 'reply/DISPLAY_OFF';
 const LOAD_CONTENTS = 'reply/LOAD_CONTENTS';
 const ON_DELETE_MODE = 'reply/ON_DELETE_MODE';
 const CLEAR_REPLIES = 'reply/CLEAR_REPLIES';
+const PENDING_REPLIES = 'reply/PENDING_REPLIES';
 
 export const textChange = (value) => ({
     type: TEXT_CHANGE,
@@ -15,6 +16,7 @@ export const textChange = (value) => ({
 });
 export const clear = () => ({type: CLEAR});
 export const getReplies = (post_id) => async (dispatch, getState) => {
+    dispatch({type: PENDING_REPLIES})
     const replies = await serviceReplies.getReplies(post_id);
     console.log('getReplies');
     dispatch({
@@ -45,7 +47,8 @@ const initialState = {
     replies: [],
     replyForm: { space: null, id: 0, depth: 0, tarEle: null },
     unshown: 0,
-    deleteMode: 0
+    deleteMode: 0,
+    onPending: false
 };
 
 export default function reducer (state=initialState, action) {
@@ -56,7 +59,7 @@ export default function reducer (state=initialState, action) {
             return { ...state, contents: '', replyForm: { space: null, id: 0, depth: 0 },
                 unshown: 0, deleteMode: 0 };
         case GET_REPLIES :
-            return { ...state, replies: action.payload };
+            return { ...state, replies: action.payload, onPending: false };
         case LOAD_REPLY_FORM :
             return { ...state, replyForm: action.payload };
         case DISPLAY_OFF :
@@ -67,6 +70,8 @@ export default function reducer (state=initialState, action) {
             return { ...state, deleteMode: action.payload };
         case CLEAR_REPLIES :
             return { ...state, replies: [] };
+        case PENDING_REPLIES :
+            return { ...state, onPending: true };
         default :
             return state;
     }

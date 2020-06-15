@@ -43,7 +43,7 @@ const Article = ({
                     <button type='button' onClick={goBack}>Cancel</button>
                 </article>
             }
-            <ReplyContainer/>
+            { onReady && <ReplyContainer/> }
         </section>
     );
 };

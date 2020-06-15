@@ -147,30 +147,34 @@ class ReplyContainer extends Component {
     render() {
         const { handleTextChange, handleFormSubmit, loadReplyForm, onModifyMode,
             onDeleteMode, offDeleteMode, onDelete, clear } = this;
-        const { replies, isLoggedIn, replyForm, unshown, deleteMode } = this.props;
+        const { replies, isLoggedIn, replyForm, unshown, deleteMode, onPending } = this.props;
 
         return (
             <Fragment>
-                <ReplyList 
-                    replies={replies} 
-                    loadReplyForm={loadReplyForm} 
-                    replyForm={replyForm}
-                    handleTextChange={handleTextChange} 
-                    handleFormSubmit={handleFormSubmit}
-                    clear={clear}
-                    onModifyMode={onModifyMode}
-                    unshown={unshown}
-                    onDeleteMode={onDeleteMode}
-                    deleteMode={deleteMode}
-                    offDeleteMode={offDeleteMode}
-                    onDelete={onDelete}
-                />
-                { (isLoggedIn && replyForm.depth == 0) && 
-                    <ReplyForm 
-                        onChange={handleTextChange} 
-                        onSubmit={handleFormSubmit}
-                        posibleCancel={false}
-                    /> 
+                { !onPending &&
+                    <Fragment>
+                        <ReplyList 
+                            replies={replies} 
+                            loadReplyForm={loadReplyForm} 
+                            replyForm={replyForm}
+                            handleTextChange={handleTextChange} 
+                            handleFormSubmit={handleFormSubmit}
+                            clear={clear}
+                            onModifyMode={onModifyMode}
+                            unshown={unshown}
+                            onDeleteMode={onDeleteMode}
+                            deleteMode={deleteMode}
+                            offDeleteMode={offDeleteMode}
+                            onDelete={onDelete}
+                        />
+                        { (isLoggedIn && replyForm.depth == 0) && 
+                            <ReplyForm 
+                                onChange={handleTextChange} 
+                                onSubmit={handleFormSubmit}
+                                posibleCancel={false}
+                            /> 
+                        }
+                    </Fragment>
                 }
             </Fragment>
         )
@@ -184,7 +188,8 @@ const mapStateToProps = (state) => ({
     replies: state.reply.replies,
     replyForm: state.reply.replyForm,
     unshown: state.reply.unshown,
-    deleteMode: state.reply.deleteMode
+    deleteMode: state.reply.deleteMode,
+    onPending: state.reply.onPending
 })
 
 //props값으로 넣어줄 액션 함수들 정의

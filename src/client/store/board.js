@@ -5,7 +5,7 @@ import * as serviceUsers from '~c/services/users';
 const SET_CATEGORY = 'board/SET_CATEGORY';
 const GET_POSTS = 'board/GET_POSTS';
 const GET_ARTICLE = 'board/GET_ARTICLE';
-const ARTICLE_PENDING = 'board/ARTICLE_PENDING';
+const PENDING_ARTICLE = 'board/PENDING_ARTICLE';
 const GET_DELETE_ALERT = 'board/GET_DELETE_ALERT';
 const SKIM_ON_DELETE = 'board/SKIM_ON_DELETE';
 const REPLY_COUNT_UP = 'board/REPLY_COUNT_UP';
@@ -67,7 +67,7 @@ export const search = (category, query) => async (dispatch, getState) => {
     document.querySelector('.input-search.keyword').value = query.keyword;
 };
 export const getArticle = (id) => async (dispatch, getState) => {
-    dispatch({type: ARTICLE_PENDING});
+    dispatch({type: PENDING_ARTICLE});
     let newGet = 0;
     console.log(id);
     console.log(sessionStorage.getItem('article-id'));
@@ -154,7 +154,7 @@ export default function reducer (state=initialState, action) {
             if (action.payload.article.category == 0) cate = 'qna';
             else if (action.payload.article.category == 1) cate = 'forum';
             return { ...state, category: cate, article: _article, articleOnReady: true };
-        case ARTICLE_PENDING :
+        case PENDING_ARTICLE :
             return { ...state, articleOnReady: false };
         case GET_DELETE_ALERT :
             return { ...state, onDelete: true };
