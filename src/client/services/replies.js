@@ -42,12 +42,12 @@ export const updateReply = (formData) => {
     });
 }
 
-export const deleteReply = (id) => {
+export const deleteReply = (id, post_id) => {
     return axios({
         method: 'delete',
         url: '/reply',
         params: { 
-            id 
+            id, post_id
         }
     }).then(res => {
         return true

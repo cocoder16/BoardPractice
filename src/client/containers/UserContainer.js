@@ -9,6 +9,10 @@ class UserContainer extends Component {
     handleLogOut = async () => {
         await tryLogOut();
 
+        if (location.pathname.split('/')[1] == 'info') {
+            location.replace('/');
+        }
+
         this.props.deleteUserInfo();
         this.props.deleteUserWrote();
         console.log(this.props.isLoggedIn);

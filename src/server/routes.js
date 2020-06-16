@@ -165,7 +165,7 @@ router.put('/reply', upload.none(), async (req, res) => {
 
 router.delete('/reply', async (req, res) => {
     console.log('#### delete /reply ####');
-    const result = await ReplyController.deleteReply(req.query.id, req.session);
+    const result = await ReplyController.deleteReply(req.query, req.session);
     res.status(result.status).send();
 })
 

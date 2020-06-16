@@ -52,7 +52,14 @@ class ReplyController {
         });
     }
 
-    static async deleteReply (id, session) {
+    static async deleteReply (query, session) {
+        const { id, post_id } = query;
+        console.log(id, post_id);
+        Post.updateOne({id: post_id}, { $inc: {
+            reply_count: -1
+        }}, (err, raw) => {
+            console.log(raw);
+        })
         if (!session.userid) return { status: 401 };
         return Reply.updateOne({ id, author_id: session.userid }, { $set: {
             is_deleted: true,

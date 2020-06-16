@@ -69,7 +69,7 @@ export default function reducer (state=initialState, action) {
         case ON_DELETE_MODE :
             return { ...state, deleteMode: action.payload };
         case CLEAR_REPLIES :
-            return { ...state, replies: [] };
+            return { ...state, replies: [], replyForm: { space: null, id: 0, depth: 0, tarEle: null } };
         case PENDING_REPLIES :
             return { ...state, onPending: true };
         default :

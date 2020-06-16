@@ -3,12 +3,12 @@ import { ArticleList } from './index';
 import PaginationContainer from '~c/containers/PaginationContainer';
 
 const BoardBody = ({
-    onReady, posts
+    posts
 }) => {
     return (
         <Fragment>
             <section>
-                { onReady && <ArticleList posts={posts}/> }
+                <ArticleList posts={posts}/>
             </section>
             <PaginationContainer/>
         </Fragment>

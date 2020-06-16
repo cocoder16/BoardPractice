@@ -5,10 +5,11 @@ import * as serviceUsers from '~c/services/users';
 const SET_CATEGORY = 'board/SET_CATEGORY';
 const GET_POSTS = 'board/GET_POSTS';
 const GET_ARTICLE = 'board/GET_ARTICLE';
-const PENDING_ARTICLE = 'board/PENDING_ARTICLE';
 const GET_DELETE_ALERT = 'board/GET_DELETE_ALERT';
 const SKIM_ON_DELETE = 'board/SKIM_ON_DELETE';
 const REPLY_COUNT_UP = 'board/REPLY_COUNT_UP';
+const REPLY_COUNT_DOWN = 'board/REPLY_COUNT_DOWN';
+
 const SET_SEARCH_TYPE = 'board/SET_SEARCH_TYPE';
 const SET_SEARCH_KEYWORD = 'board/SET_SEARCH_KEYWORD';
 const GET_SEARCH = 'board/GET_SEARCH';
@@ -16,6 +17,8 @@ const GET_USER_WROTE = 'board/GET_USER_WROTE';
 const DELETE_USER_WROTE = 'board/DELTE_USER_WROTE';
 const RECENT_POSTS = 'board/RECENT_POSTS';
 const ON_PENDING = 'board/ON_PENDING';
+const OFF_PENDING = 'board/OFF_PENDING';
+const CLEAR_ARTICLE = 'board/CLEAR_ARTICLE';
 
 //function creating action
 export const getPosts = (category, query) => async (dispatch, getState) => {
@@ -67,7 +70,6 @@ export const search = (category, query) => async (dispatch, getState) => {
     document.querySelector('.input-search.keyword').value = query.keyword;
 };
 export const getArticle = (id) => async (dispatch, getState) => {
-    dispatch({type: PENDING_ARTICLE});
     let newGet = 0;
     console.log(id);
     console.log(sessionStorage.getItem('article-id'));
@@ -86,6 +88,8 @@ export const deletePost = (id) => async (dispatch, getState) => {
     dispatch({type: SKIM_ON_DELETE});
 };
 export const replyCountUp = () => ({type: REPLY_COUNT_UP});
+export const replyCountDown = () => ({type: REPLY_COUNT_DOWN});
+
 export const setSearchType = (val) => ({
     type: SET_SEARCH_TYPE,
     payload: val
@@ -108,9 +112,6 @@ export const getUserWrote = (type, query) => async (dispatch, getState) => {
 };
 export const deleteUserWrote = () => ({type: DELETE_USER_WROTE});
 export const getRecentPosts = () => async (dispatch, getState) => {
-    dispatch({
-        type: ON_PENDING
-    })
     const posts = await servicePosts.recentPosts();
     console.log('recent posts');
     console.log(posts);
@@ -119,14 +120,16 @@ export const getRecentPosts = () => async (dispatch, getState) => {
         payload: posts
     })
 }
+export const pending = () => ({type: ON_PENDING});
+export const pendingOff = () => ({type: OFF_PENDING});
+export const clearArticle = () => ({type: CLEAR_ARTICLE});
 
 //module's initial state
 const initialState = {
     category: '',
     posts: [],
-    listOnReady: false,
+    onPending: false,
     article: {},
-    articleOnReady: false,
     onDelete: false,
     per: 20,
     now: 1,
@@ -143,25 +146,25 @@ const initialState = {
 export default function reducer (state=initialState, action) {
     switch (action.type) {
         case SET_CATEGORY :
-            return { ...state, category: action.payload, listOnReady: false };
+            return { ...state, category: action.payload };
         case GET_POSTS :
             return { ...state, posts: [ ...action.payload.posts ], now: action.payload.page,
-                max: action.payload.max, listOnReady: true };
+                max: action.payload.max, onPending: false };
         case GET_ARTICLE : 
             const _article = { ...action.payload.article };
             delete _article.category;
             let cate;
             if (action.payload.article.category == 0) cate = 'qna';
             else if (action.payload.article.category == 1) cate = 'forum';
-            return { ...state, category: cate, article: _article, articleOnReady: true };
-        case PENDING_ARTICLE :
-            return { ...state, articleOnReady: false };
+            return { ...state, category: cate, article: _article, onPending: false };
         case GET_DELETE_ALERT :
             return { ...state, onDelete: true };
         case SKIM_ON_DELETE :
             return { ...state, onDelete: false };
         case REPLY_COUNT_UP :
-            return { ...state, article: { ...state.article, reply_count: ++state.article.reply_count } };
+            return { ...state, article: { ...state.article, reply_count: ++state.article.reply_count }};
+        case REPLY_COUNT_DOWN :
+            return { ...state, article: { ...state.article, reply_count: --state.article.reply_count }};
         case SET_SEARCH_TYPE : 
             return { ...state, searchType: action.payload };
         case SET_SEARCH_KEYWORD :
@@ -177,9 +180,13 @@ export default function reducer (state=initialState, action) {
             return { ...state, userPosts: [], userReplies: [] }
         case RECENT_POSTS :
             return { ...state, recentPosts: { qna: [ ...action.payload.qnaArr ], forum: [ ...action.payload.forumArr ] },
-                listOnReady: true }
+                onPending: false }
         case ON_PENDING :
-            return { ...state, listOnReady: false }
+            return { ...state, onPending: true }
+        case OFF_PENDING :
+            return { ...state, onPending: false }
+        case CLEAR_ARTICLE :
+            return { ...state, article: {}}
         default :
             return state;
     }

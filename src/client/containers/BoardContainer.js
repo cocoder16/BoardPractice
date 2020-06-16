@@ -10,43 +10,63 @@ class BoardContainer extends Component {
     constructor (props) {
         super(props);
         console.log('con');
-        this.getData();
 
-        this.goBackOnDelete = this.goBackOnDelete.bind(this); //왜 붙였지?
+        this.goBackOnDelete = this.goBackOnDelete.bind(this); 
+    }
+
+    shouldComponentUpdate (nextProps, nextState) {
+        console.log('#### Board - should component update ####');
+        console.log(this.props.onDelete);
+        console.log(nextProps.onDelete);
+        console.log(this.props.onPending);
+        console.log(nextProps.onPending);
+        if (!this.props.onDelete && nextProps.onDelete) {
+            console.log('delete xxxxxxx');
+            return true;
+        }
+
+        if (this.props.searchType != nextProps.searchType
+            || this.props.searchKeyword != nextProps.searchKeyword) {
+
+            return false;
+        }
+
+        if (nextProps.onPending) {
+            return false;
+        } 
+        return true;
     }
 
     componentDidMount() {
-        this.unlisten = this.props.history.listen((location, action) => { //링크 이동시 호출하려고, componentDidUpdate에서 호출하면 무한루프
-            console.log("on route change");
-            console.log(location.pathname);
-            console.log(location.search);
-            console.log(history);
-            this.getData();
-        });
-    }
-
-    componentWillUnmount() {
-        this.unlisten();
+        this.getData();
     }
 
     componentDidUpdate (prevProps) {
-        if (prevProps.isLoggedIn != this.props.isLoggedIn
-            && (location.pathname.split('/')[1] == 'article'
-            || location.pathname.split('/')[1] == 'modify'
-            || location.pathname.split('/')[1] == 'delete')) {
+        console.log('#### Board - component did update ####');
+
+        if (!(prevProps.onPending && !this.props.onPending)
+            || location.pathname.split('/')[1] == 'delete') { // delete만 onPending 안씀.
             this.getData();
         }
+        
         const menu = document.querySelector('.sidebar .menu');
         menu.classList.remove('show');
+    }
+
+    preGetData = () => {
+        this.props.pending();
+        this.props.clearArticle();
     }
 
     getData = () => {
         if (location.pathname == '/') {
             this.props.getRecentPosts();
+            this.preGetData();
             sessionStorage.clear('article-id');
         } else if (location.pathname == '/qna' || location.pathname == '/forum') {
             const query = qs.parse(location.search);
-            const category = location.pathname.split('/')[1]
+            const category = location.pathname.split('/')[1];
+            this.preGetData();
             if (query.type && query.keyword) {
                 console.log(query);                
                 this.props.search(category, query);
@@ -54,10 +74,12 @@ class BoardContainer extends Component {
                 this.props.getPosts(category, query);
             }
             sessionStorage.clear('article-id');
-        } else if (location.pathname.split('/')[1] == 'article') {
+        } else if (location.pathname.split('/')[1] == 'article') { 
             console.log('getData');
+            this.preGetData();
             this.props.getArticle(location.pathname.split('/article/')[1]);
         } else if (location.pathname.split('/')[1] == 'modify') {
+            this.props.pending();
             this.props.getArticle(location.pathname.split('/modify/')[1]);
         } else if (location.pathname.split('/')[1] == 'delete') {
             this.props.getDeleteAlert();
@@ -65,7 +87,9 @@ class BoardContainer extends Component {
     }
 
     goBackOnDelete = () => {
+        console.log('skim s');
         this.props.skimOnDelete();
+        console.log('skim');
         this.props.history.goBack();
     }
 
@@ -84,7 +108,7 @@ class BoardContainer extends Component {
     }
 
     render () {
-        const { category, isLoggedIn, listOnReady, posts, articleOnReady, article, isModify, onDelete, 
+        const { category, isLoggedIn, onPending, posts, article, isModify, onDelete, 
             searchType, searchKeyword, recentPosts } = this.props;
         const { goBackOnDelete, handleDeletePost, handleChangeSearchType, handleChangeSearchKeyword } = this;
 
@@ -94,7 +118,7 @@ class BoardContainer extends Component {
         return (
             <Fragment>
                 { isHome 
-                    ? <RecentPosts posts={recentPosts} onReady={listOnReady}/>
+                    ? <RecentPosts posts={recentPosts} onReady={!onPending}/>
                     :
                     <Fragment>
                         <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify} 
@@ -103,25 +127,29 @@ class BoardContainer extends Component {
                             onChangeSearchKeyword={handleChangeSearchKeyword}
                         />
                         <Switch>
-                            <Route exact path='/qna'
-                                render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
-                            />
-                            <Route exact path='/forum'
-                                render={() => <BoardBody onReady={listOnReady} posts={posts}/>}
-                            />
-                            <Route path='/article'
-                                render={() => <Article onReady={articleOnReady} article={article} auth={article.auth}
-                                    id={article.id}
-                                />}
-                            />
-                            <Route exact path='/write' component={WriteContainer}/>
-                            <Route path='/modify' component={WriteContainer}/>
-                            <Route path='/delete'
-                                render={() => <Article auth={article.auth} onDelete={onDelete} 
-                                    goBack={goBackOnDelete}
-                                    deletePost={handleDeletePost}
-                                />}
-                            />
+                            { !onPending &&
+                                <Fragment>
+                                    <Route exact path='/qna'
+                                        render={() => <BoardBody posts={posts}/>}
+                                    />
+                                    <Route exact path='/forum'
+                                        render={() => <BoardBody posts={posts}/>}
+                                    />
+                                    <Route path='/article'
+                                        render={() => <Article article={article} auth={article.auth}
+                                            id={article.id}
+                                        />}
+                                    />
+                                    <Route exact path='/write' component={WriteContainer}/>
+                                    <Route path='/modify' component={WriteContainer}/>
+                                    <Route path='/delete'
+                                        render={() => <Article article={article} auth={article.auth} onDelete={onDelete} 
+                                            goBack={goBackOnDelete}
+                                            deletePost={handleDeletePost}
+                                        />}
+                                    />
+                                </Fragment>
+                            }
                         </Switch>
                     </Fragment>
                 }
@@ -134,14 +162,13 @@ const mapStateToProps = (state) => ({
     category: state.board.category,
     isLoggedIn: state.userInfo.isLoggedIn,
     posts: state.board.posts,
-    listOnReady: state.board.listOnReady,
     article: state.board.article,
-    articleOnReady: state.board.articleOnReady,
     isModify: state.write.isModify,
     onDelete: state.board.onDelete,
     searchType: state.board.searchType,
     searchKeyword: state.board.searchKeyword,
-    recentPosts: state.board.recentPosts
+    recentPosts: state.board.recentPosts,
+    onPending: state.board.onPending
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -153,7 +180,9 @@ const mapDispatchToProps = (dispatch) => ({
     setSearchType: (val) => dispatch(boardActions.setSearchType(val)),
     setSearchKeyword: (val) => dispatch(boardActions.setSearchKeyword(val)),
     search: (cate, query) => dispatch(boardActions.search(cate, query)),
-    getRecentPosts: () => dispatch(boardActions.getRecentPosts())
+    getRecentPosts: () => dispatch(boardActions.getRecentPosts()),
+    pending: () => dispatch(boardActions.pending()),
+    clearArticle: () => dispatch(boardActions.clearArticle())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);

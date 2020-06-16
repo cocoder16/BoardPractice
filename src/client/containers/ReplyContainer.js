@@ -14,15 +14,24 @@ class ReplyContainer extends Component {
         this.props.getReplies(location.pathname.split('/article/')[1]);
     }
 
+    shouldComponentUpdate (nextProps) {
+        console.log('#### Reply - should component update ####');
+        return true;
+    }
+
     componentDidUpdate (prevProps, prevState) {
-        const { unshown, replyForm, contents } = this.props;
+        console.log('#### Reply - componentDidUpdate ####');
+        const { unshown, replyForm, contents, deleteMode } = this.props;
         if (prevProps.unshown != unshown) {
-            console.log('componentDidUpdate');
             document.querySelector('.reply-form .contents').value = this.props.contents;
         }
-        if (replyForm.space !== null && (prevProps.contents == contents || prevProps.unshown != 0 && unshown == 0)) {
-            const tar = document.querySelectorAll(`li[data-id="${replyForm.id}"]`)[0];
-            this.focusingForm(replyForm.space, tar);
+        if (replyForm.space !== null && (prevProps.contents == contents 
+            || prevProps.unshown != 0 && unshown == 0)) {
+
+            if (prevProps.deleteMode == deleteMode || deleteMode == 0) { //삭제인 경우에는 포커싱 패스.
+                const tar = document.querySelectorAll(`li[data-id="${replyForm.id}"]`)[0];
+                this.focusingForm(replyForm.space, tar);
+            }
         }
         if (prevProps.isLoggedIn != this.props.isLoggedIn) {
             this.props.getReplies(location.pathname.split('/article/')[1]);
@@ -55,6 +64,7 @@ class ReplyContainer extends Component {
             formData.append('depth', replyForm.depth);
             formData.append('parent_id', replyForm.id);
             await createReply(formData);
+            this.props.replyCountUp();
         } else {
             formData.append('id', replyForm.id);
             await updateReply(formData);
@@ -63,7 +73,6 @@ class ReplyContainer extends Component {
         document.querySelector('.reply-form .contents').value = '';
         this.props.clear();
         this.props.getReplies(location.pathname.split('/article/')[1]);
-        this.props.replyCountUp();
     }
 
     loadReplyForm = (e) => {
@@ -95,6 +104,7 @@ class ReplyContainer extends Component {
         this.clearFocusingForm();
         window.location.replace(`${location.pathname}#comment_${space}`);
         if (idTarget) idTarget.classList.add('active');
+        document.querySelector('.reply-form textarea').focus();
     }
 
     clearFocusingForm () {
@@ -133,10 +143,13 @@ class ReplyContainer extends Component {
 
     onDelete = async (e) => {
         e.preventDefault();
-        await deleteReply(e.target.getAttribute('data-id'));
+        const articleNum = location.pathname.split('/article/')[1];
+        await deleteReply(e.target.getAttribute('data-id'), articleNum);
 
         this.props.clear();
-        this.props.getReplies(location.pathname.split('/article/')[1]);
+        this.props.getReplies(articleNum);
+        this.props.replyCountDown();
+
     }
 
     clear = () => {
@@ -189,7 +202,7 @@ const mapStateToProps = (state) => ({
     replyForm: state.reply.replyForm,
     unshown: state.reply.unshown,
     deleteMode: state.reply.deleteMode,
-    onPending: state.reply.onPending
+    onPending: state.reply.onPending,
 })
 
 //props값으로 넣어줄 액션 함수들 정의
@@ -202,7 +215,8 @@ const mapDispatchToProps = (dispatch) => ({
     loadContents: (contents) => dispatch(replyActions.loadContents(contents)),
     onDeleteMode: (id) => dispatch(replyActions.onDeleteMode(id)),
     clearReplies: () => dispatch(replyActions.clearReplies()),
-    replyCountUp: () => dispatch(boardActions.replyCountUp())
+    replyCountUp: () => dispatch(boardActions.replyCountUp()),
+    replyCountDown: () => dispatch(boardActions.replyCountDown()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReplyContainer);

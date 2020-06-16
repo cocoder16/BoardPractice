@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { WriteForm } from '~c/components';
 import * as writeActions from '~c/store/write';
+import * as boardActions from '~c/store/board';
 import { createPost, updatePost } from '~c/services/posts';
 
 class WriteContainer extends Component {
@@ -15,13 +16,12 @@ class WriteContainer extends Component {
             this.props.setIsModify(true);
         }
 
-        this.goBack = this.goBack.bind(this); //왜
+        this.goBack = this.goBack.bind(this);
     }
 
     componentDidUpdate (prevProps, prevState) {
-        console.log(prevProps.articleOnReady);
-        console.log(this.props.articleOnReady);
-        if ((!prevProps.articleOnReady && this.props.articleOnReady && this.props.isModify)) {
+        console.log('#### Write - component did update ####')
+        if ((prevProps.onPending && !this.props.onPending && this.props.isModify)) {
             document.getElementsByName('title')[0].value = this.props.article.title;
             this.props.setInputValue({title: this.props.article.title, contents: this.props.article.contents});
         }
@@ -31,10 +31,12 @@ class WriteContainer extends Component {
         console.log("on clear");
         this.props.setIsModify(false);
         this.props.clear();
+        this.props.pendingOff();
     }
 
     goBack = () => {
         this.props.clear();
+        this.props.pendingOff();
         this.props.history.goBack();
     }
 
@@ -95,7 +97,7 @@ class WriteContainer extends Component {
 
 const mapStateToProps = (state) => ({
     article: state.board.article,
-    articleOnReady: state.board.articleOnReady,
+    onPending: state.board.onPending,
 
     category: state.board.category,
     isModify: state.write.isModify,
@@ -107,7 +109,8 @@ const mapDispatchToProps = (dispatch) => ({
     inputChange: (payload) => dispatch(writeActions.inputChange(payload)),
     setIsModify: (isModify) => dispatch(writeActions.setIsModify(isModify)),
     clear: () => dispatch(writeActions.clear()),
-    setInputValue: (payload) => dispatch(writeActions.setInputValue(payload))
+    setInputValue: (payload) => dispatch(writeActions.setInputValue(payload)),
+    pendingOff: () => dispatch(boardActions.pendingOff())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(WriteContainer);
