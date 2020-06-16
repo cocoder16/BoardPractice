@@ -136,7 +136,7 @@ const initialState = {
     searchKeyword: '',
     userPosts: [],
     userReplies: [],
-    recentPosts: { qna: [], forum: [] }
+    recentPosts: { qna: [], forum: [] },
 }
 
 //reducer

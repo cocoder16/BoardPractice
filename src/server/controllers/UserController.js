@@ -160,6 +160,8 @@ class UserController {
                     MeasureRunTime.end('findOneAndUpdate');
                     return { status: 201, data: { result: true }}
                 } else return { status: 200, data: { result: false }}
+            } else {
+                return { status: 200, data: { result: false }}
             }
         }).catch(err => {
             return Exception._400(err, '#### catch : logInDataCheck failed ####');

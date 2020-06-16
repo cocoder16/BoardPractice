@@ -18,6 +18,9 @@ class BoardContainer extends Component {
     componentDidMount() {
         this.unlisten = this.props.history.listen((location, action) => { //링크 이동시 호출하려고, componentDidUpdate에서 호출하면 무한루프
             console.log("on route change");
+            console.log(location.pathname);
+            console.log(location.search);
+            console.log(history);
             this.getData();
         });
     }
@@ -27,7 +30,10 @@ class BoardContainer extends Component {
     }
 
     componentDidUpdate (prevProps) {
-        if (prevProps.isLoggedIn != this.props.isLoggedIn) {
+        if (prevProps.isLoggedIn != this.props.isLoggedIn
+            && (location.pathname.split('/')[1] == 'article'
+            || location.pathname.split('/')[1] == 'modify'
+            || location.pathname.split('/')[1] == 'delete')) {
             this.getData();
         }
         const menu = document.querySelector('.sidebar .menu');
