@@ -24,9 +24,9 @@ export const getReplies = (post_id) => async (dispatch, getState) => {
         payload: replies
     });
 };
-export const loadReplyForm = (space, id, depth) => ({
+export const loadReplyForm = (space, id, depth, parent_nickname) => ({
     type: LOAD_REPLY_FORM,
-    payload: { space, id, depth }
+    payload: { space, id, depth, parent_nickname }
 });
 export const displayOff = (id) => ({
     type: DISPLAY_OFF,
@@ -45,7 +45,7 @@ export const clearReplies = () => ({type: CLEAR_REPLIES});
 const initialState = {
     contents: '',
     replies: [],
-    replyForm: { space: null, id: 0, depth: 0, tarEle: null },
+    replyForm: { space: null, id: 0, depth: 0, tarEle: null, parent_nickname: null },
     unshown: 0,
     deleteMode: 0,
     onPending: false
@@ -56,7 +56,7 @@ export default function reducer (state=initialState, action) {
         case TEXT_CHANGE :
             return { ...state, contents: action.payload };
         case CLEAR :
-            return { ...state, contents: '', replyForm: { space: null, id: 0, depth: 0 },
+            return { ...state, contents: '', replyForm: { space: null, id: 0, depth: 0, tarEle: null, parent_nickname: null },
                 unshown: 0, deleteMode: 0 };
         case GET_REPLIES :
             return { ...state, replies: action.payload, onPending: false };
@@ -69,7 +69,7 @@ export default function reducer (state=initialState, action) {
         case ON_DELETE_MODE :
             return { ...state, deleteMode: action.payload };
         case CLEAR_REPLIES :
-            return { ...state, replies: [], replyForm: { space: null, id: 0, depth: 0, tarEle: null } };
+            return { ...state, replies: [], replyForm: { space: null, id: 0, depth: 0, tarEle: null, parent_nickname: null } };
         case PENDING_REPLIES :
             return { ...state, onPending: true };
         default :

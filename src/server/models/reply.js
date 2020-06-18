@@ -10,6 +10,7 @@ const replySchema = new mongoose.Schema({
     author_id: { type: String, required: true, index: true },
     depth: { type: Number, default: 0 },
     parent_id: { type: Number, default: null },
+    parent_nickname: { type: String, default: null },
     is_deleted: { type: Boolean, default: false },
     created_at: { type: String, default: new Date().format('yy-MM-dd HH:mm:ss') },
     updated_at: { type: String, default: new Date().format('yy-MM-dd HH:mm:ss') }

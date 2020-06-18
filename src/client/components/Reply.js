@@ -32,7 +32,10 @@ const Reply = ({//id contents author author_id depth parent_id is_deleted create
                         <span>The reply was deleted.</span>
                     </div> :
                     <div className='contents' onClick={loadReplyForm}>
-                        {XSS.recover(reply.contents)}
+                        { reply.parent_nickname != null &&
+                            <span className='parent-nickname'>{reply.parent_nickname}&nbsp;</span>
+                        }
+                        <span className='body'>{XSS.recover(reply.contents)}</span>
                     </div>
                 }
                 { isDeleteMode && 

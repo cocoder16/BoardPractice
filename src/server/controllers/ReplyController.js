@@ -23,7 +23,8 @@ class ReplyController {
             author: session.usernickname,
             author_id: session.userid,
             depth: formData.depth,
-            parent_id: formData.parent_id
+            parent_id: formData.parent_id,
+            parent_nickname: formData.parent_nickname //없으면 error안뜨고 알아서 default값 들어가.
         });
         console.log(newReply);
         return newReply.save().then(res => {
@@ -75,120 +76,110 @@ class ReplyController {
     }
 
     static async getReplies (post_id, session) {
-        console.log('#### getReplies ####');
-        //lowArr, highArr 를 만드는 함수
-        const sameDepthArrGenerator = (arr, _depth) => {
-            const newArr = [];
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i].depth == _depth) newArr.push(arr[i]);
+        console.log('#### getReplies ####');        
+        MeasureRunTime.start('getReplies');
+
+        return Reply.find({ post_id })
+        .select('id contents author author_id depth parent_id parent_nickname is_deleted created_at')
+        .sort({ id: 1 }).then(replies => {
+            if (replies.length == 0) return { status: 200, data: []}
+
+            MeasureRunTime.start('Tree declaration');
+            //트리 생성 함수
+            const Tree = function (nodeValue) {
+                this.value = nodeValue;
+                this.children = [];
             }
-            return newArr;
-        }
-        //resort()를 보조하는 함수
-        const searchParent = (arr, parentId) => { //arr가 탐색대상 highArr
-            let newArr = [];
-            for (let i = 0; i < arr.length; i++) {
-                if (Array.isArray(arr[i])) {
-                    if (arr[i][0].parent_id == parentId) {
-                        newArr = [ ...newArr, ...arr[i] ];
-                    }
-                } else {
-                    if (arr[i].parent_id == parentId) {
-                        newArr = [ ...newArr, arr[i] ];
-                    }
+            
+            Tree.prototype.addChild = function (nodeValue) {
+                this.children.push(new Tree(nodeValue));
+            }
+
+            Tree.prototype.preOrderFindByIdAddChild = function preOrderFindByIdAddChild(id, child, node=this) {
+                if (!node) {
+                    return;
+                }
+                
+                if (node.value.id == id) {
+                    node.addChild(child)
+                    return;
+                }
+                for (let i = 0; i < node.children.length; i++) {
+                    node.children[i].preOrderFindByIdAddChild(id, child);
                 }
             }
-            // console.log('#### searchParent ####');
-            // console.log(newArr);
-            return newArr;
-        };
-        //댓글 depth고려해 재정렬 하기 위한 함수
-        const resort = (lowArr, highArr) => { //depth값이 lowArr + 1 = highArr
-            const newArr = [];
-            for (let i = 0; i < lowArr.length; i++) {
-                // console.log('#### resort ####');
-                const newEle = searchParent(highArr, lowArr[i].id);
-                // console.log(`#### new Ele - ${i}####`);
-                // console.log(newEle);
-                newEle.unshift( lowArr[i]);
-                // console.log('#### unshift ####');
-                // console.log(newEle);
-                newArr.push(newEle);
+            
+            Tree.prototype.preOrderTraversalResort = function preOrderTraversalResort(arr, node=this) {
+                if (!node) {
+                    return;
+                }
+                
+                arr.push(node.value);
+                for (let i = 0; i < node.children.length; i++) {
+                    node.children[i].preOrderTraversalResort(arr);
+                }
             }
-            return newArr;
-        };
+            MeasureRunTime.end('Tree declaration');
 
-        const maxDepth = await Reply.find({ post_id }).sort({ depth: -1 }).limit(1).then(replies => {
-            if (replies.length == 0) return -1;
-            return replies[0].depth;
-        }).catch(err => {
-            return Exception._400(err, '#### catch : getReply failed ####');
-        });
-        // console.log('#### max Depth ####');
-        // console.log(maxDepth);
-        if (maxDepth == { status: 404 }) return { status: 404 };
+            MeasureRunTime.start('replyIdArr');
+            const replyIdArr = replies.map(cur => {
+                return cur.id;
+            });
+            MeasureRunTime.end('replyIdArr');
 
-        console.log('#### post_id ####');
-        console.log(post_id);
-        return Reply.find({ post_id })
-        .select('id contents author author_id depth parent_id is_deleted created_at')
-        .sort({ id: 1 }).then(replies => {
-            console.log('#### replies ####');
-            console.log(replies);
+            MeasureRunTime.start('tree');
+            const root = (function () {
+                let maxDepth = -1;
+                const tree = new Tree({id:-999}); //있을수 없는 임의의 id 루트는 depth 0을 묶기위한 가상트리
+                for (let i = 0; i < replies.length; i++) {
+                    if (replies[i].depth == 0) {
+                        tree.addChild(replies[i]);
+                        continue;
+                    }
+                    const targetId = (function() {
+                        for (let j = 0; j < replyIdArr.length; j++) {
+                            if (replyIdArr[j] == replies[i].parent_id) {
+                                return replyIdArr[j];
+                            }
+                        }
+                    })();
+                    
+                    console.log('####found targetId : ', targetId);
+                    tree.preOrderFindByIdAddChild(targetId, replies[i]);
+                }
+
+                return tree;
+            })();
+            MeasureRunTime.end('tree');
+
+            console.log('#### root ####');
+            console.log(root);
+                
+            //원댓 순서대로 각 트리를 순회하면서 클라에 보낼 배열에 순서대로 담아준다.
+            MeasureRunTime.start('preOrderTraversalResort');
+            const orderedReplies = [];
+            root.preOrderTraversalResort(orderedReplies);
+            orderedReplies.shift(); //root는 원댓들을 묶는 가상 노드이므로 제거.
+            MeasureRunTime.end('preOrderTraversalResort');
+
+            console.log('#### orderedReplies ####');
+            console.log(orderedReplies);
+
             const today = new Date().format('yy-MM-dd');
-            //id낮은 순으로 정렬되어있는상태.
-            //depth의 max값을 구하고, 그 값에 해당하는 document들만 새 배열에 정렬함.
-            //한단계 위의 depth에 해당하는 document들만 다른 새 배열에 정렬함.
-            //max depth에 해당하는 document들의 parent_id에 해당하는 document를 찾아서 걔아래로 id낮은순으로 들어감.
-            //윗줄의 결과 예시 [[5, 6, 6, 6], [5], [5], [5, 6]] 원소값은 depth를 나타냄
-            //얘네를 원소 순서대로 다시 depth가 4인 document 배열에 들어감.
-            //[[4], [4, 5, 6, 6, 6], [4], [4, 5, 5], [4], [4], [4, 5, 6]] 이런식으로 반복
-            //최종적으로 [[1], [2], [3]] 이런꼴이 됨. mapping 할때 배열 풀어줌.
-            if (replies.length > 0 && maxDepth > 0) {
-                const highArr = sameDepthArrGenerator(replies, maxDepth);
 
-                const finalResort = (function resortMerger (depth, highArr) {
-                    // console.log('#### highArr ####');
-                    // console.log(highArr);
-                    const lowArr = sameDepthArrGenerator(replies, depth - 1);
-                    // console.log('#### lowArr ####');
-                    // console.log(lowArr);
-
-                    if (depth == 1) return resort(lowArr, highArr);
-                    return resortMerger (depth-1, resort(lowArr, highArr));
-                })(maxDepth, highArr);
-                // console.log('#### finalResort ####');
-                // console.log(finalResort);
-
-                // console.log('#### finalResort resolve ####');
-                replies = finalResort.reduce((acc, cur) => {
-                    return [ ...acc, ...cur ];
-                });
-
-                replies = replies.map(cur => {
-                    let auth = false;
-                    if (session.userid) {
-                        if (cur.author_id == session.userid) auth = true;
-                    }
-                    cur._doc.auth = auth;
-                    // console.log(cur);
-                    if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                    else cur.created_at = cur.created_at.split(' ')[0];
-                    return cur;
-                });
-                // console.log('#### replies ####');
-                // console.log(replies);
-            } else if (replies.length > 0 && maxDepth == 0) {
-                replies.map(cur => {
-                    let auth = false;
-                    if (session.userid) {
-                        if (cur.author_id == session.userid) auth = true;
-                    }
-                    cur._doc.auth = auth;
-                    if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
-                    else cur.created_at = cur.created_at.split(' ')[0]
-                });
-            }
+            MeasureRunTime.start('mapping');
+            replies = orderedReplies.map(cur => {
+                let auth = false;
+                if (session.userid) {
+                    if (cur.author_id == session.userid) auth = true;
+                }
+                cur._doc.auth = auth;
+                if (cur.created_at.search(today) != -1) cur.created_at = cur.created_at.split(' ')[1].substr(0, 5);
+                else cur.created_at = cur.created_at.split(' ')[0];
+                return cur;
+            });
+            MeasureRunTime.end('mapping');
+            MeasureRunTime.end('getReplies');
             return { status: 200, data: replies };
         }).catch(err => {
             return Exception._400(err, '#### catch : getReplies failed ####');

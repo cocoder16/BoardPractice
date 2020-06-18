@@ -9,6 +9,7 @@ class InfoContainer extends Component {
         super(props);
         console.log('a');
         this.getData();
+        this.props.clearArticle();
     }
 
     componentDidMount() {
@@ -71,7 +72,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getUserWrote: (type, query) => dispatch(boardActions.getUserWrote(type, query))
+    getUserWrote: (type, query) => dispatch(boardActions.getUserWrote(type, query)),
+    clearArticle: () => dispatch(boardActions.clearArticle())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoContainer);

@@ -63,6 +63,9 @@ class ReplyContainer extends Component {
             formData.append('post_id', location.pathname.split('/article/')[1]);
             formData.append('depth', replyForm.depth);
             formData.append('parent_id', replyForm.id);
+            if (this.props.replyForm.parent_nickname) {
+                formData.append('parent_nickname', this.props.replyForm.parent_nickname);
+            }
             await createReply(formData);
             this.props.replyCountUp();
         } else {
@@ -97,7 +100,9 @@ class ReplyContainer extends Component {
             }
         }
         console.log(prevEle);
-        this.props.loadReplyForm(prevEle.getAttribute('data-id'), targetLi.getAttribute('data-id'), depth*1 + 1);
+        console.log('#author');
+        this.props.loadReplyForm(prevEle.getAttribute('data-id'), targetLi.getAttribute('data-id'), 
+            depth*1 + 1, targetLi.querySelector('.author').textContent);
     }
 
     focusingForm (space, idTarget) {
@@ -123,7 +128,7 @@ class ReplyContainer extends Component {
         const reply = e.target.closest('li');
         console.log(reply);
         const id = reply.getAttribute('data-id');
-        const contents = reply.querySelector('.contents').textContent;
+        const contents = reply.querySelector('.contents .body').textContent;
         this.props.displayOff(id);
         this.props.loadContents(contents);
         this.props.loadReplyForm(id, id);
@@ -210,7 +215,7 @@ const mapDispatchToProps = (dispatch) => ({
     textChange: (value) => dispatch(replyActions.textChange(value)),
     clear: () => dispatch(replyActions.clear()),
     getReplies: (post_id) => dispatch(replyActions.getReplies(post_id)),
-    loadReplyForm: (space, id, depth) => dispatch(replyActions.loadReplyForm(space, id, depth)),
+    loadReplyForm: (space, id, depth, parent_nickname) => dispatch(replyActions.loadReplyForm(space, id, depth, parent_nickname)),
     displayOff: (id) => dispatch(replyActions.displayOff(id)),
     loadContents: (contents) => dispatch(replyActions.loadContents(contents)),
     onDeleteMode: (id) => dispatch(replyActions.onDeleteMode(id)),

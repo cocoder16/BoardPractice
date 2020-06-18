@@ -23,6 +23,9 @@ section {
             }
             .contents {
                 padding-bottom: 3px;
+                .parent-nickname {
+                    color: #fcba03;
+                }
             }
             .delete-box {
                 display: inline-block; position: absolute; 
