@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
     "watch": "webpack-dev-server --config ./webpack.config.dev --hot",
     "start": "nodemon --exec babel-node src/server/server.js",
     "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn start\"",
