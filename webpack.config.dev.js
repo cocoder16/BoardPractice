@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     context: __dirname, //webpack이 동작할 root디렉토리
-    entry: ['@babel/polyfill', './src/client/index.js', './src/client/index.scss'],
+    entry: ['./src/client/index.js', './src/client/index.scss'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/',

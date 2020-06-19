@@ -1,13 +1,6 @@
-.ck-editor__editable {
-    height: 400px;
-}
-figure {
-    img {
-        display: block;
-        margin: auto;
-    }
-
-    figcaption {
-        text-align: center;
+#cke_editor1 {
+    height: auto;
+    #cke_1_contents {
+        height: 450px !important;
     }
 }

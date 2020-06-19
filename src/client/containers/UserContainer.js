@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { LoggedOut, LoggedIn } from '~c/components';
 import * as userInfoActions from '~c/store/userInfo';
 import * as boardActions from '~c/store/board';
+import * as replyActions from '~c/store/reply';
 import { tryLogOut } from '~c/services/users';
 
 class UserContainer extends Component {
@@ -13,6 +14,7 @@ class UserContainer extends Component {
             location.replace('/');
         }
 
+        this.props.clear();
         this.props.deleteUserInfo();
         this.props.deleteUserWrote();
         console.log(this.props.isLoggedIn);
@@ -43,7 +45,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo()),
-    deleteUserWrote: () => dispatch(boardActions.deleteUserWrote())
+    deleteUserWrote: () => dispatch(boardActions.deleteUserWrote()),
+    clear: () => dispatch(replyActions.clear())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

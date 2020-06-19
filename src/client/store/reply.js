@@ -9,6 +9,7 @@ const LOAD_CONTENTS = 'reply/LOAD_CONTENTS';
 const ON_DELETE_MODE = 'reply/ON_DELETE_MODE';
 const CLEAR_REPLIES = 'reply/CLEAR_REPLIES';
 const PENDING_REPLIES = 'reply/PENDING_REPLIES';
+const SET_SCROLL = 'reply/SET_SCROLL';
 
 export const textChange = (value) => ({
     type: TEXT_CHANGE,
@@ -41,6 +42,10 @@ export const onDeleteMode = (id) => ({
     payload: id
 });
 export const clearReplies = () => ({type: CLEAR_REPLIES});
+export const setScroll = (top) => ({
+    type: SET_SCROLL,
+    payload: top
+})
 
 const initialState = {
     contents: '',
@@ -48,7 +53,8 @@ const initialState = {
     replyForm: { space: null, id: 0, depth: 0, tarEle: null, parent_nickname: null },
     unshown: 0,
     deleteMode: 0,
-    onPending: false
+    onPending: false,
+    scrollTop: 0,
 };
 
 export default function reducer (state=initialState, action) {
@@ -72,6 +78,8 @@ export default function reducer (state=initialState, action) {
             return { ...state, replies: [], replyForm: { space: null, id: 0, depth: 0, tarEle: null, parent_nickname: null } };
         case PENDING_REPLIES :
             return { ...state, onPending: true };
+        case SET_SCROLL :
+            return { ...state, scrollTop: action.payload }
         default :
             return state;
     }

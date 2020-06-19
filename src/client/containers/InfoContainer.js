@@ -21,10 +21,17 @@ class InfoContainer extends Component {
     }
 
     componentWillUnmount() {
+        console.log('#### component will unmount')
         this.unlisten();
     }
 
+    shouldComponentUpdate() {
+        console.log('#### should component update')
+        return true;
+    }
+
     componentDidUpdate (prevProps) {
+        console.log('#### component did update')
         if (prevProps.isLoggedIn != this.props.isLoggedIn) {
             this.getData();
         }

@@ -2,14 +2,10 @@
     "presets": [
         ["@babel/preset-env", {
             "targets": { 
-                "browsers": ["last 2 versions", ">= 2% in KR"] 
+                "browsers": ["last 2 versions", ">= 2% in KR", "not ie <= 8"] 
             } 
         }],
-        ["@babel/preset-react", {
-            "targets": { 
-                "browsers": ["last 2 versions", ">= 2% in KR"] 
-            } 
-        }]
+        ["@babel/preset-react"]
     ],
     "plugins": ["@babel/plugin-proposal-class-properties"]
   }

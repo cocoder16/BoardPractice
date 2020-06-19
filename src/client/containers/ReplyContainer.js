@@ -21,7 +21,7 @@ class ReplyContainer extends Component {
 
     componentDidUpdate (prevProps, prevState) {
         console.log('#### Reply - componentDidUpdate ####');
-        const { unshown, replyForm, contents, deleteMode } = this.props;
+        const { unshown, replyForm, contents, deleteMode, isLoggedIn } = this.props;
         if (prevProps.unshown != unshown) {
             document.querySelector('.reply-form .contents').value = this.props.contents;
         }
@@ -35,6 +35,10 @@ class ReplyContainer extends Component {
         }
         if (prevProps.isLoggedIn != this.props.isLoggedIn) {
             this.props.getReplies(location.pathname.split('/article/')[1]);
+        }
+        if (prevProps.replies != this.props.replies) {
+            window.scrollTo(0, this.props.scrollTop);
+            this.props.setScroll(0);
         }
     }
 
@@ -51,7 +55,9 @@ class ReplyContainer extends Component {
 
     handleFormSubmit = async (e) => {
         e.preventDefault();
+        this.props.setScroll(window.pageYOffset);
         const { contents, replyForm, unshown } = this.props;
+        const articleId = location.pathname.split('/article/')[1];
         if (contents == '') {
             alert('Please fill out contents');
             return null;
@@ -60,7 +66,7 @@ class ReplyContainer extends Component {
         formData.append('contents', contents);
 
         if (unshown == 0) {
-            formData.append('post_id', location.pathname.split('/article/')[1]);
+            formData.append('post_id', articleId);
             formData.append('depth', replyForm.depth);
             formData.append('parent_id', replyForm.id);
             if (this.props.replyForm.parent_nickname) {
@@ -75,7 +81,7 @@ class ReplyContainer extends Component {
 
         document.querySelector('.reply-form .contents').value = '';
         this.props.clear();
-        this.props.getReplies(location.pathname.split('/article/')[1]);
+        this.props.getReplies(articleId);
     }
 
     loadReplyForm = (e) => {
@@ -154,7 +160,6 @@ class ReplyContainer extends Component {
         this.props.clear();
         this.props.getReplies(articleNum);
         this.props.replyCountDown();
-
     }
 
     clear = () => {
@@ -208,6 +213,7 @@ const mapStateToProps = (state) => ({
     unshown: state.reply.unshown,
     deleteMode: state.reply.deleteMode,
     onPending: state.reply.onPending,
+    scrollTop: state.reply.scrollTop
 })
 
 //props값으로 넣어줄 액션 함수들 정의
@@ -222,6 +228,7 @@ const mapDispatchToProps = (dispatch) => ({
     clearReplies: () => dispatch(replyActions.clearReplies()),
     replyCountUp: () => dispatch(boardActions.replyCountUp()),
     replyCountDown: () => dispatch(boardActions.replyCountDown()),
+    setScroll: (top) => dispatch(replyActions.setScroll(top))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReplyContainer);
