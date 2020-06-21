@@ -82,7 +82,10 @@ class ReplyController {
         return Reply.find({ post_id })
         .select('id contents author author_id depth parent_id parent_nickname is_deleted created_at')
         .sort({ id: 1 }).then(replies => {
-            if (replies.length == 0) return { status: 200, data: []}
+            if (replies.length == 0) {
+                MeasureRunTime.end('getReplies');
+                return { status: 200, data: []}
+            }
 
             MeasureRunTime.start('Tree declaration');
             //트리 생성 함수

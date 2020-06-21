@@ -16,10 +16,11 @@ section {
                 span {
                     color: $grey;
                     font-size: 0.7rem;
+                    margin-right: 10px;
                 }
-            }
-            .read {
-                margin-right: 10px;
+                span.time {
+                    margin-right: 0;
+                }
             }
         }
         .body {

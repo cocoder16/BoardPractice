@@ -26,7 +26,7 @@ const Sidebar = ({
     return (
         <header className={classname}>
             <h1>
-                <Link to="/" className='link'>Board</Link>
+                <Link to="/" className='link' onClick={() => window.scrollTo(0, 0)}>Board</Link>
             </h1>
             <UserContainer/>
             { deviceType < 2 &&

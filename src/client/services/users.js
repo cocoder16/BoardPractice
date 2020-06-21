@@ -1,11 +1,12 @@
 import axios from 'axios';
 import Exception from './Exception';
 
-export const isOverlap = (target) => {
+export const isOverlap = async (target) => {
     return axios({
         method: 'get',
         url: '/check/overlap',
-        params: target
+        params: target,
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data.result;
     }).catch(err => {
@@ -14,40 +15,46 @@ export const isOverlap = (target) => {
     });
 }
 
-export const createUser = (formData) => {
-    axios({
+export const createUser = async (formData) => {
+    return axios({
         method: 'post',
         url: '/user',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         alert('Welcome to my board :)');
-        window.location.replace('/');
+        return;
     }).catch(err => {
         Exception.logAlertRedirect(err, 'The registration is failed. Please try again.');
     });
 }
 
-export const updateUser = (formData) => {
-    axios({
+export const updateUser = async (formData) => {
+    return axios({
         method: 'put',
         url: '/user',
         data: formData,
-        headers: { 'content-type': 'multipart/form-data' }
+        headers: { 
+            'content-type': 'multipart/form-data',
+            Pragma: 'no-cache'
+        }
     }).then(res => {
         alert('User information update is completed.');
-        window.location.replace('/');
+        return;
     }).catch(err => {
         Exception.logAlertRedirect(err, 'User information update is failed. Please try again.');
     });
 }
 
-export const deleteUser = (formData) => {
+export const deleteUser = async (formData) => {
     return axios({
         method: 'delete',
         url: '/user',
         data: formData,
-        headers: { 'content-type': 'multipart/form-data' }
+        headers: { 
+            'content-type': 'multipart/form-data',
+            Pragma: 'no-cache'
+        }
     }).then(res => {
         return res.data.result;
     }).catch(err => {
@@ -56,7 +63,7 @@ export const deleteUser = (formData) => {
     });
 }
 
-export const tryLogIn = (formData) => {
+export const tryLogIn = async (formData) => {
     return axios({
         method: 'post',
         url: '/session/login',
@@ -70,23 +77,27 @@ export const tryLogIn = (formData) => {
     });
 }
 
-export const tryLogOut = () => {
+export const tryLogOut = async () => {
     return axios({
         method: 'delete',
         url: '/session/logout',
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
-        return true;
+        return;
     }).catch(err => {
         console.log(err);
         Exception.basicRedirect();
     });
 }
 
-export const getUserInfo = () => {
+export const getUserInfo = async () => {
     return axios({
         method: 'get',
         url: '/userinfo',
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
+        console.log('#### service - getUserInfo - res.data');
+        console.log(res.data);
         return res.data;
     }).catch(err => {
         console.log(err);
@@ -94,13 +105,14 @@ export const getUserInfo = () => {
     });
 }
 
-export const getUserWrote = (type, page, per) => {
+export const getUserWrote = async (type, page, per) => {
     return axios({
         method: 'get',
         url: '/userwrote',
         params: {
             type, page, per
-        }
+        },
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data;
     }).catch(err => {
@@ -109,7 +121,7 @@ export const getUserWrote = (type, page, per) => {
     });
 }
 
-export const goAuthEmail = (formData) => {
+export const goAuthEmail = async (formData) => {
     return axios({
         method: 'post',
         url: '/help/pwreset/authemail',
@@ -120,7 +132,7 @@ export const goAuthEmail = (formData) => {
     }).catch(err => {console.log(err)});
 }
 
-export const issueNewPw = (id, token) => {
+export const issueNewPw = async (id, token) => {
     return axios({
         method: 'post',
         url: '/help/pwreset/issue',

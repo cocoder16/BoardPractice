@@ -36,7 +36,8 @@ class UserContainer extends Component {
         formData.append('pw', pw);
         const result = await tryLogIn(formData);
         if (result) {
-            window.location.replace('/');
+            this.props.getUserInfo();
+            this.props.history.push('/');
         } else {
             this.props.logInFailed();
         }

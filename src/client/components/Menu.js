@@ -6,7 +6,7 @@ const Menu = () => {
         <nav>
             <ul className='menu'>
                 <li>
-                    <Link to='/qna' className='link'>
+                    <Link to='/qna' className='link' onClick={() => window.scrollTo(0, 0)}>
                         <div className='item-box'>
                             <img src='/images/QnaIcon.png' alt='Q n A'/>
                             <span>Q n A</span>
@@ -14,7 +14,7 @@ const Menu = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link to='/forum' className='link'>
+                    <Link to='/forum' className='link' onClick={() => window.scrollTo(0, 0)}>
                         <div className='item-box'>
                             <img src='/images/ForumIcon.png' alt='Forum'/>
                             <span>Forum</span>

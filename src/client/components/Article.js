@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ReplyContainer from '~c/containers/ReplyContainer';
 
 const Article = ({
-    article, auth, id, onDelete, goBack, deletePost
+    article, auth, id, onDelete, goBack, deletePost, history
 }) => {   
     let btnClass;
     if (auth) btnClass = 'personal-btn show';
@@ -17,7 +17,10 @@ const Article = ({
                         <div className='head'>
                             <h3>{article.title}</h3>
                             <div className='details'>
+                                <span className='author'>{article.author}</span>
+                                <span>|</span>
                                 <span className='read'>views {article.read_count}</span>
+                                <span>|</span>
                                 <span className='time'>{article.created_at}</span>
                             </div>
                         </div>
@@ -34,13 +37,16 @@ const Article = ({
                             </div>
                         </div>
                     </article> 
-                    <ReplyContainer/>
+                    <ReplyContainer history={history}/>
                 </Fragment> :
                 <article>
                     <div className='head'>
                         <h3>{article.title}</h3>
                         <div className='details'>
+                            <span className='author'>{article.author}</span>
+                            <span>|</span>
                             <span className='read'>views {article.read_count}</span>
+                            <span>|</span>
                             <span className='time'>{article.created_at}</span>
                         </div>
                     </div>

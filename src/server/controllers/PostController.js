@@ -47,6 +47,9 @@ class Read {
 
 class PostController {
     static async createPost (formData, session) { 
+        console.log('#### createPost ####');
+        console.log('#### session');
+        console.log(session);
         const category = Converter.CategoryStrToNum(formData.category);
         const newPost = new Post({
             category,
@@ -91,7 +94,7 @@ class PostController {
             console.log(rawResponse);
         }).then(res => {
             if (res.n == 0) return { status: 401 };
-            else return { status: 200, data: { result: true, url: `/${category}` }};            
+            else return { status: 200 };            
         }).catch(err => {
             return Exception._400(err, '#### catch : deletePost failed ####');
         });

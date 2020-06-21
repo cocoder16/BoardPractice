@@ -191,13 +191,16 @@ class UserController {
         console.log('#### getUserInfo ####');
         //유저데이터는 세션을 통해 검증받아야만 보냄.
         if (!req.session.userid) {
+            console.log('res.session not exist')
             return { status: 200, data: { result: false, userInfo: { id: '', nickname: '', email: '' }}}
         }
         //세션이 있다면 그에 맞는 유저 데이터를 보냄.
         return User.find({ id: req.session.userid, is_deleted: false }).then(async user => {
             if (user.length == 0) {
+                console.log('not found user')
                 return { status: 200, data: { result: false, userInfo: { id: '', nickname: '', email: '' }}};
             } else {
+                console.log(' result true');
                 return { status: 200, data: { result: true, userInfo: { 
                     id: user[0].user_id, 
                     nickname: user[0].nickname,

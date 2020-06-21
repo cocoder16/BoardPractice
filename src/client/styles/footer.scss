@@ -13,8 +13,11 @@ footer {
     a:visited {
         color: $grey;
     }
-    span {
-        display: inline-block;
-        margin-left: 20px;
+    p {
+        margin-top: 0; margin-bottom: 0;
+        span {
+            display: inline-block;
+            margin-left: 20px;
+        }
     }
 }

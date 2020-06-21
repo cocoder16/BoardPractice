@@ -36,7 +36,7 @@
             @media (min-width: 769px) {
                 width: $m769-user-box-logged-in-width;
                 button {
-                    width: initial;
+                    width: auto; //initial
                 }
             }
         }
@@ -55,7 +55,7 @@
         }
     }
     button {
-        padding: initial;
+        padding: 0; //initial
         position: absolute; top: calc(50% - 1px); transform: translate(0, -50%);
         width: $sidebar-btn-side-length * 1.2; height: $sidebar-btn-side-length;
         font-size: 1rem;
@@ -91,7 +91,7 @@
             .menu {
                 display: block;
                 width: $m993-sidebar-menu-width;
-                padding: initial;
+                padding: 0; //initial
                 top: 150px;
                 font-size: 1.1rem;
             }
@@ -105,7 +105,7 @@
                     }
                 }
                 .logged-in { 
-                    width: initial;
+                    width: auto; //initial
                     .link:after {
                         display: block; content: '';
                     }

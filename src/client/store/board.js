@@ -84,7 +84,7 @@ export const getArticle = (id) => async (dispatch, getState) => {
 export const getDeleteAlert = () => ({type: GET_DELETE_ALERT});
 export const skimOnDelete = () => ({type: SKIM_ON_DELETE});
 export const deletePost = (id) => async (dispatch, getState) => {
-    servicePosts.deletePost(id, getState().board.category);
+    await servicePosts.deletePost(id, getState().board.category);
     dispatch({type: SKIM_ON_DELETE});
 };
 export const replyCountUp = () => ({type: REPLY_COUNT_UP});

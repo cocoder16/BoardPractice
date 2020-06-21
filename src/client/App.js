@@ -9,6 +9,7 @@ import * as viewportActions from '~c/store/viewport';
 class App extends Component {
     constructor (props) {
         super(props);
+        console.log('### App - constructor');
         this.props.getUserInfo();
         this.setDeviceType();
         window.addEventListener('resize', this.setDeviceType);

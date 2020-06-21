@@ -7,20 +7,10 @@ const MyCKEditor = ({
     return (
         <CKEditor
             data={contents}
-            onInit={ editor => {
-                // You can store the "editor" and use when it is needed.
-                console.log('Editor is ready to use!', editor);
-            }}
-            onChange={( event, editor ) => {
+            onChange={( event ) => {
                 const data = event.editor.getData();
-                console.log( { event, editor, data } );
+                console.log('event.editor : ', event.editor);
                 onChange(data);
-            }}
-            onBlur={( event, editor ) => {
-                console.log('Blur.', editor );
-            }}
-            onFocus={( event, editor ) => {
-                console.log('Focus.', editor );
             }}
             config={
                 {

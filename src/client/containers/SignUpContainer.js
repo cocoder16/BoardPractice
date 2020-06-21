@@ -81,9 +81,10 @@ class SignUpContainer extends Component {
 
         if (!isModify) {
             formData.append('id', id);
-            createUser(formData);
+            await createUser(formData);
         }
-        else updateUser(formData);
+        else await updateUser(formData);
+        this.props.history.push('/');
     }
 
     onDeleteMode = (e) => {
@@ -105,7 +106,7 @@ class SignUpContainer extends Component {
             const result = await deleteUser(formData);
             if (result == true) {
                 alert('Your account is deleted.');
-                window.location.replace('/');
+                this.props.history.push('/');
             } else {
                 this.props.deleteFailed();
             }

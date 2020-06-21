@@ -67,13 +67,17 @@ class WriteContainer extends Component {
         formData.append('title', title);
         formData.append('contents', contents);
 
+        let url;
         if (!isModify) {
             formData.append('category', category);
-            createPost(formData);
+            url = await createPost(formData);
         }
         else {
             formData.append('id', location.pathname.split('/modify/')[1]);
-            updatePost(formData);
+            url = await updatePost(formData);
+        }
+        if (url) {
+            this.props.history.push(url);
         }
     }
 

@@ -6,9 +6,9 @@ const InfoHead = () => {
         <div className='info-head'>
             <ul>
                 <li><Link to='/info/privacy' className='link'>Management</Link></li>
-                <li className='line'>l</li>
+                <li className='line'>|</li>
                 <li><Link to='/info/posts' className='link'>Your articles</Link></li>
-                <li className='line'>l</li>
+                <li className='line'>|</li>
                 <li><Link to='/info/replies' className='link'>Your replies</Link></li>
             </ul>
         </div>

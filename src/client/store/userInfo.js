@@ -7,6 +7,7 @@ const DELETE_USER_INFO = 'userInfo/DELETE_USER_INFO';
 
 //function creating action
 export const getUserInfo = () => async (dispatch, getState) => {
+    console.log('#### getUserInfo');
     dispatch({type: GETTING_START});
     const data = await serviceUsers.getUserInfo();
     if (data.result){

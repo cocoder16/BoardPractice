@@ -44,7 +44,8 @@
         margin-top: 10px; max-width: $form-btn-max-width; 
     }
     button.submit {
-        margin-top: 20px; max-width: initial; width: $form-signup-submit-btn-width;
+        margin-top: 20px; max-width: none; //initial
+        width: $form-signup-submit-btn-width;
     }
     .fail-message { height: 28px; }
     button.remove-btn {

@@ -1,26 +1,27 @@
 import axios from 'axios';
 import Exception from './Exception';
 
-export const createPost = (formData) => {
-    axios({
+export const createPost = async (formData) => {
+    return axios({
         method: 'post',
         url: '/post',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
-        window.location.replace(res.data.url);
+        return res.data.url;
     }).catch(err => {
         Exception.logAlertRedirect(err, 'failed to create post...');
     });
 }
 
-export const getPosts = (category, page, per) => {
+export const getPosts = async (category, page, per) => {
     return axios({
         method: 'get',
         url: '/post',
         params: {
             category, page, per
-        }
+        },
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data;
     }).catch(err => {
@@ -29,34 +30,38 @@ export const getPosts = (category, page, per) => {
     });
 }
 
-export const updatePost = (formData) => {
-    axios({
+export const updatePost = async (formData) => {
+    return axios({
         method: 'put',
         url: '/post',
         data: formData,
-        headers: { 'content-type': 'multipart/form-data' }
+        headers: { 
+            'content-type': 'multipart/form-data',
+            Pragma: 'no-cache'
+        }
     }).then(res => {
-        window.location.replace(res.data.url);
+        return res.data.url;
     }).catch(err => {
         Exception.logAlertRedirect(err, 'failed to update post...');
     });
 }
 
-export const deletePost = (id, category) => {
-    axios({
+export const deletePost = async (id, category) => {
+    return axios({
         method: 'delete',
         url: '/post',
         params: {
             id, category
-        }
+        },
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
-        window.location.replace(res.data.url);
+        return;
     }).catch(err => {
         Exception.logAlertRedirect(err, 'failed to delete post...');
     });
 }
 
-export const getArticle = (num, newGet) => {
+export const getArticle = async (num, newGet) => {
     console.log('newGet');
     console.log(newGet);
     return axios({
@@ -64,7 +69,8 @@ export const getArticle = (num, newGet) => {
         url: `/post/${num}`,
         params: {
             newGet
-        }
+        },
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data;
     }).catch(err => {
@@ -73,13 +79,14 @@ export const getArticle = (num, newGet) => {
     });
 }
 
-export const search = (category, type, keyword, page, per) => {
+export const search = async (category, type, keyword, page, per) => {
     return axios({
         method: 'get',
         url: '/search',
         params: {
             category, type, keyword, page, per
-        }
+        },
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data;
     }).catch(err => {
@@ -88,10 +95,11 @@ export const search = (category, type, keyword, page, per) => {
     });
 }
 
-export const recentPosts = () => {
+export const recentPosts = async () => {
     return axios({
         method: 'get',
         url: '/recentposts',
+        headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data;
     }).catch(err => console.log(err));

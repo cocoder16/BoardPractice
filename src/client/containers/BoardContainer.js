@@ -93,8 +93,10 @@ class BoardContainer extends Component {
         this.props.history.goBack();
     }
 
-    handleDeletePost = () => {
-        this.props.deletePost(location.pathname.split('/delete/')[1]);
+    handleDeletePost = async () => {
+        const num = location.pathname.split('/delete/')[1];
+        await this.props.deletePost(num);
+        this.props.history.push(`/${this.props.category}`);
     }
 
     handleChangeSearchType = (e) => {
@@ -109,7 +111,7 @@ class BoardContainer extends Component {
 
     render () {
         const { category, isLoggedIn, onPending, posts, article, isModify, onDelete, 
-            searchType, searchKeyword, recentPosts } = this.props;
+            searchType, searchKeyword, recentPosts, history } = this.props;
         const { goBackOnDelete, handleDeletePost, handleChangeSearchType, handleChangeSearchKeyword } = this;
 
         let isHome = true;
@@ -137,13 +139,16 @@ class BoardContainer extends Component {
                                     />
                                     <Route path='/article'
                                         render={() => <Article article={article} auth={article.auth}
-                                            id={article.id}
+                                            id={article.id} history={history}
                                         />}
                                     />
                                     <Route exact path='/write' component={WriteContainer}/>
                                     <Route path='/modify' component={WriteContainer}/>
                                     <Route path='/delete'
-                                        render={() => <Article article={article} auth={article.auth} onDelete={onDelete} 
+                                        render={() => <Article article={article} 
+                                            auth={article.auth} 
+                                            onDelete={onDelete} 
+                                            history={history}
                                             goBack={goBackOnDelete}
                                             deletePost={handleDeletePost}
                                         />}

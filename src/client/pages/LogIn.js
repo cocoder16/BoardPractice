@@ -1,12 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import LogInContainer from '~c/containers/LogInContainer';
+import { Route } from 'react-router-dom';
 
 class LogIn extends Component {
 	render() {
 		return (
-			<Fragment>
-				<LogInContainer/>
-			</Fragment>
+			<Route component={LogInContainer}/>
 		);
 	}
 };

@@ -48,6 +48,6 @@ select:focus {
 .personal-btn {
     display: none;
     &.show {
-        display: initial;
+        display: inline-block;
     }
 }

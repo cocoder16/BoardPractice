@@ -6,7 +6,7 @@ const PageItem = ({
 }) => {
     return (
         <li className={classname}>
-            <Link to={to} className='link'>{val}</Link>
+            <Link to={to} className='link' onClick={() => window.scrollTo(0, 0)}>{val}</Link>
         </li>
     )
 };

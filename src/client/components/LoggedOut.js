@@ -14,7 +14,7 @@ const LoggedOut = ({
             </Link>
             <Link to="/signup" className='link'>
                 <div className='icon'>
-                    {deviceType > 0 && <img src='/images/SignupBtn.png' alt='Login'/>}
+                    {deviceType > 0 && <img src='/images/SignupBtn.png' alt='SignUp'/>}
                     <span>Join</span>
                 </div>
             </Link>

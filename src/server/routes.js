@@ -62,7 +62,11 @@ router.delete('/session/logout', async (req, res) => {
 
 router.get('/userinfo', async (req, res) => {
     console.log('#### get /userinfo ####');
+    console.log('#### session')
+    console.log(req.session);
     const result = await UserController.getUserInfo(req);
+    console.log('#### route result');
+    console.log(result);
     res.status(result.status).send(result.data);
 })
 

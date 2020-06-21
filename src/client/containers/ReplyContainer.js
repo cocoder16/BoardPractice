@@ -113,7 +113,7 @@ class ReplyContainer extends Component {
 
     focusingForm (space, idTarget) {
         this.clearFocusingForm();
-        window.location.replace(`${location.pathname}#comment_${space}`);
+        this.props.history.push(`${location.pathname}#comment_${space}`);
         if (idTarget) idTarget.classList.add('active');
         document.querySelector('.reply-form textarea').focus();
     }
