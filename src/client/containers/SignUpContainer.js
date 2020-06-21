@@ -106,6 +106,7 @@ class SignUpContainer extends Component {
             const result = await deleteUser(formData);
             if (result == true) {
                 alert('Your account is deleted.');
+                this.props.deleteUserInfo();
                 this.props.history.push('/');
             } else {
                 this.props.deleteFailed();
@@ -165,6 +166,7 @@ const mapDispatchToProps = (dispatch) => ({
     onDeleteMode: () => dispatch(signUpActions.onDeleteMode()),
     offDeleteMode: () => dispatch(signUpActions.offDeleteMode()),
     deleteFailed: () => dispatch(signUpActions.deleteFailed()),
+    deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo()),
     pwValidation: (pw) => dispatch(signUpActions.pwValidation(pw))
 })
 

@@ -6,12 +6,16 @@ html, body {
 }
 .link, a { text-decoration: none; color: black; }
 .link:visited, a:visited, .link:active, a:active { color: black; }
-img { width: 100%; height: 100% }
+img { width: 100%; height: 100%; }
 ul, ol { list-style: none; padding-left: 0px; }
 button, input[type=button], input[type=submit] { 
     border: none; outline: none; background-color: rgba(0,0,0,0); 
     color: white;
     padding: 3px 8px 3px 8px;
+    @media screen and (-ms-high-contrast:active), ( -ms-high-contrast:none ){
+        /* IE10~11 */
+        line-height: 1;
+    }
 }
 input:focus {
     outline: none;

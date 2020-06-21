@@ -53,6 +53,11 @@
                 float: left; line-height: $sidebar-btn-side-length;
             }
         }
+        button {
+            .icon {
+                margin: 0;
+            }
+        }
     }
     button {
         padding: 0; //initial
