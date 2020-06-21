@@ -109,10 +109,17 @@ class BoardContainer extends Component {
         this.props.setSearchKeyword(e.target.value);
     }
 
+    onSearch = (e) => {
+        e.preventDefault();
+        const { category, searchType, searchKeyword } = this.props;
+        this.props.history.push(`/${category}?type=${searchType}&keyword=${searchKeyword}`);
+    }
+
     render () {
         const { category, isLoggedIn, onPending, posts, article, isModify, onDelete, 
-            searchType, searchKeyword, recentPosts, history } = this.props;
-        const { goBackOnDelete, handleDeletePost, handleChangeSearchType, handleChangeSearchKeyword } = this;
+            searchType, recentPosts, history } = this.props;
+        const { goBackOnDelete, handleDeletePost, 
+            handleChangeSearchType, handleChangeSearchKeyword, onSearch } = this;
 
         let isHome = true;
         if (location.pathname != '/') isHome = false;
@@ -124,9 +131,10 @@ class BoardContainer extends Component {
                     :
                     <Fragment>
                         <BoardHead category={category} isLoggedIn={isLoggedIn} isModify={isModify} 
-                            searchType={searchType} searchKeyword={searchKeyword}
+                            searchType={searchType} 
                             onChangeSearchType={handleChangeSearchType}
                             onChangeSearchKeyword={handleChangeSearchKeyword}
+                            onSearch={onSearch}
                         />
                         <Switch>
                             { !onPending &&

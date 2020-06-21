@@ -68,6 +68,8 @@ class UserController {
     }
 
     static async testFormAndUpdateUser (formData, session) {
+        session.usernickname = formData.nickname;
+        session.save();
         return User.find({ id: session.userid, is_deleted: false }).then(user => {
             //pw 검사 및 재설정
             if (formData.pw != '') {

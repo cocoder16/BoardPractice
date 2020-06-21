@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const BoardHead = ({
-    category, isLoggedIn, isModify, searchType, searchKeyword, onChangeSearchType, onChangeSearchKeyword
+    category, isLoggedIn, isModify, searchType,
+    onChangeSearchType, onChangeSearchKeyword, onSearch
 }) => {
     const path = location.pathname;
     let isWrite = false;
@@ -22,7 +23,7 @@ const BoardHead = ({
                     <button type='button'>Write</button>
                 </Link> 
             }
-            <form action={`/${category}?type=${searchType}&keyword=${searchKeyword}`}>
+            <form onSubmit={onSearch}>
                 <div className='left wrap'>
                     <select name="type" className='input-search type' defaultValue={searchType} onChange={onChangeSearchType}>
                         <option value="0">title</option>
