@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 import routes from './routes';
 import db from './db';
 import bodyParser from 'body-parser';
@@ -9,7 +8,7 @@ import helmet from 'helmet';
 
 const server = express();
 const devPort = 4000;
-const port = 4001;
+const port = process.env.PORT || 4001;
 // const MongoStore = connectMongo(session);
 
 db();
