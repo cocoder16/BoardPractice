@@ -1,6 +1,8 @@
 import express from 'express';
 import path from 'path';
 import multer from 'multer';
+import url from 'url';
+import mime from 'mime-types';
 
 import UserController from './controllers/UserController';
 import PostController from './controllers/PostController';
@@ -17,10 +19,15 @@ const upload = multer({
         }
     }),
     limits: { fileSize: 5 * 1024 * 1024 }
-  });
+});
 
 //html file
-const index = path.resolve(__dirname, '../../dist/index.html');
+let root;
+if (process.env.NODE_ENV.trim() == 'development') {
+    root = path.resolve(__dirname, '../../dist');
+} else if (process.env.NODE_ENV.trim() == 'production') {
+    root = path.resolve(__dirname, '../../build');
+}
 
 router.get('/check/overlap', async (req, res) => {
     console.log('#### get /check/overlap ####');
@@ -206,9 +213,16 @@ router.get('/delete*', (req, res) => {
     res.redirect('/');
 })
 
+router.get('/*.*', (req, res) => {
+    const options = url.parse(req.url, true);
+    res.setHeader('content-type', mime.lookup(options.pathname.split('.')[1]));
+    console.log(path.join(root, options.pathname))
+    res.sendFile(path.join(root, options.pathname));
+})
+
 router.get('*', (req, res) => {
     console.log('#### get * ####');
-    res.sendFile(index);
+    res.sendFile(path.join(root, 'index.html'));
 })
 
 export default router;

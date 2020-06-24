@@ -8,12 +8,11 @@ import session from 'express-session';
 import helmet from 'helmet';
 
 const server = express();
-const port = 4000;
 const devPort = 4000;
+const port = 4001;
 // const MongoStore = connectMongo(session);
 
 db();
-server.use(express.static('public'));
 server.use(bodyParser.urlencoded({extended: false}));
 server.use(bodyParser.json());
 server.use(session({
@@ -27,27 +26,22 @@ server.use(session({
     //     url: process.env.MONGO_URI,
     //     collection: "sessions"
     // })
-}))
-server.use(routes); // routes는 sessions에 의존하므로 더 밑에 위치
+}));
 server.use(helmet());
+server.use(routes); // routes는 sessions에 의존하므로 더 밑에 위치
 
 console.log(process.env.NODE_ENV);
 console.log(__dirname);
-//dev server
+
 if (process.env.NODE_ENV.trim() == 'development') {
     server.listen(devPort, () => {
+        server.use(express.static('dist'));
         console.log(`#### webpack-dev-server is listening on port ${devPort}. ${new Date().toLocaleString()} ####`);
     });
+} else if (process.env.NODE_ENV.trim() == 'production') {
+    server.listen(port, () => {
+        // server.use('/css', express.static('build/css'));
+        server.use(express.static('build'));
+        console.log(`#### Express listening on port ${port}. ${new Date().toLocaleString()} ####`);
+    });
 }
-
-// //production server
-// //html file
-// const index = path.resolve(__dirname, 'dist/index.html');
-
-// server.get('*', (req, res) => {
-//     res.sendFile(index);
-// })
-
-// server.listen(port, () => {
-//     console.log(`#### Express listening on port ${port}. ${new Date().toLocaleString()}`);
-// });

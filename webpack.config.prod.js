@@ -5,24 +5,13 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     context: __dirname, //webpack이 동작할 root디렉토리
-    entry: ['./src/client/index.js', './src/client/index.scss'],
+    entry: [ './src/client/index.js', './src/client/index.scss' ],
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         filename: 'js/bundle_[name].js'
     },
-    mode: "development",
-    devServer: {
-        hot: true,
-        port: 3000,
-        open: true,
-        contentBase: path.resolve(__dirname, 'dist'),
-        historyApiFallback: true, // 이거없으면 리액트 라우터 에러 발생
-        writeToDisk: true, // new CopywebpackPlugin 사용시 필요.
-        proxy: {
-            "**": "http://localhost:4000" // express 서버주소
-        }
-    },
+    mode: "production",
     plugins: [
         new MiniCssExtractPlugin({ filename: 'css/style.css' }), //컴파일+번들링CSS파일이 저장될 경로와 이름 지정
         new HtmlWebpackPlugin({
