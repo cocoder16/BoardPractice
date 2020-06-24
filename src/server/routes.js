@@ -98,14 +98,14 @@ router.post('/help/pwreset/issue', async (req, res) => {
     res.status(result.status).send(result.data);
 })
 
-router.post('/upload/test', upload.single('upload'), (req, res) => {  
-    console.log('#### post /upload/test ####');
-    console.log(path.resolve(__dirname, `../../public/uploads/${req.file.filename.toLowerCase()}`));
-    res.status(201).send({
-        "uploaded": true,
-        "url": `${process.env.DEV_DOMAIN}/uploads/${req.file.filename.toLowerCase()}`
-    })
-})
+// router.post('/upload/test', upload.single('upload'), (req, res) => {  
+//     console.log('#### post /upload/test ####');
+//     console.log(path.resolve(__dirname, `../../public/uploads/${req.file.filename.toLowerCase()}`));
+//     res.status(201).send({
+//         "uploaded": true,
+//         "url": `${process.env.DEV_DOMAIN}/uploads/${req.file.filename.toLowerCase()}`
+//     })
+// })
 
 router.get('/post/:num', async (req, res) => {
     console.log('#### get /poset/:num ####');

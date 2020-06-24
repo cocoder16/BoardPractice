@@ -242,6 +242,12 @@ class UserController {
             if (user.length == 0) return { status: 200, data: { result: false }}
 
             const userEmail = user[0].email;
+            let domain;
+            if (process.env.NODE_ENV.trim() == 'development') {
+                domain = process.env.DEV_DOMAIN;
+            } else if (process.env.NODE_ENV.trim() == 'production') {
+                domain = process.env.DOMAIN;
+            }
 
             //token발급과 함께 인증메일 발송
             crypto.randomBytes(64, (err, buf) => {
@@ -263,7 +269,7 @@ class UserController {
                             to: userEmail,
                             subject: 'Board Practice 비밀번호 재설정 인증메일 입니다.',
                             html: `<p>회원 인증을 위해서 
-                                <a href='${process.env.DEV_DOMAIN}/auth/?id=${user[0].id}&token=${emailToken}'>
+                                <a href='${domain}/auth/?id=${user[0].id}&token=${emailToken}'>
                                 인증하기</a>를 클릭해주세요</p>`
                         };
                         transporter.sendMail(mailOptions, (err, info) => {
