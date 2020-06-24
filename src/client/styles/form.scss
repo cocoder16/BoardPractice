@@ -15,6 +15,7 @@
         padding: 6px; background-color: #d5eaf7;
     }
     input:focus {
+        border: 1px solid rgba(0,0,0,0);
         outline: 2px solid red; box-shadow: 0 0 1px red;
     }
     .fail-message { 
