@@ -11,7 +11,8 @@
     "start": "nodemon --exec babel-node src/server/server.js",
     "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn start\"",
     "build": "yarn webpack-prod",
-    "prod": "set NODE_ENV=production && babel-node src/server/server.js"
+    "prod": "set NODE_ENV=production && babel-node src/server/server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "repository": {
     "type": "git",
