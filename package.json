@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/cocoder16/BoardPractice#readme",
   "dependencies": {
+    "@babel/node": "^7.10.3",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "ckeditor4-react": "^1.1.1",
@@ -54,7 +55,6 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
-    "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.10.1",
     "@babel/preset-env": "^7.9.6",
