@@ -8,10 +8,10 @@
     "webpack-prod": "webpack --config ./webpack.config.prod",
     "webpack-dev": "webpack --config ./webpack.config.dev",
     "watch": "webpack-dev-server --config ./webpack.config.dev --hot",
-    "start": "nodemon --exec babel-node src/server/server.js",
-    "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn start\"",
+    "nodemon": "nodemon --exec babel-node src/server/server.js",
+    "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn watch\" \"yarn nodemon\"",
     "build": "npm run webpack-prod",
-    "prod": "set NODE_ENV=production && babel-node src/server/server.js",
+    "start": "set NODE_ENV=production && babel-node src/server/server.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "repository": {
