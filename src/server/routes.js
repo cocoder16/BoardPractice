@@ -28,6 +28,7 @@ if (process.env.NODE_ENV.trim() == 'development') {
 } else if (process.env.NODE_ENV.trim() == 'production') {
     root = path.resolve(__dirname, '../../build');
 }
+const index = path.join(root, 'index.html');
 
 router.get('/check/overlap', async (req, res) => {
     console.log('#### get /check/overlap ####');
@@ -222,7 +223,7 @@ router.get('/*.*', (req, res) => {
 
 router.get('*', (req, res) => {
     console.log('#### get * ####');
-    res.sendFile(path.join(root, 'index.html'));
+    res.sendFile(index);
 })
 
 export default router;
