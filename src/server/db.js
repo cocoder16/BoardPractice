@@ -4,7 +4,13 @@ dotenv.config();
 
 export default () => {
     function connect() {
-        mongoose.connect(process.env.MONGO_URI, {
+        let uri;
+        if (process.env.NODE_ENV.trim() == 'development') {
+            uri = process.env.DEV_MONGO_URI;
+        } else if (process.env.NODE_ENV.trim() == 'production') {
+            uri = process.env.MONGO_URI;
+        }
+        mongoose.connect(uri, {
             useNewUrlParser: true, useUnifiedTopology: true
         }, function(err) {
             if (err) {
