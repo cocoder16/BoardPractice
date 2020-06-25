@@ -37,4 +37,4 @@ MERN (MongoDB, Express, React, Node.js) stack을 사용했습니다.
 
 ## 사이트 url
 
-[Board Practice 웹사이트로 이동](http://boardpractice.site)
+[Board Practice 웹사이트로 이동](http://www.boardpractice.site)
