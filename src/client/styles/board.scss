@@ -51,6 +51,7 @@
 section {
     width: $board-width; margin: auto;
     .board, .info-board {
+        margin-top: 1.3em; margin-bottom: 2em;
         .item {
             font-size: 0.9rem; text-align: center;
             background-color: white;

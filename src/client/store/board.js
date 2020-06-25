@@ -120,7 +120,7 @@ const initialState = {
     per: 20,
     now: 1,
     max: 1,
-    interval: 10,
+    interval: 5,
     searchType: 0,
     searchKeyword: '',
     userPosts: [],
