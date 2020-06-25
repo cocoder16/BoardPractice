@@ -24,7 +24,9 @@ class ReplyController {
             author_id: session.userid,
             depth: formData.depth,
             parent_id: formData.parent_id,
-            parent_nickname: formData.parent_nickname //없으면 error안뜨고 알아서 default값 들어가.
+            parent_nickname: formData.parent_nickname, //없으면 error안뜨고 알아서 default값 들어가.
+            created_at: new Date().format('yy-MM-dd HH:mm:ss'),
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss'),
         });
         return newReply.save().then(res => {
             console.log(res);

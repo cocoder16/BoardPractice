@@ -56,7 +56,9 @@ class PostController {
             title: formData.title,
             contents: formData.contents,
             author: session.usernickname,
-            author_id: session.userid
+            author_id: session.userid,
+            created_at: new Date().format('yy-MM-dd HH:mm:ss'),
+            updated_at: new Date().format('yy-MM-dd HH:mm:ss'),
         });
         return newPost.save().then(res => {
             console.log('#### new Post ####');
