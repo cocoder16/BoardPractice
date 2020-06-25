@@ -33,7 +33,7 @@ MERN (MongoDB, Express, React, Node.js) stack을 사용했습니다.
 
 ## 컴포넌트 설계도
 
-![Component Design](./docs/img/Component Design.png)
+![Component Design](https://user-images.githubusercontent.com/60813614/85696669-181cf000-b714-11ea-9bfe-0cf86065309e.png)
 
 ## 사이트 url
 
