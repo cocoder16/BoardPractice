@@ -1,7 +1,6 @@
 import express from 'express';
 import routes from './routes';
 import db from './db';
-import bodyParser from 'body-parser';
 import session from 'express-session';
 // import { default as connectMongo } from 'connect-mongo';
 import helmet from 'helmet';
@@ -12,8 +11,6 @@ const port = process.env.PORT || 4001;
 // const MongoStore = connectMongo(session);
 
 db();
-server.use(bodyParser.urlencoded({extended: false}));
-server.use(bodyParser.json());
 server.use(session({
     HttpOnly: true,
     secure: true,

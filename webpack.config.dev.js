@@ -31,6 +31,7 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
+                { from: 'public/favicon.ico', to: 'favicion.ico' },
                 { from: 'public/fonts', to: 'fonts'},
                 { from: 'public/images', to: 'images'},
             ]
