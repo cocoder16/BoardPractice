@@ -23,12 +23,10 @@ const userSchema = new mongoose.Schema({
 //user_id, password,->로그인, user_id의 경우 회원가입때는 중복체크, id, nickname -> 검색
 
 userSchema.pre('save', async function (next) {
-    console.log('#### pre ####');
     if (!this.isNew) {
         next();
         return;
     }
-    console.log('#### entering auto increment ####');
     await autoIncrement(User, this, 'id'); // this는 save를 원하는 document, 'id'는 auto increase 대상 필드
     next();
 });

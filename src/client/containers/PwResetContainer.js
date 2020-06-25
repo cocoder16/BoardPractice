@@ -25,7 +25,6 @@ class PwResetContainer extends Component {
 
         await this.props.formValidation();
         if (!this.props.pass) {
-            console.log('fail form validation due to input value');
             return false;
         }
 
@@ -33,7 +32,6 @@ class PwResetContainer extends Component {
         const formData = new FormData();
         formData.append('id', id);
         const result = await goAuthEmail(formData);
-        console.log(result);
         if (result) {
             //next page
             sessionStorage.setItem('sent email', true);

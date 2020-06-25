@@ -58,7 +58,6 @@ class PostController {
             author: session.usernickname,
             author_id: session.userid
         });
-        console.log(newPost);
         return newPost.save().then(res => {
             console.log('#### new Post ####');
             console.log(res);
@@ -83,7 +82,7 @@ class PostController {
         });
     }
 
-    static async deletePost(id, category, session) {
+    static async deletePost(id, session) {
         console.log('### del ###');
         console.log(id);
         console.log(session.userid);
@@ -100,12 +99,12 @@ class PostController {
         });
     }
 
-    static async authModify (id, session) {
+    static async authForModify (id, session) {
         return Post.find({ id }).then(post => {
             if (post[0].author_id == session.userid) return { status: 200 };
             else return { status: 404, data: { url: '/' }};
         }).catch(err => {
-            return Exception._400URL(err, '#### catch : authModify failed ####', '/');
+            return Exception._400URL(err, '#### catch : authForModify failed ####', '/');
         })
     }
 
@@ -136,11 +135,7 @@ class PostController {
         const per = query.per*1;
         const skip = (query.page - 1) * per;
 
-        console.log(skip);
-        console.log(per);
-
         const total = await Post.countDocuments(filter).exec();
-        console.log(total);
         const max = Math.ceil(total / per);
         
         return Read.generalPosts(filter, skip, per, max);
@@ -148,7 +143,6 @@ class PostController {
 
     static async getArticle (num, session, newGet) {
         console.log('#### getArticle ####');
-        console.log(newGet);
         if (newGet == 1) {
             await Post.updateOne({ id: num }, {$inc: {
                 read_count: 1
@@ -173,7 +167,7 @@ class PostController {
         });
     }
 
-    static async recentPosts () {
+    static async getRecentPosts () {
         let qnaArr, forumArr;
         qnaArr = await Read.recentsPosts({ category: 0, is_deleted: false });
         forumArr = await Read.recentsPosts({ category: 1, is_deleted: false });

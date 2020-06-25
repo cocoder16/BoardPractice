@@ -14,7 +14,6 @@ export const setIsModify = (isModify) => ({
     payload: isModify
 });
 export const clear = () => {
-    console.log('clear');
     return {type: CLEAR};
 };
 export const setInputValue = (payload) => ({

@@ -5,8 +5,6 @@ const ReplyList = ({
     replies, loadReplyForm, replyForm, handleTextChange, handleFormSubmit, clear, onModifyMode, unshown,
     onDeleteMode, deleteMode, offDeleteMode, onDelete
 }) => {
-    console.log(replies);
-
     return (
         <ul className='replies'>
             {replies.length == 0 && 

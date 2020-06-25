@@ -9,24 +9,16 @@ import * as viewportActions from '~c/store/viewport';
 class App extends Component {
     constructor (props) {
         super(props);
-        console.log('### App - constructor');
         this.props.getUserInfo();
         this.setDeviceType();
         window.addEventListener('resize', this.setDeviceType);
     }
 
-    shouldComponentUpdate () {
-        console.log('### App - shouldComponentUpdate');
-        return true;
-    }
-
-    componentDidUpdate () {
-        console.log('### App - componentDidUpdate');
-    }
-
     setDeviceType = () => {
-        if (window.innerWidth > 992) this.props.setDeviceType(2);
-        else if (window.innerWidth > 768) this.props.setDeviceType(1);
+        const desktopMinWidth = 993;
+        const tabletMinWidth = 769;
+        if (window.innerWidth >= desktopMinWidth) this.props.setDeviceType(2);
+        else if (window.innerWidth >= tabletMinWidth) this.props.setDeviceType(1);
         else this.props.setDeviceType(0);
     }
 

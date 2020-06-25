@@ -7,7 +7,6 @@ const DELETE_USER_INFO = 'userInfo/DELETE_USER_INFO';
 
 //function creating action
 export const getUserInfo = () => async (dispatch, getState) => {
-    console.log('#### getUserInfo');
     dispatch({type: GETTING_START});
     const data = await serviceUsers.getUserInfo();
     if (data.result){
@@ -34,7 +33,6 @@ export default function reducer (state=initialState, action) {
         case GETTING_START :
             return { ...state, onPending: true }
         case SET_USER_INFO :
-            console.log(action.payload);
             return { ...state, onPending: false, isLoggedIn: true, id: action.payload.id, 
                 nickname: action.payload.nickname, email: action.payload.email }
         case DELETE_USER_INFO :

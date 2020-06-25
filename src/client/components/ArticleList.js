@@ -5,8 +5,6 @@ import qs from 'query-string';
 const ArticleList = ({
     posts
 }) => {
-    console.log("ArticleList");
-    console.log(posts);
     const query = qs.parse(location.search);
 
     return (

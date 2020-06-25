@@ -28,8 +28,6 @@ export const overlapCheck = (name) => async (dispatch, getState) => {
     if (getState().signUp.isModify && getState().userInfo.nickname == getState().signUp.nickname) return null;
     let _name = name.split('Check')[0];
     const isOverlap = await serviceUsers.isOverlap({ [_name]: getState().signUp[_name] });
-    
-    console.log('isOverlap : ' + isOverlap);
     dispatch({
         type: OVERLAP_CHECK,
         payload: {
@@ -43,15 +41,12 @@ export const formValidationOverlap = () => async (dispatch, getState) => {
     let isOverlap = {};
     if (!getState().signUp.isModify) {
         isOverlap.id = await serviceUsers.isOverlap({ id: getState().signUp.id });
-        console.log('isOverlap_id : ' + isOverlap.id); 
         isOverlap.nickname = await serviceUsers.isOverlap({ nickname: getState().signUp.nickname });
-        console.log('isOverlap_nickname : ' + isOverlap.nickname);
     } else {
         isOverlap.id = false;
         isOverlap.nickname = false;
         if (getState().signUp.nickname != getState().userInfo.nickname) {
             isOverlap.nickname = await serviceUsers.isOverlap({ nickname: getState().signUp.nickname });
-            console.log('isOverlap_nickname : ' + isOverlap.nickname);
         }
     }
    
@@ -69,8 +64,8 @@ export const setInputValue = (payload) => ({
     payload: payload
 })
 export const clear = () => ({type: CLEAR});
-export const onDeleteMode = () => ({type: ON_DELETE_MODE});
-export const offDeleteMode = () => ({type: OFF_DELETE_MODE});
+export const turnOnDeleteMode = () => ({type: ON_DELETE_MODE});
+export const turnOffDeleteMode = () => ({type: OFF_DELETE_MODE});
 export const deleteFailed = () => ({type: DELETE_FAILED});
 export const pwValidation = (pw) => ({
     type: PW_VALIDATION,
@@ -157,7 +152,6 @@ export default function reducer (state=initialState, action) {
                     }
             }
         case OVERLAP_CHECK :
-            console.log(action.payload);
             switch (action.payload.name) {
                 case 'id' :
                     if (action.payload.isOverlap) {
@@ -181,7 +175,6 @@ export default function reducer (state=initialState, action) {
                     return { ...state, pass: true };
                 }
             } else {
-                console.log('me');
                 if (!InputChecker.nickname(state.nickname) || !InputChecker.email(state.email)) {
                     return { ...state, pass: false };
                 } else {

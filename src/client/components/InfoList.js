@@ -8,13 +8,9 @@ const InfoList = ({
     //'id contents created_at post_id'
 }) => {
     let mode;
-    console.log(posts);
-    console.log(replies);
     if (location.pathname == '/info/posts') mode = 'post';
     else if (location.pathname == '/info/replies') mode = 'reply';
-
-    console.log(mode);
-
+    
     return (
         <section>
             <ul className='info-board'>

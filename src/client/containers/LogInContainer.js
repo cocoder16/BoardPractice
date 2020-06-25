@@ -11,10 +11,6 @@ class UserContainer extends Component {
         sessionStorage.removeItem('sent email');
     }
     
-    componentDidUpdate () {
-        console.log(this.props.isLoggedIn);
-    }
-    
     handleInputChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -26,7 +22,7 @@ class UserContainer extends Component {
 
         await this.props.formValidationInput();
         if (!this.props.pass) {
-            console.log('fail form validation due to input value');
+            // console.log('fail form validation due to input value');
             return false;
         }
 

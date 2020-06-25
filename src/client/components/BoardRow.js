@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 const BoardRow = ({//id title author read_count reply_count created_at
     post
 }) => {
-
     return (
         <li className='item'>
             <div className='left wrap'>

@@ -12,26 +12,23 @@ const Pagination = ({
     interval = interval*1;
 
     const query = qs.parse(location.search);
-    console.log('Pagination');
-    console.log(query);
     const pathname = location.pathname;
     let type = 0; //type 0 : board, 1 : search, 2 : info/posts, 3: info/replies
     if (query.type && query.keyword) type = 1;
-    console.log(pathname);
     if (pathname == '/info/posts') type = 2;
     else if (pathname == '/info/replies') type = 3;
 
-    const adjustedStartVal = () => {
+    const setStartVal = () => {
         if (now % interval == 0) return now - interval + 1;
         return now - now % interval + 1;
     };
 
-    const lastPageCount = () => {
+    const getLastPageCount = () => {
         if (max % interval == 0) return interval;
         return max % interval;
     };
 
-    const dataArrGenerator = (first, last, len, start, url) => {
+    const dataArrGenerator = ({ first, last, len, start, url }) => {
         const data = [];
         let separator;
         if (url.indexOf('?') != -1) separator = '&';
@@ -51,22 +48,18 @@ const Pagination = ({
         return data;
     }
 
-    const liGenerator = (first, last, len=interval, start=adjustedStartVal(), _type=type) => {
-        console.log(category);
-        console.log(_type);
+    const liGenerator = (first, last, len=interval) => {
         let data;
-        if (_type == 0) {
-            data = dataArrGenerator(first, last, len, start, `/${category}`);
-        } else if (_type == 1) {
-            console.log('onSearch');
+        if (type == 0) {
+            data = dataArrGenerator({ first, last, len, start: setStartVal(), url: `/${category}` });
+        } else if (type == 1) {
             const type = query.type;
             const keyword = query.keyword;
-            data = dataArrGenerator(first, last, len, start, `/${category}?type=${type}&keyword=${keyword}`);
-            console.log(data);
-        } else if (_type == 2) {
-            data = dataArrGenerator(first, last, len, start, `/info/posts`);
-        } else if (_type == 3) {
-            data = dataArrGenerator(first, last, len, start, `/info/replies`);
+            data = dataArrGenerator({ first, last, len, start: setStartVal(), url: `/${category}?type=${type}&keyword=${keyword}` });
+        } else if (type == 2) {
+            data = dataArrGenerator({ first, last, len, start: setStartVal(), url: `/info/posts` });
+        } else if (type == 3) {
+            data = dataArrGenerator({ first, last, len, start: setStartVal(), url: `/info/replies` });
         }
         return data;
     }
@@ -88,7 +81,7 @@ const Pagination = ({
     
     if (max <= interval) { // 페이지가 단 하나
         pageData = liGenerator(true, true, max);
-    } else if (max - (now - 1) <= lastPageCount()) { // 마지막 페이지set이란 뜻
+    } else if (max - (now - 1) <= getLastPageCount()) { // 마지막 페이지set이란 뜻
         if (max % interval == 0) pageData = liGenerator(false, true, interval);
         else pageData = liGenerator(false, true, max % interval);
     } else if (now <= interval) { // 첫번째 페이지set이란 뜻

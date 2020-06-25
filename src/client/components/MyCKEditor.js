@@ -9,7 +9,6 @@ const MyCKEditor = ({
             data={contents}
             onChange={( event ) => {
                 const data = event.editor.getData();
-                console.log('event.editor : ', event.editor);
                 onChange(data);
             }}
             config={

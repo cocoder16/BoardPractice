@@ -30,8 +30,6 @@ export const getPosts = (category, query) => async (dispatch, getState) => {
     if (!query.page) page = '1';
     else page = query.page;
     const result = await servicePosts.getPosts(category, page, getState().board.per);
-    console.log('getPosts');
-    console.log(result);
     dispatch({
         type: GET_POSTS,
         payload: { posts: result.posts, page, max: result.max }
@@ -44,9 +42,6 @@ export const getPosts = (category, query) => async (dispatch, getState) => {
     document.querySelector('.input-search.keyword').value = '';
 };
 export const search = (category, query) => async (dispatch, getState) => {
-    console.log('search');
-    console.log(category);
-    console.log(query);
     dispatch({
         type: SET_CATEGORY,
         payload: category
@@ -54,7 +49,6 @@ export const search = (category, query) => async (dispatch, getState) => {
     let page;
     if (!query.page) page = '1';
     else page = query.page;
-    console.log(query.type);
     const result = await servicePosts.search(category, query.type, query.keyword, page, getState().board.per);
     dispatch({
         type: GET_POSTS,
@@ -64,15 +58,11 @@ export const search = (category, query) => async (dispatch, getState) => {
         type: GET_SEARCH,
         payload: { type: query.type, keyword: query.keyword }
     });
-    console.log('xxx');
-    console.log(query.type);
     document.querySelector('.input-search.type').value = query.type;
     document.querySelector('.input-search.keyword').value = query.keyword;
 };
 export const getArticle = (id) => async (dispatch, getState) => {
     let newGet = 0;
-    console.log(id);
-    console.log(sessionStorage.getItem('article-id'));
     if (sessionStorage.getItem('article-id') != id) newGet = 1;
     sessionStorage.setItem('article-id', id);
     const article = await servicePosts.getArticle(id, newGet);
@@ -103,8 +93,6 @@ export const getUserWrote = (type, query) => async (dispatch, getState) => {
     if (!query.page) page = '1';
     else page = query.page;
     const data = await serviceUsers.getUserWrote(type, page, getState().board.per);
-    console.log('getUserWrote');
-    console.log(data);
     dispatch({
         type: GET_USER_WROTE,
         payload: { data, page }
@@ -112,16 +100,14 @@ export const getUserWrote = (type, query) => async (dispatch, getState) => {
 };
 export const deleteUserWrote = () => ({type: DELETE_USER_WROTE});
 export const getRecentPosts = () => async (dispatch, getState) => {
-    const posts = await servicePosts.recentPosts();
-    console.log('recent posts');
-    console.log(posts);
+    const posts = await servicePosts.getRecentPosts();
     dispatch({
         type: RECENT_POSTS,
         payload: posts
     })
 }
-export const pending = () => ({type: ON_PENDING});
-export const pendingOff = () => ({type: OFF_PENDING});
+export const turnOnPending = () => ({type: ON_PENDING});
+export const turnOffPending = () => ({type: OFF_PENDING});
 export const clearArticle = () => ({type: CLEAR_ARTICLE});
 
 //module's initial state
@@ -172,8 +158,6 @@ export default function reducer (state=initialState, action) {
         case GET_SEARCH :
             return { ...state, searchType: action.payload.type, searchKeyword: action.payload.keyword };
         case GET_USER_WROTE :
-            console.log('SET_USER_WROTE');
-            console.log(action.payload);
             return { ...state, userPosts: action.payload.data.postArr, userReplies: action.payload.data.replyArr,
                 now: action.payload.page, max: action.payload.data.max }
         case DELETE_USER_WROTE :

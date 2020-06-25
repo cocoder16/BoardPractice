@@ -73,8 +73,6 @@ router.get('/userinfo', async (req, res) => {
     console.log('#### session')
     console.log(req.session);
     const result = await UserController.getUserInfo(req);
-    console.log('#### route result');
-    console.log(result);
     res.status(result.status).send(result.data);
 })
 
@@ -95,7 +93,6 @@ router.post('/help/pwreset/issue', async (req, res) => {
     const id = req.body.id;
     const token = req.body.token;
     const result = await UserController.issueNewPw(id, token);
-    console.log(result);
     res.status(result.status).send(result.data);
 })
 
@@ -140,7 +137,7 @@ router.put('/post', upload.none(), async (req, res) => {
 
 router.delete('/post', async (req, res) => {
     console.log('#### delete /post ####');
-    const result = await PostController.deletePost(req.query.id, req.query.category, req.session);
+    const result = await PostController.deletePost(req.query.id, req.session);
     res.status(result.status).send(result.data);
 })
 
@@ -152,7 +149,7 @@ router.get('/info*', (req, res) => {
 
 router.get('/modify/:num', async (req, res) => {
     console.log('#### get /modify/:num ####');
-    const result = await PostController.authModify(req.params.num, req.session);
+    const result = await PostController.authForModify(req.params.num, req.session);
     if (result.status != 200) res.status(result.status).redirect(result.data.url);
     else res.status(result.status).sendFile(index);
 })
@@ -183,7 +180,7 @@ router.delete('/reply', async (req, res) => {
 
 router.get('/recentposts', async (req, res) => {
     console.log('#### get /recentposts ####');
-    const posts = await PostController.recentPosts();
+    const posts = await PostController.getRecentPosts();
     res.status(200).send(posts);
 })
 
@@ -217,7 +214,6 @@ router.get('/delete*', (req, res) => {
 router.get('/*.*', (req, res) => {
     const options = url.parse(req.url, true);
     res.setHeader('content-type', mime.lookup(options.pathname.split('.')[1]));
-    console.log(path.join(root, options.pathname))
     res.sendFile(path.join(root, options.pathname));
 })
 

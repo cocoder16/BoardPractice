@@ -8,7 +8,6 @@ class PwResetCompletedContainer extends Component {
     constructor (props) {
         super(props);
         const query = qs.parse(location.search);
-        console.log(query);
         if (sessionStorage.getItem('received newPw')) {
             this.props.reinitial();
         } else {

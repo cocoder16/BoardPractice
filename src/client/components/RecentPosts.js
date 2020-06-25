@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 const RecentPosts = ({
     posts, onReady
 }) => {
-    console.log('RecentPosts');
-    console.log(posts);
     return (
         <Fragment>
             { onReady && 

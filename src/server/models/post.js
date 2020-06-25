@@ -23,12 +23,10 @@ const postSchema = new mongoose.Schema({
 //title, contents, author -> 검색, id -> get url, authorId -> 권한
 
 postSchema.pre('save', async function (next) {
-    console.log('#### pre ####');
     if (!this.isNew) {
         next();
         return;
     }
-    console.log('#### entering auto increment ####');
     await autoIncrement(Post, this, 'id'); // this는 save를 원하는 document, 'id'는 auto increase 대상 필드
     next();
 });

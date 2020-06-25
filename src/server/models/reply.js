@@ -23,12 +23,10 @@ const replySchema = new mongoose.Schema({
 //contents, author -> 검색, post_id -> get, author_id -> 권한
 
 replySchema.pre('save', async function (next) {
-    console.log('#### pre ####');
     if (!this.isNew) {
         next();
         return;
     }
-    console.log('#### entering auto increment ####');
     await autoIncrement(Reply, this, 'id'); // this는 save를 원하는 document, 'id'는 auto increase 대상 필드
     next();
 });

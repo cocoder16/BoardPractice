@@ -58,7 +58,6 @@ class UserController {
                         nickname: formData.nickname,
                         email: formData.email
                     })
-                    console.log(newUser);
                     newUser.save();
                 });
             });
@@ -93,10 +92,8 @@ class UserController {
             }
             //nickname 검사 및 재설정
             if (formData.nickname != user[0].nickname) {
-                console.log('## go to nickname check ##');
                 if (!InputChecker.nickname(formData.nickname)) return { status: 400 };
             }
-            console.log('## pass nick check ##');
             //pw빼고 재설정
             if (!InputChecker.email(formData.email)) return { status: 400 };
             User.updateOne({ id: session.userid, is_deleted: false }, { $set: {
@@ -137,20 +134,15 @@ class UserController {
 
     static async logInDataCheck (req, formData) {
         // 아이디가 있는지 찾고 있으면 입력받은 pw를 해시화하여 DB에 있는 값과 비교
-        MeasureRunTime.start('find');
         return User.find({ user_id: formData.id, is_deleted: false }).then(user => {
-            MeasureRunTime.end('find');
             if (user.length > 0) {
                 const salt = user[0].salt;
-                MeasureRunTime.start('pw hash');
                 const key = crypto.pbkdf2Sync(formData.pw, salt, process.env.ITERATIONS*1, 64, 'sha512');
-                MeasureRunTime.end('pw hash');
                 if (key.toString('base64') === user[0].password) {
                      //session 만들어주고,
                     req.session.userid = user[0].id;
                     req.session.usernickname = user[0].nickname;
                     req.session.save();
-                    MeasureRunTime.start('findOneAndUpdate');
                     User.updateOne({ user_id: formData.id, is_deleted: false }, {$set: {
                         is_login: true
                     }}, (err, rawResponse) => {
@@ -159,7 +151,6 @@ class UserController {
                             console.log(rawResponse);
                         }
                     })
-                    MeasureRunTime.end('findOneAndUpdate');
                     return { status: 201, data: { result: true }}
                 } else return { status: 200, data: { result: false }}
             } else {
@@ -171,9 +162,10 @@ class UserController {
     }
 
     static async logOut (req) {
+        const _9hours = 3600000 * 9;
         return User.updateOne({ id: req.session.userid, is_deleted: false }, { $set: {
             is_login: false, 
-            last_logout: Date.now() + 3600000 * 9
+            last_logout: Date.now() + _9hours
         }}, (err, rawResponse) => {
             if (err) console.log(err);
             else {
@@ -190,19 +182,15 @@ class UserController {
     }
 
     static async getUserInfo (req) {
-        console.log('#### getUserInfo ####');
         //유저데이터는 세션을 통해 검증받아야만 보냄.
         if (!req.session.userid) {
-            console.log('res.session not exist')
             return { status: 200, data: { result: false, userInfo: { id: '', nickname: '', email: '' }}}
         }
         //세션이 있다면 그에 맞는 유저 데이터를 보냄.
         return User.find({ id: req.session.userid, is_deleted: false }).then(async user => {
             if (user.length == 0) {
-                console.log('not found user')
                 return { status: 200, data: { result: false, userInfo: { id: '', nickname: '', email: '' }}};
             } else {
-                console.log(' result true');
                 return { status: 200, data: { result: true, userInfo: { 
                     id: user[0].user_id, 
                     nickname: user[0].nickname,
@@ -237,7 +225,6 @@ class UserController {
     }
 
     static async sendPwAuthEmail (id) {
-        console.log(id);
         return User.find({ user_id: id, is_deleted: false }).then(user => {
             if (user.length == 0) return { status: 200, data: { result: false }}
 
@@ -295,7 +282,6 @@ class UserController {
                 newPw += String.fromCharCode((Math.random() * 15) + 33); //특수문자
             }
         } 
-        console.log('#### new pw : ' + newPw);
         const buffer = await new Promise((res, rej) => {
             crypto.randomBytes(64, function(err, buf) {
                 if (err) rej("cant generate buffer.");

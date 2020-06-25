@@ -14,7 +14,7 @@ const store = createStore(combineReducers({
 }), applyMiddleware(thunk));
 
 store.subscribe(() => {
-    console.log("Store Updated", store.getState());
+    // console.log("Store Updated", store.getState());
 });
 
 export default store;

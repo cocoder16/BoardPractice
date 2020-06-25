@@ -29,9 +29,6 @@ server.use(session({
 server.use(helmet());
 server.use(routes); // routes는 sessions에 의존하므로 더 밑에 위치
 
-console.log(process.env.NODE_ENV);
-console.log(__dirname);
-
 if (process.env.NODE_ENV.trim() == 'development') {
     server.listen(devPort, () => {
         server.use(express.static('dist'));

@@ -8,9 +8,6 @@ const InfoRow = ({
     //'id contents created_at post_id'
 }) => {
 
-    console.log(post);
-    console.log(reply);
-
     let category;
     if (post) {
         if (post.category == 0) category = 'Q & A';

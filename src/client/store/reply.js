@@ -19,7 +19,6 @@ export const clear = () => ({type: CLEAR});
 export const getReplies = (post_id) => async (dispatch, getState) => {
     dispatch({type: PENDING_REPLIES})
     const replies = await serviceReplies.getReplies(post_id);
-    console.log('getReplies');
     dispatch({
         type: GET_REPLIES,
         payload: replies
@@ -29,7 +28,7 @@ export const loadReplyForm = (space, id, depth, parent_nickname) => ({
     type: LOAD_REPLY_FORM,
     payload: { space, id, depth, parent_nickname }
 });
-export const displayOff = (id) => ({
+export const turnOffDisplay = (id) => ({
     type: DISPLAY_OFF,
     payload: id
 });

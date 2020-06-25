@@ -19,8 +19,6 @@ class SignUpContainer extends Component {
     }
 
     componentDidUpdate (prevProps, prevState) {
-        console.log(prevProps.onPending);
-        console.log(this.props.onPending);
         if ((prevProps.onPending && !this.props.onPending)) {
             document.getElementsByName('id')[0].value = this.props.userId;
             document.getElementsByName('nickname')[0].value = this.props.userNickname;
@@ -35,7 +33,7 @@ class SignUpContainer extends Component {
 
     componentWillUnmount () {
         this.props.clear();
-        this.props.offDeleteMode();
+        this.props.turnOffDeleteMode();
     }
 
     handleInputChange = (e) => {
@@ -61,14 +59,12 @@ class SignUpContainer extends Component {
 
         await this.props.formValidationInput();
         if (!this.props.pass) {
-            console.log('fail form validation due to input value');
             this.alertReject();
             return null;
         }
 
         await this.props.formValidationOverlap();
         if (!this.props.pass) {
-            console.log('fail form validation due to overlap');
             this.alertReject();
             return null;
         }
@@ -87,15 +83,13 @@ class SignUpContainer extends Component {
         this.props.history.push('/');
     }
 
-    onDeleteMode = (e) => {
+    turnOnDeleteMode = (e) => {
         e.preventDefault();
-        this.props.onDeleteMode();
+        this.props.turnOnDeleteMode();
     }
 
-    onDelete = async (e) => {
+    handleDelete = async (e) => {
         e.preventDefault();
-        console.log(e.target);
-        console.log(e.target.querySelector('.pw'));
         const pw = e.target.querySelector('.pw').value;
 
         await this.props.pwValidation(pw);
@@ -115,7 +109,7 @@ class SignUpContainer extends Component {
     }
 
     render() {
-        const { handleInputChange, overlapCheck, handleFormSubmit, onDeleteMode, onDelete } = this;
+        const { handleInputChange, overlapCheck, handleFormSubmit, turnOnDeleteMode, handleDelete } = this;
         const { span, isModify, isDeleteMode, deleteFailedMessage } = this.props;
 
         return (
@@ -125,9 +119,9 @@ class SignUpContainer extends Component {
                 onOverlapCheck={overlapCheck}
                 onFormSubmit={handleFormSubmit} 
                 isModify={isModify}
-                onDeleteMode={onDeleteMode}
+                onDeleteMode={turnOnDeleteMode}
                 isDeleteMode={isDeleteMode}
-                onDelete={onDelete}
+                onDelete={handleDelete}
                 deleteFailedMessage={deleteFailedMessage}
             />
         )
@@ -163,8 +157,8 @@ const mapDispatchToProps = (dispatch) => ({
     setInputValue: (payload) => dispatch(signUpActions.setInputValue(payload)),
     clear: () => dispatch(signUpActions.clear()),
     getUserInfo: (payload) => dispatch(userInfoActions.getUserInfo(payload)),
-    onDeleteMode: () => dispatch(signUpActions.onDeleteMode()),
-    offDeleteMode: () => dispatch(signUpActions.offDeleteMode()),
+    turnOnDeleteMode: () => dispatch(signUpActions.turnOnDeleteMode()),
+    turnOffDeleteMode: () => dispatch(signUpActions.turnOffDeleteMode()),
     deleteFailed: () => dispatch(signUpActions.deleteFailed()),
     deleteUserInfo: () => dispatch(userInfoActions.deleteUserInfo()),
     pwValidation: (pw) => dispatch(signUpActions.pwValidation(pw))

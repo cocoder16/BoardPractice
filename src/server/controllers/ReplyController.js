@@ -26,7 +26,6 @@ class ReplyController {
             parent_id: formData.parent_id,
             parent_nickname: formData.parent_nickname //없으면 error안뜨고 알아서 default값 들어가.
         });
-        console.log(newReply);
         return newReply.save().then(res => {
             console.log(res);
             return { status: 201 };
@@ -55,7 +54,6 @@ class ReplyController {
 
     static async deleteReply (query, session) {
         const { id, post_id } = query;
-        console.log(id, post_id);
         Post.updateOne({id: post_id}, { $inc: {
             reply_count: -1
         }}, (err, raw) => {
@@ -76,18 +74,15 @@ class ReplyController {
     }
 
     static async getReplies (post_id, session) {
-        console.log('#### getReplies ####');        
-        MeasureRunTime.start('getReplies');
+        console.log('#### getReplies ####');
 
         return Reply.find({ post_id })
         .select('id contents author author_id depth parent_id parent_nickname is_deleted created_at')
         .sort({ id: 1 }).then(replies => {
             if (replies.length == 0) {
-                MeasureRunTime.end('getReplies');
                 return { status: 200, data: []}
             }
 
-            MeasureRunTime.start('Tree declaration');
             //트리 생성 함수
             const Tree = function (nodeValue) {
                 this.value = nodeValue;
@@ -122,15 +117,11 @@ class ReplyController {
                     node.children[i].preOrderTraversalResort(arr);
                 }
             }
-            MeasureRunTime.end('Tree declaration');
 
-            MeasureRunTime.start('replyIdArr');
             const replyIdArr = replies.map(cur => {
                 return cur.id;
             });
-            MeasureRunTime.end('replyIdArr');
 
-            MeasureRunTime.start('tree');
             const root = (function () {
                 let maxDepth = -1;
                 const tree = new Tree({id:-999}); //있을수 없는 임의의 id 루트는 depth 0을 묶기위한 가상트리
@@ -147,30 +138,19 @@ class ReplyController {
                         }
                     })();
                     
-                    console.log('####found targetId : ', targetId);
                     tree.preOrderFindByIdAddChild(targetId, replies[i]);
                 }
 
                 return tree;
             })();
-            MeasureRunTime.end('tree');
-
-            console.log('#### root ####');
-            console.log(root);
                 
             //원댓 순서대로 각 트리를 순회하면서 클라에 보낼 배열에 순서대로 담아준다.
-            MeasureRunTime.start('preOrderTraversalResort');
             const orderedReplies = [];
             root.preOrderTraversalResort(orderedReplies);
             orderedReplies.shift(); //root는 원댓들을 묶는 가상 노드이므로 제거.
-            MeasureRunTime.end('preOrderTraversalResort');
-
-            console.log('#### orderedReplies ####');
-            console.log(orderedReplies);
 
             const today = new Date().format('yy-MM-dd');
 
-            MeasureRunTime.start('mapping');
             replies = orderedReplies.map(cur => {
                 let auth = false;
                 if (session.userid) {
@@ -181,8 +161,6 @@ class ReplyController {
                 else cur.created_at = cur.created_at.split(' ')[0];
                 return cur;
             });
-            MeasureRunTime.end('mapping');
-            MeasureRunTime.end('getReplies');
             return { status: 200, data: replies };
         }).catch(err => {
             return Exception._400(err, '#### catch : getReplies failed ####');

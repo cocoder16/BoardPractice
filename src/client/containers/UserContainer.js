@@ -17,7 +17,6 @@ class UserContainer extends Component {
         this.props.clear();
         this.props.deleteUserInfo();
         this.props.deleteUserWrote();
-        console.log(this.props.isLoggedIn);
     }
 
     render () {        

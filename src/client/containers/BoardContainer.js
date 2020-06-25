@@ -9,19 +9,11 @@ import WriteContainer from './WriteContainer';
 class BoardContainer extends Component {
     constructor (props) {
         super(props);
-        console.log('con');
-
         this.goBackOnDelete = this.goBackOnDelete.bind(this); 
     }
 
     shouldComponentUpdate (nextProps, nextState) {
-        console.log('#### Board - should component update ####');
-        console.log(this.props.onDelete);
-        console.log(nextProps.onDelete);
-        console.log(this.props.onPending);
-        console.log(nextProps.onPending);
         if (!this.props.onDelete && nextProps.onDelete) {
-            console.log('delete xxxxxxx');
             return true;
         }
 
@@ -42,8 +34,6 @@ class BoardContainer extends Component {
     }
 
     componentDidUpdate (prevProps) {
-        console.log('#### Board - component did update ####');
-
         if (!(prevProps.onPending && !this.props.onPending)
             || location.pathname.split('/')[1] == 'delete') { // delete만 onPending 안씀.
             this.getData();
@@ -54,7 +44,7 @@ class BoardContainer extends Component {
     }
 
     preGetData = () => {
-        this.props.pending();
+        this.props.turnOnPending();
         this.props.clearArticle();
     }
 
@@ -67,19 +57,17 @@ class BoardContainer extends Component {
             const query = qs.parse(location.search);
             const category = location.pathname.split('/')[1];
             this.preGetData();
-            if (query.type && query.keyword) {
-                console.log(query);                
+            if (query.type && query.keyword) {          
                 this.props.search(category, query);
             } else {
                 this.props.getPosts(category, query);
             }
             sessionStorage.clear('article-id');
         } else if (location.pathname.split('/')[1] == 'article') { 
-            console.log('getData');
             this.preGetData();
             this.props.getArticle(location.pathname.split('/article/')[1]);
         } else if (location.pathname.split('/')[1] == 'modify') {
-            this.props.pending();
+            this.props.turnOnPending();
             this.props.getArticle(location.pathname.split('/modify/')[1]);
         } else if (location.pathname.split('/')[1] == 'delete') {
             this.props.getDeleteAlert();
@@ -87,9 +75,7 @@ class BoardContainer extends Component {
     }
 
     goBackOnDelete = () => {
-        console.log('skim s');
         this.props.skimOnDelete();
-        console.log('skim');
         this.props.history.goBack();
     }
 
@@ -109,7 +95,7 @@ class BoardContainer extends Component {
         this.props.setSearchKeyword(e.target.value);
     }
 
-    onSearch = (e) => {
+    handleSearch = (e) => {
         e.preventDefault();
         const { category, searchType, searchKeyword } = this.props;
         this.props.history.push(`/${category}?type=${searchType}&keyword=${searchKeyword}`);
@@ -119,7 +105,7 @@ class BoardContainer extends Component {
         const { category, isLoggedIn, onPending, posts, article, isModify, onDelete, 
             searchType, recentPosts, history } = this.props;
         const { goBackOnDelete, handleDeletePost, 
-            handleChangeSearchType, handleChangeSearchKeyword, onSearch } = this;
+            handleChangeSearchType, handleChangeSearchKeyword, handleSearch } = this;
 
         let isHome = true;
         if (location.pathname != '/') isHome = false;
@@ -134,7 +120,7 @@ class BoardContainer extends Component {
                             searchType={searchType} 
                             onChangeSearchType={handleChangeSearchType}
                             onChangeSearchKeyword={handleChangeSearchKeyword}
-                            onSearch={onSearch}
+                            onSearch={handleSearch}
                         />
                         <Switch>
                             { !onPending &&
@@ -194,7 +180,7 @@ const mapDispatchToProps = (dispatch) => ({
     setSearchKeyword: (val) => dispatch(boardActions.setSearchKeyword(val)),
     search: (cate, query) => dispatch(boardActions.search(cate, query)),
     getRecentPosts: () => dispatch(boardActions.getRecentPosts()),
-    pending: () => dispatch(boardActions.pending()),
+    turnOnPending: () => dispatch(boardActions.turnOnPending()),
     clearArticle: () => dispatch(boardActions.clearArticle())
 })
 

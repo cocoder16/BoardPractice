@@ -46,12 +46,12 @@ export const updatePost = async (formData) => {
     });
 }
 
-export const deletePost = async (id, category) => {
+export const deletePost = async (id) => {
     return axios({
         method: 'delete',
         url: '/post',
         params: {
-            id, category
+            id
         },
         headers: { Pragma: 'no-cache' }
     }).then(res => {
@@ -62,8 +62,6 @@ export const deletePost = async (id, category) => {
 }
 
 export const getArticle = async (num, newGet) => {
-    console.log('newGet');
-    console.log(newGet);
     return axios({
         method: 'get',
         url: `/post/${num}`,
@@ -95,7 +93,7 @@ export const search = async (category, type, keyword, page, per) => {
     });
 }
 
-export const recentPosts = async () => {
+export const getRecentPosts = async () => {
     return axios({
         method: 'get',
         url: '/recentposts',

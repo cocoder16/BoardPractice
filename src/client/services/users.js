@@ -96,8 +96,6 @@ export const getUserInfo = async () => {
         url: '/userinfo',
         headers: { Pragma: 'no-cache' }
     }).then(res => {
-        console.log('#### service - getUserInfo - res.data');
-        console.log(res.data);
         return res.data;
     }).catch(err => {
         console.log(err);
