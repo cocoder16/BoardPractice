@@ -13,8 +13,6 @@ class WriteContainer extends Component {
         } else if (location.pathname.split('/')[1] == 'modify') {
             this.props.setIsModify(true);
         }
-
-        this.goBack = this.goBack.bind(this);
     }
 
     componentDidUpdate (prevProps, prevState) {

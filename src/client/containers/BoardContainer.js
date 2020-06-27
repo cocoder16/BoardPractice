@@ -7,11 +7,6 @@ import * as boardActions from '~c/store/board';
 import WriteContainer from './WriteContainer';
 
 class BoardContainer extends Component {
-    constructor (props) {
-        super(props);
-        this.goBackOnDelete = this.goBackOnDelete.bind(this); 
-    }
-
     shouldComponentUpdate (nextProps, nextState) {
         if (!this.props.onDelete && nextProps.onDelete) {
             return true;
