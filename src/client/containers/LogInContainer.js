@@ -5,7 +5,7 @@ import * as logInActions from '~c/store/logIn';
 import * as userInfoActions from '~c/store/userInfo';
 import { tryLogIn } from '~c/services/users';
 
-class UserContainer extends Component {
+class LogInContainer extends Component {
     componentDidMount () {
         sessionStorage.removeItem('received newPw');
         sessionStorage.removeItem('sent email');
@@ -70,4 +70,4 @@ const mapDispatchToProps = (dispatch) => ({
     getUserInfo: () => dispatch(userInfoActions.getUserInfo()),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LogInContainer);
