@@ -125,7 +125,6 @@ class ReplyController {
             });
 
             const root = (function () {
-                let maxDepth = -1;
                 const tree = new Tree({id:-999}); //있을수 없는 임의의 id 루트는 depth 0을 묶기위한 가상트리
                 for (let i = 0; i < replies.length; i++) {
                     if (replies[i].depth == 0) {

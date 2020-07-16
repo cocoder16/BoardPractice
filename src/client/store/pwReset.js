@@ -20,7 +20,10 @@ export const rejectMessage = () => ({type: REJECT_MESSAGE});
 export const getNewPw = (query) => async (dispatch, getState) => {
     const id = query.id;
     const token = query.token;
-    const resData = await issueNewPw(id, token);
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('token', token);
+    const resData = await issueNewPw(formData);
     if (resData.result) {
         sessionStorage.setItem('received newPw', true);
         dispatch({

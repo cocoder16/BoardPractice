@@ -4,7 +4,7 @@ import Exception from './Exception';
 export const isOverlap = async (target) => {
     return axios({
         method: 'get',
-        url: '/check/overlap',
+        url: '/is-overlap',
         params: target,
         headers: { Pragma: 'no-cache' }
     }).then(res => {
@@ -66,7 +66,7 @@ export const deleteUser = async (formData) => {
 export const tryLogIn = async (formData) => {
     return axios({
         method: 'post',
-        url: '/session/login',
+        url: '/session/user',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
@@ -80,7 +80,7 @@ export const tryLogIn = async (formData) => {
 export const tryLogOut = async () => {
     return axios({
         method: 'delete',
-        url: '/session/logout',
+        url: '/session/user',
         headers: { Pragma: 'no-cache' }
     }).then(res => {
         return;
@@ -122,7 +122,7 @@ export const getUserWrote = async (type, page, per) => {
 export const goAuthEmail = async (formData) => {
     return axios({
         method: 'post',
-        url: '/help/pwreset/authemail',
+        url: '/authemail',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
@@ -130,13 +130,12 @@ export const goAuthEmail = async (formData) => {
     }).catch(err => {console.log(err)});
 }
 
-export const issueNewPw = async (id, token) => {
+export const issueNewPw = async (formData) => {
     return axios({
         method: 'post',
-        url: '/help/pwreset/issue',
-        data: {
-            id, token
-        }
+        url: '/newpw',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         return res.data;
     }).catch(err => console.log(err));
