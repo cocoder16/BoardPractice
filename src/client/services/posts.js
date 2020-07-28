@@ -25,8 +25,7 @@ export const getPosts = async (category, page, per) => {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -72,8 +71,7 @@ export const getArticle = async (num, newGet) => {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -88,8 +86,7 @@ export const search = async (category, type, keyword, page, per) => {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -100,5 +97,7 @@ export const getRecentPosts = async () => {
         headers: { Pragma: 'no-cache' }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        throw new Error(err);
+    });
 }

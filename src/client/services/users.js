@@ -10,8 +10,7 @@ export const isOverlap = async (target) => {
     }).then(res => {
         return res.data.result;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -58,8 +57,7 @@ export const deleteUser = async (formData) => {
     }).then(res => {
         return res.data.result;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -72,8 +70,7 @@ export const tryLogIn = async (formData) => {
     }).then(res => {
         return res.data.result;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -85,8 +82,7 @@ export const tryLogOut = async () => {
     }).then(res => {
         return;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -98,8 +94,7 @@ export const getUserInfo = async () => {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -114,8 +109,7 @@ export const getUserWrote = async (type, page, per) => {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 
@@ -127,7 +121,9 @@ export const goAuthEmail = async (formData) => {
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         return res.data.result;
-    }).catch(err => {console.log(err)});
+    }).catch(err => {
+        throw new Error(err);
+    });
 }
 
 export const issueNewPw = async (formData) => {
@@ -138,5 +134,7 @@ export const issueNewPw = async (formData) => {
         headers: { 'content-type': 'multipart/form-data' }
     }).then(res => {
         return res.data;
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        throw new Error(err);
+    });
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, SignUp, LogIn, PwReset, PwResetCompleted, NotFound } from '~c/pages/index';
+import { Home, Info, SignUp, LogIn, PwReset, PwResetCompleted, NotFound } from '~c/pages/index';
 
 const Router = () => (
     <Switch>
@@ -10,9 +10,9 @@ const Router = () => (
         <Route exact path="/help/pwreset/completed" component={PwResetCompleted}/>
         <Route path="/auth" component={PwResetCompleted}/>
         <Route exact path="/" component={Home}/>
-        <Route exact path='/info/privacy' component={Home}/>
-        <Route exact path='/info/posts' component={Home}/>
-        <Route exact path='/info/replies' component={Home}/>
+        <Route exact path='/info/privacy' component={Info}/>
+        <Route exact path='/info/posts' component={Info}/>
+        <Route exact path='/info/replies' component={Info}/>
         <Route exact path='/qna' component={Home}/>
         <Route exact path='/forum' component={Home}/>
         <Route exact path='/write' component={Home}/>

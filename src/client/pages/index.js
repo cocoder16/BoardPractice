@@ -4,6 +4,7 @@ import NotFound from './NotFound';
 import PwReset from './PwReset';
 import PwResetCompleted from './PwResetCompleted';
 import LogIn from './LogIn';
+import Info from './Info';
 
 export {
     Home,
@@ -11,5 +12,6 @@ export {
     LogIn,
     PwReset,
     PwResetCompleted,
+    Info,
     NotFound
 }

@@ -1,11 +1,12 @@
 const Exception = {
-    basicRedirect () {
+    basicRedirect (err) {
         window.location.replace('/');
+        throw new Error(err);
     },
     logAlertRedirect (err, alertMessage, redirectMethod=this.basicRedirect) {
-        console.log(err);
         alert(alertMessage);
         redirectMethod();
+        throw new Error(err);
     }
 }
 

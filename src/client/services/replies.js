@@ -25,8 +25,7 @@ export const getReplies = async (post_id) => {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        console.log(err);
-        Exception.basicRedirect();
+        Exception.basicRedirect(err);
     });
 }
 

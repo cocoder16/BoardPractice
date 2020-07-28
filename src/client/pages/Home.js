@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import InfoContainer from '~c/containers/InfoContainer';
 import BoardContainer from '~c/containers/BoardContainer';
 
 class Home extends Component {
@@ -8,7 +7,6 @@ class Home extends Component {
     	return (
 			<Switch>
 				<Route exact path="/" component={BoardContainer}/>
-				<Route path='/info' component={InfoContainer}/>
 				<Route exact path='/qna' component={BoardContainer}/>
 				<Route exact path='/forum' component={BoardContainer}/>
 				<Route path='/article' component={BoardContainer}/>
